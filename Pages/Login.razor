@@ -1,0 +1,54 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="login-page">
+    <div class="login-left">
+        <div class="logo-container">
+            <img src="Assets/numnumfoods-logo.png" alt="NumNum Logo" class="logo" />
+        </div>
+        <div class="image-container">
+            <img src="Assets/login-background.jpg" alt="Background Image" class="background-image" />
+        </div>
+    </div>
+
+    <div class="login-right">
+        <h2 class="login-title">Login</h2>
+        <div class="login-form">
+            <label for="username">Username or email</label>
+            <input type="text" id="username" placeholder="Username or email" />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" />
+
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" />
+                <label for="remember-me">Remember me</label>
+            </div>
+
+            <button class="login-button">Login</button>
+            <a href="/forgot-password" class="forgot-password">Forgot password?</a>
+
+            <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register now!</a></p>
+            </div>
+
+            <div class="or-divider">
+                <span>or</span>
+            </div>
+
+            <button class="google-login">
+                <img src="/Assets/google_logo-google_icongoogle-512.png" alt="Google Icon" />
+                Continue with Google
+            </button>
+
+            <button class="apple-login">
+                <img src="/Assets/Apple Icon.png" alt="Apple Icon" />
+                Continue with Apple
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+}

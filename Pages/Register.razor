@@ -1,0 +1,39 @@
+﻿@page "/register"
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="register-page">
+    <div class="register-left">
+        <div class="image-container">
+            <img src="/Assets/register-background1.jpg" alt="Left Image" class="left-image" />
+        </div>
+    </div>
+
+    <div class="register-middle">
+        <h2 class="register-title">Register</h2>
+        <div class="register-form">
+            <label for="fullname">Full name</label>
+            <input type="text" id="fullname" placeholder="Full name" />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" />
+
+            <label for="confirm-password">Confirm password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm password" />
+
+            <button class="create-account-button">Create Account</button>
+            <a href="/login" class="login-instead">Login Instead</a>
+        </div>
+    </div>
+    <div class="register-right">
+        <div class="image-container">
+            <img src="/Assets/register-background2.jpg" alt="Left Image" class="left-image" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+}

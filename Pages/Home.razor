@@ -1,0 +1,56 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+@* Hero Section *@
+<section class="hero">
+    <div class="hero-content">
+        <h1>Num Num Baby Food</h1>
+        <h2>Nutritious & Delicious Meals!</h2>
+        <p>
+            Num Num Foods is a home-grown baby food company dedicated to providing fresh, nutritious meals for little ones. Using locally sourced ingredients, grown in our own backyard, we create wholesome, homemade baby foods packed with essential vitamins and nutrients. Each batch is carefully prepared at home, ensuring the highest quality and taste, perfect for supporting your baby’s healthy growth and development. With Num Num Foods, you can trust that every spoonful is made with love, from our home to yours.
+        </p>
+        <button class="cta-btn">Find out more!</button>
+    </div>
+</section>
+
+@* Featured Products *@
+<section class="featured-products">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+        @for (var i = 0; i < 3; i++)
+        {
+            <div class="product-card">
+                <img src="/Assets/Mashed_Peas.png" alt="Product Image" />
+                <h3>Mashed Peas</h3>
+                <p>Creamy mashed peas rich in vitamins and nutrients for your baby's growth.</p>
+                <div class="product-rating">
+                    <p>⭐⭐⭐⭐⭐</p>
+                </div>
+                <button class="view-product-btn">View Product</button>
+            </div>
+        }
+    </div>
+</section>
+
+@* Events & Specials *@
+<section class="events-specials">
+    <h2>Events & Specials</h2>
+    <div class="events-list">
+        <div class="event-item">
+            <p><strong>23 May 2024</strong></p>
+            <p>Store Wide Sale! Use code <strong>BABIEZ</strong> for 30% off</p>
+            <p><i>John Doe</i></p>
+        </div>
+        <div class="event-item">
+            <p><strong>29 May 2024</strong></p>
+            <p>Check out our new product!</p>
+            <p><i>Jane Smith</i></p>
+            <div class="new-product-card">
+                <img src="/Assets/Mashed_Peas.png" alt="New Product Image" />
+                <h3>Mashed Peas</h3>
+                <button class="view-product-btn">View Product</button>
+            </div>
+        </div>
+    </div>
+</section>

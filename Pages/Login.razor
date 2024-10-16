@@ -1,5 +1,6 @@
 ﻿@page "/login"
-@using Microsoft.AspNetCore.Components.Web
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
 <div class="login-page">
     <div class="login-left">
@@ -13,19 +14,27 @@
 
     <div class="login-right">
         <h2 class="login-title">Login</h2>
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="error-message">
+                <p>@ErrorMessage</p>
+            </div>
+        }
+
         <div class="login-form">
-            <label for="username">Username or email</label>
-            <input type="text" id="username" placeholder="Username or email" />
+            <label for="email">Username or email</label>
+            <input type="text" id="email" @bind="Email" placeholder="Username or email" />
 
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" />
+            <input type="password" id="password" @bind="Password" placeholder="Password" />
 
             <div class="remember-me">
-                <input type="checkbox" id="remember-me" />
+                <input type="checkbox" id="remember-me" @bind="RememberMe" />
                 <label for="remember-me">Remember me</label>
             </div>
 
-            <button class="login-button">Login</button>
+            <button @onclick="LoginUser" class="login-button">Login</button>
             <a href="/forgot-password" class="forgot-password">Forgot password?</a>
 
             <div class="register-link">
@@ -50,5 +59,40 @@
 </div>
 
 @code {
+    private string Email { get; set; } = string.Empty;
+    private string Password { get; set; } = string.Empty;
+    private bool RememberMe { get; set; } = false;
+    private string ErrorMessage { get; set; } = string.Empty;
 
+    private async Task LoginUser()
+    {
+        try
+        {
+            // Define the login model matching the API's expected input
+            var loginData = new
+            {
+                Email = Email,
+                Password = Password
+            };
+
+            // Call the Login API endpoint
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/login", loginData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Navigate to the home page or another protected page after successful login
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                // Handle errors by showing an error message
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                ErrorMessage = $"Login failed: {errorResponse}";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
 }

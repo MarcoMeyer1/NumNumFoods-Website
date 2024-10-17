@@ -1,0 +1,186 @@
+﻿@page "/manage-vouchers"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+
+<div class="voucher-management">
+    <h1>Voucher Management</h1>
+
+    <div class="new-voucher">
+        <h2>New voucher</h2>
+        <div class="voucher-inputs">
+            <input type="text" placeholder="Voucher Code" @bind="VoucherCode" />
+            <input type="date" @bind="ExpiryDate" />
+            <input type="number" placeholder="Max uses" @bind="MaxUses" />
+            <input type="number" placeholder="% Discount" @bind="DiscountPercent" />
+            <button @onclick="CreateVoucher">Create Voucher</button>
+        </div>
+    </div>
+
+    <div class="active-vouchers">
+        <h2>Active Vouchers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Expiry Date</th>
+                    <th>Uses left</th>
+                    <th>Discount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var voucher in Vouchers)
+                {
+                    <tr>
+                        <td>@voucher.Code</td>
+                        <td>@voucher.ExpiryDate.ToString("dd MMM yyyy")</td>
+                        <td>@(voucher.MaxUses.HasValue ? $"{voucher.Uses}/{voucher.MaxUses}" : "No Limit")</td>
+                        <td>@voucher.DiscountPercent%</td>
+                        <td>
+                            @if (voucher.Uses < voucher.MaxUses)
+                            {
+                                <span class="active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="limit-reached">Limit Reached</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private string VoucherCode { get; set; } = string.Empty;
+    private DateTime ExpiryDate { get; set; } = DateTime.Now;
+    private int? MaxUses { get; set; }
+    private int DiscountPercent { get; set; }
+    private List<Voucher> Vouchers { get; set; } = new List<Voucher>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchActiveVouchers();
+    }
+
+    private async Task CreateVoucher()
+    {
+        var newVoucher = new Voucher
+            {
+                Code = VoucherCode,
+                ExpiryDate = ExpiryDate,
+                MaxUses = MaxUses,
+                DiscountPercent = DiscountPercent
+            };
+
+        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/voucher/create", newVoucher);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Successfully created the voucher, fetch the updated list
+            await FetchActiveVouchers();
+            ClearInputs();
+        }
+        else
+        {
+            // Handle error (e.g., show a message)
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error creating voucher: {errorMessage}");
+        }
+    }
+
+    private async Task FetchActiveVouchers()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/voucher/getAll");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Vouchers = await response.Content.ReadFromJsonAsync<List<Voucher>>();
+        }
+        else
+        {
+            // Handle error (e.g., show a message)
+            Console.WriteLine("Error fetching vouchers.");
+        }
+    }
+
+    private void ClearInputs()
+    {
+        VoucherCode = string.Empty;
+        ExpiryDate = DateTime.Now;
+        MaxUses = null;
+        DiscountPercent = 0;
+    }
+}
+
+<style>
+    .voucher-management {
+        background-color: #efbfcd; /* Background color */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .new-voucher, .active-vouchers {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #fff; /* White background for sections */
+        border-radius: 8px;
+    }
+
+    .voucher-inputs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+        .voucher-inputs input {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            flex: 1; /* Make inputs flexible */
+        }
+
+        .voucher-inputs button {
+            padding: 8px 15px;
+            background-color: #D5598C; /* Button color */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            .voucher-inputs button:hover {
+                background-color: #C5497A; /* Darker shade on hover */
+            }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #D5598C; /* Header background */
+        color: #fff;
+    }
+
+    .active {
+        color: green;
+    }
+
+    .limit-reached {
+        color: orange;
+    }
+
+    .expired {
+        color: red;
+    }
+</style>

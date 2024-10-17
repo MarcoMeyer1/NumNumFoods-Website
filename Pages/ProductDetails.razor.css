@@ -1,0 +1,88 @@
+﻿.product-title {
+    margin-left: 20px;
+}
+
+.product-details-page {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* 3-column layout for desktop */
+    gap: 20px;
+    padding: 2rem;
+    align-items: start;
+}
+
+.product-card{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nutrition-card {
+    background-color: #b3b3b3;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Center the product image within the product card */
+.product-image {
+    display: block;
+    margin: 0 auto; /* Horizontally center the image */
+    max-width: 100%; /* Ensure image scales properly */
+    height: auto;
+}
+
+.product-description {
+    text-align: center; /* Center the description content */
+}
+
+/* Styling for the Add to Cart button */
+.add-to-cart-btn {
+    background-color: #ff69b4;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.review-section {
+    text-align: center;
+}
+
+.review-input textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.submit-review-btn {
+    background-color: #ff69b4;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+/* Filled star rating */
+.filled {
+    color: gold;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .product-details-page {
+        grid-template-columns: 1fr; /* Stacks sections vertically on mobile */
+    }
+
+    .product-card, .nutrition-card {
+        margin-bottom: 20px;
+    }
+}

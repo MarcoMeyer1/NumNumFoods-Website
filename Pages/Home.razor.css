@@ -4,9 +4,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 1200px; /* You can adjust the width */
-    margin: 0 auto; /* This ensures the container is centered */
-    padding: 20px; /* Add some padding for spacing */
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
 }
 
 .user-profile {
@@ -43,8 +43,8 @@
     align-items: center;
     text-align: center;
     padding: 2rem;
-    background-image: url('/Assets/Smashed image.png'); /* Replace with the correct path */
-    background-size: cover; /* Ensures the image covers the entire section */
+    background-image: url('/Assets/Smashed image.png');
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
@@ -53,7 +53,7 @@
 
 .hero-content {
     max-width: 800px;
-    background-color: rgba(255, 255, 255, 0.7); /* Slight white overlay to make the text readable */
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 2rem;
     border-radius: 10px;
 }
@@ -88,12 +88,14 @@
     display: flex;
     justify-content: center;
     gap: 20px;
+    flex-wrap: wrap; /* Allow wrapping for mobile */
 }
 
 .product-card {
     border: 1px solid #ddd;
     padding: 1rem;
-    width: 250px;
+    width: 100%; /* Full width for mobile, limited for desktop */
+    max-width: 250px; /* Keep consistent size on larger screens */
     text-align: center;
     background-color: #fff;
     border-radius: 10px;
@@ -132,6 +134,7 @@
     display: flex;
     justify-content: center;
     gap: 2rem;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 .event-item {
@@ -139,6 +142,8 @@
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width on mobile */
+    max-width: 300px; /* Fixed width on larger screens */
 }
 
     .event-item p {
@@ -155,3 +160,50 @@
         height: 80px;
         border-radius: 50%;
     }
+
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+    .hero {
+        height: auto;
+        padding: 1rem;
+    }
+
+        .hero h1 {
+            font-size: 2.5rem; /* Smaller heading for mobile */
+        }
+
+        .hero h2 {
+            font-size: 1.2rem;
+        }
+
+    .hero-content {
+        padding: 1rem;
+        max-width: 100%;
+    }
+
+    .cta-btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    /* Product Grid for Mobile */
+    .product-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 300px; /* Increase size on mobile */
+    }
+
+    /* Event List on Mobile */
+    .events-list {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .event-item {
+        width: 100%;
+    }
+}

@@ -1,0 +1,180 @@
+﻿@page "/manage-events"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+
+<div class="manage-events-container">
+    <h1>Manage Events</h1>
+
+    <button class="new-event-button" @onclick="NavigateToNewEvent">New Event</button>
+
+    <div class="events-list">
+        <h2>Current Events</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Title</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Promo Code</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventItem in Events)
+                {
+                    <tr>
+                        <td>@eventItem.Title</td>
+                        <td>@eventItem.Description</td>
+                        <td>@eventItem.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@eventItem.EndDate.ToString("yyyy-MM-dd")</td>
+                        <td>@eventItem.PromoCode</td>
+                        <td>
+                            <button class="delete-button" @onclick="() => ConfirmDelete(eventItem.EventId)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<Event> Events { get; set; } = new List<Event>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchEvents();
+    }
+
+    private async Task FetchEvents()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/events/getAll");
+        if (response.IsSuccessStatusCode)
+        {
+            Events = await response.Content.ReadFromJsonAsync<List<Event>>();
+        }
+        else
+        {
+            // Handle error
+            Console.WriteLine("Error fetching events.");
+        }
+    }
+
+    private void NavigateToNewEvent()
+    {
+        Navigation.NavigateTo("/new-event"); // Navigate to the New Event page
+    }
+
+    private async Task ConfirmDelete(int eventId)
+    {
+        // Display confirmation dialog and await user response
+ 
+
+     
+            // Make a DELETE request to the API to delete the event
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/events/{eventId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Optionally, refresh the events list after deletion
+                await FetchActiveEvents(); // Ensure you have this method implemented to refresh the event list
+            }
+            else
+            {
+                // Handle error (e.g., show an error message)
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error deleting event: {errorMessage}");
+            }
+        
+    }
+
+    private async Task FetchActiveEvents()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/events/getAll");
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Deserialize the response content into a list of Event objects
+            var events = await response.Content.ReadFromJsonAsync<List<Event>>();
+
+            if (events != null)
+            {
+                // Update the UI with the retrieved events
+                // Assuming you have a property to hold events, like this:
+                Events = events;
+            }
+        }
+        else
+        {
+            // Handle error (e.g., show an error message)
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error fetching events: {errorMessage}");
+        }
+    }
+
+
+}
+
+<style>
+    .manage-events-container {
+        background-color: #efbfcd; /* Background color */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .new-event-button {
+        padding: 10px 15px;
+        background-color: #D5598C; /* Button color */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+        .new-event-button:hover {
+            background-color: #C5497A; /* Darker shade on hover */
+        }
+
+    .events-list {
+        margin-top: 20px;
+        background-color: #fff; /* White background for the events list */
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #D5598C; /* Header background */
+        color: #fff;
+    }
+
+    .delete-button {
+        padding: 6px 12px;
+        background-color: #ff4444; /* Red color for delete */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .delete-button:hover {
+            background-color: #ff0000; /* Darker shade on hover */
+        }
+</style>

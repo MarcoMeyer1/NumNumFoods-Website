@@ -1,0 +1,122 @@
+﻿@page "/products"
+
+<PageTitle>Products</PageTitle>
+
+<h1 align="center">Our Products</h1>
+
+<section class="product-page">
+    <div class="filters-and-search">
+        <input type="text" placeholder="Search for products..." class="search-bar" @bind="searchTerm" />
+        <select class="sort-dropdown" @bind="selectedSort">
+            <option value="default">Sort</option>
+            <option value="price-asc">Price - Low to High</option>
+            <option value="price-desc">Price - High to Low</option>
+            <option value="rating">Rating</option>
+        </select>
+    </div>
+
+    <div class="filter-tags">
+        @foreach (var tag in filterTags)
+        {
+            <button class="filter-btn" @onclick="() => ApplyFilter(tag)">@tag</button>
+        }
+    </div>
+
+    <h2>The Teeny Weeny Range</h2>
+    <div class="product-grid">
+        @foreach (var product in teenyWeenyProducts)
+        {
+            <div class="product-card">
+                <img src="@product.ImageUrl" alt="@product.Name" />
+                <h3>@product.Name</h3>
+                <p>@product.Description</p>
+                <div class="product-rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span @onclick="() => RateProduct(product, i)"
+                              class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
+                    }
+                </div>
+                <button class="add-to-cart-btn">Add to cart</button>
+                <!-- Navigate to product details -->
+                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.Id)">More info</button>
+            </div>
+        }
+    </div>
+
+    <h2>The Itsy-Bitsy Range</h2>
+    <div class="product-grid">
+        @foreach (var product in itsyBitsyProducts)
+        {
+            <div class="product-card">
+                <img src="@product.ImageUrl" alt="@product.Name" />
+                <h3>@product.Name</h3>
+                <p>@product.Description</p>
+                <div class="product-rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span @onclick="() => RateProduct(product, i)"
+                              class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
+                    }
+                </div>
+                <button class="add-to-cart-btn">Add to cart</button>
+                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.Id)">More info</button>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    // Search term for binding
+    private string searchTerm { get; set; } = "";
+
+    // Dropdown sorting value
+    private string selectedSort { get; set; } = "default";
+
+    // Sample filter tags (for display purposes)
+    private List<string> filterTags = new() { "For Babies", "6+ Months", "7+ Months", "Nutritious", "Smooth Texture" };
+
+    // Sample products for dynamic content (These will be replaced by actual API data)
+    private List<Product> teenyWeenyProducts = new()
+    {
+        new Product { Id = 1, Name = "Mashed Peas", Description = "Creamy mashed peas rich in vitamins.", ImageUrl = "/Assets/Mashed_Peas.png", Rating = 4 },
+        new Product { Id = 2, Name = "Carrot Puree", Description = "Smooth carrot puree rich in beta-carotene.", ImageUrl = "/Assets/Carrot_Puree.png", Rating = 5 },
+        new Product { Id = 3, Name = "Apple & Banana Mix", Description = "A fruity mix of apples and bananas.", ImageUrl = "/Assets/Apple_Banana.png", Rating = 3 }
+    };
+
+    private List<Product> itsyBitsyProducts = new()
+    {
+        new Product { Id = 4, Name = "Pumpkin Puree", Description = "Smooth pumpkin puree full of vitamins.", ImageUrl = "/Assets/Pumpkin_Puree.png", Rating = 5 },
+        new Product { Id = 5, Name = "Sweet Potato Mash", Description = "Creamy sweet potato mash, perfect for your baby.", ImageUrl = "/Assets/Sweet_Potato.png", Rating = 4 },
+        new Product { Id = 6, Name = "Green Bean Mix", Description = "A nutritious mix of green beans and peas.", ImageUrl = "/Assets/Green_Beans.png", Rating = 2 }
+    };
+
+    // Handle rating (for front-end only)
+    private void RateProduct(Product product, int rating)
+    {
+        product.Rating = rating;
+    }
+
+    // Handle filter application (not functional now, just a placeholder)
+    private void ApplyFilter(string filterTag)
+    {
+        // Logic for filtering products based on filterTag would go here
+    }
+
+    // Navigate to Product Details page
+    [Inject] private NavigationManager NavigationManager { get; set; }
+    private void GoToProductDetails(int productId)
+    {
+        NavigationManager.NavigateTo($"/product-details/{productId}");
+    }
+
+    // Sample product class
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public int Rating { get; set; } // Rating from 1 to 5
+    }
+}

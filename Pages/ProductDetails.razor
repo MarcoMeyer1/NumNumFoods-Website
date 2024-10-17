@@ -1,0 +1,91 @@
+﻿@page "/product-details/{ProductId:int}"
+
+<PageTitle>Product Details</PageTitle>
+
+<h1 class="product-title">@product.Name</h1>
+
+<div class="product-details-page">
+    <!-- Product Card aligned with title -->
+    <div class="product-card">
+        <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+        <div class="product-description">
+            <h2>@product.Name</h2>
+            <p>@product.Description</p>
+            <div class="product-rating">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
+                }
+            </div>
+            <button class="submit-review-btn add-to-cart-btn">Add to cart</button>
+        </div>
+    </div>
+
+    <!-- Review section without card -->
+    <div class="review-section">
+        <h3>Tell us what you think!</h3>
+        <div class="review-input">
+            <div class="stars">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <span class="rating-star @(userRating >= i ? "filled" : "")" @onclick="() => SetRating(i)">⭐</span>
+                }
+            </div>
+            <textarea placeholder="Write a review for this product" @bind="reviewText"></textarea>
+            <button class="submit-review-btn">Submit Review</button>
+        </div>
+    </div>
+
+    <!-- Nutritional facts on the right -->
+    <div class="nutrition-card">
+        <h3>Featured Ingredients</h3>
+        <p>@product.Ingredients</p>
+
+        <h3>Nutritional Facts</h3>
+        <p>@product.NutritionInfo</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int ProductId { get; set; }
+
+    private Product product = new Product
+        {
+            Id = 1,
+            Name = "Mashed Peas",
+            Description = "Creamy mashed peas with vitamins and minerals.",
+            ImageUrl = "/Assets/Mashed_Peas.png",
+            Rating = 4,
+            Ingredients = "Peas, Water, Mint Leaves",
+            NutritionInfo = "Rich in fiber, Vitamin A, Vitamin B6, Vitamin C, and low in cholesterol."
+        };
+
+    private string reviewText = "";
+    private int userRating = 0;
+
+    private void SetRating(int rating)
+    {
+        userRating = rating;
+    }
+
+    private void AddToCart()
+    {
+        // Logic for adding product to cart
+    }
+
+    private void SubmitReview()
+    {
+        // Logic to submit review
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public int Rating { get; set; }
+        public string Ingredients { get; set; }
+        public string NutritionInfo { get; set; }
+    }
+}

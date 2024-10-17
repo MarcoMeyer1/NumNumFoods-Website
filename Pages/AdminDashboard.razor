@@ -1,0 +1,95 @@
+﻿@page "/admin-dashboard"
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Check the user's role from session storage
+        var role = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "userRole");
+
+        if (role != "admin")
+        {
+            Navigation.NavigateTo("/"); // Redirect non-admin users to the homepage
+        }
+    }
+
+    private void NavigateToManageVouchers()
+    {
+        Navigation.NavigateTo("/manage-vouchers");
+    }
+
+    private void NavigateToManageProducts()
+    {
+        Navigation.NavigateTo("/manage-products");
+    }
+
+    private void NavigateToManageOrders()
+    {
+        Navigation.NavigateTo("/manage-orders");
+    }
+
+    private void NavigateToViewStock()
+    {
+        Navigation.NavigateTo("/view-stock");
+    }
+
+    private void NavigateToManageEvents()
+    {
+        Navigation.NavigateTo("/manage-events");
+    }
+}
+
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard-grid">
+        <div class="dashboard-item" @onclick="NavigateToManageVouchers">
+            <h3>Vouchers</h3>
+            <p>Manage Vouchers</p>
+        </div>
+        <div class="dashboard-item" @onclick="NavigateToManageProducts">
+            <h3>Products</h3>
+            <p>Manage Products</p>
+            <p>Add new Product</p>
+        </div>
+        <div class="dashboard-item" @onclick="NavigateToManageOrders">
+            <h3>Orders</h3>
+            <p>Manage Orders</p>
+        </div>
+        <div class="dashboard-item" @onclick="NavigateToViewStock">
+            <h3>Stock</h3>
+            <p>View Current Stock</p>
+            <p>Add new Stock entry</p>
+            <p>Stock Usage</p>
+        </div>
+        <div class="dashboard-item" @onclick="NavigateToManageEvents">
+            <h3>Other</h3>
+            <p>Manage Events</p>
+        </div>
+    </div>
+</div>
+
+<style>
+  
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .dashboard-item {
+        background-color: #D5598C; /* Text color */
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer; /* Change cursor to indicate clickable */
+        transition: transform 0.3s, box-shadow 0.3s; /* Add transition effect */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+    }
+
+        .dashboard-item:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+</style>

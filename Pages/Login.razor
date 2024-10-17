@@ -1,6 +1,10 @@
 ﻿@page "/login"
 @inject HttpClient Http
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using NumNumFoods.Models
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <div class="login-page">
     <div class="login-left">
@@ -68,24 +72,31 @@
     {
         try
         {
-            // Define the login model matching the API's expected input
             var loginData = new
             {
                 Email = Email,
                 Password = Password
             };
 
-            // Call the Login API endpoint
             var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/login", loginData);
 
             if (response.IsSuccessStatusCode)
             {
-                // Navigate to the home page or another protected page after successful login
+                // Get the user object, including role
+                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>(); // Assuming LoginResponse has the User object
+
+                // Store the user's role in session storage
+                UserState.SetRole(loginResponse.User.Role);
+                await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
+
+                // Log the stored role for debugging
+                Console.WriteLine($"User role set in session storage: {loginResponse.User.Role}");
+
+                // Redirect to the homepage after login
                 Navigation.NavigateTo("/");
             }
             else
             {
-                // Handle errors by showing an error message
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 ErrorMessage = $"Login failed: {errorResponse}";
             }
@@ -95,4 +106,8 @@
             ErrorMessage = $"An error occurred: {ex.Message}";
         }
     }
+
+
+
+
 }

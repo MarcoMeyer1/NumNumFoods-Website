@@ -1,0 +1,124 @@
+﻿@page "/new-event"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+
+<div class="new-event-container">
+    <h1>New Event</h1>
+    <div class="event-form">
+        <label for="eventTitle">Event Title</label>
+        <input type="text" id="eventTitle" @bind="EventTitle" placeholder="Enter event title" required />
+
+        <label for="shortDescription">Short Description (Optional)</label>
+        <textarea id="shortDescription" @bind="EventDescription" placeholder="Enter short description"></textarea>
+
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate" @bind="StartDate" required />
+
+        <label for="endDate">End Date</label>
+        <input type="date" id="endDate" @bind="EndDate" required />
+
+        <label for="promoCode">Promo Code (Optional)</label>
+        <input type="text" id="promoCode" @bind="PromoCode" placeholder="Enter promo code" />
+
+        <div class="button-container">
+            <button class="create-post-button" @onclick="CreateNewEvent">Create New Event</button>
+            <button class="clear-posts-button" @onclick="ClearInputs">Clear Inputs</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string EventTitle { get; set; } = string.Empty;
+    private string EventDescription { get; set; } = string.Empty;
+    private DateTime StartDate { get; set; } = DateTime.Now;
+    private DateTime EndDate { get; set; } = DateTime.Now.AddDays(1);
+    private string PromoCode { get; set; } = string.Empty;
+
+    private async Task CreateNewEvent()
+    {
+        var newEvent = new Event
+            {
+                Title = EventTitle,
+                Description = EventDescription,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                PromoCode = PromoCode
+            };
+
+        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/events/create", newEvent);
+        if (response.IsSuccessStatusCode)
+        {
+            // Event created successfully
+            Navigation.NavigateTo("/manage-events"); // Redirect back to Manage Events page
+        }
+        else
+        {
+            // Handle error (e.g., show a message)
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error creating event: {errorMessage}");
+        }
+    }
+
+    private void ClearInputs()
+    {
+        EventTitle = string.Empty;
+        EventDescription = string.Empty;
+        StartDate = DateTime.Now;
+        EndDate = DateTime.Now.AddDays(1);
+        PromoCode = string.Empty;
+    }
+}
+
+<style>
+    .new-event-container {
+        background-color: #efbfcd; /* Background color */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .event-form {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff; /* White background for the form */
+        border-radius: 8px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"], textarea, input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    textarea {
+        resize: vertical;
+        height: 100px; /* Default height for the text area */
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    .create-post-button, .clear-posts-button {
+        padding: 10px 15px;
+        background-color: #D5598C; /* Button color */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .create-post-button:hover, .clear-posts-button:hover {
+            background-color: #C5497A; /* Darker shade on hover */
+        }
+</style>

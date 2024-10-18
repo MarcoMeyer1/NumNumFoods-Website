@@ -5,7 +5,7 @@
 
 .top-row {
     height: 3.5rem;
-    background-color: #e91e63; /* Pink background for navbar */
+    background-color: #e91e63; 
     display: flex;
     align-items: center;
 }
@@ -45,3 +45,23 @@
             background-color: #ffd1dc;
             color: white;
         }
+
+.navbar-nav .nav-icon {
+    width: 24px; /* Size adjustment to make sure it fits in the navbar */
+    height: 24px; /* Ensure the height fits */
+    filter:invert(1) !important;
+    margin-left: 15px; /* Add space between the icons */
+    vertical-align: middle; /* Align them vertically in the navbar */
+}
+
+/* Ensure the icons align to the right */
+.navbar-nav.ms-auto {
+    margin-left: auto;
+}
+
+/* Make sure the navbar and icons are responsive for mobile */
+@media (max-width: 768px) {
+    .navbar-nav.ms-auto {
+        margin-top: 10px;
+    }
+}

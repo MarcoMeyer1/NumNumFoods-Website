@@ -1,0 +1,101 @@
+﻿.voucher-management {
+    background-color: #efbfcd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.new-voucher, .active-vouchers {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.voucher-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+    .voucher-inputs input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        flex: 1;
+    }
+
+    .voucher-inputs button {
+        padding: 8px 15px;
+        background-color: #D5598C;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .voucher-inputs button:hover {
+            background-color: #C5497A;
+        }
+
+.delete-button {
+    padding: 6px 12px;
+    background-color: #ff4444;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .delete-button:hover {
+        background-color: #ff0000;
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #D5598C;
+    color: #fff;
+}
+
+.active {
+    color: green;
+}
+
+.limit-reached {
+    color: orange;
+}
+
+.expired {
+    color: red;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .voucher-management {
+        padding: 10px; /* Reduce padding */
+    }
+
+    .voucher-inputs {
+        flex-direction: column; /* Stack inputs vertically on mobile */
+        gap: 5px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto; /* Allow horizontal scrolling on small screens */
+    }
+
+    th, td {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}

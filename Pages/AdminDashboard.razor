@@ -41,7 +41,7 @@
 }
 
 <div class="admin-dashboard">
-    <h1>Admin Dashboard</h1>
+    <h1 align="center">Admin Dashboard</h1>
     <div class="dashboard-grid">
         <div class="dashboard-item" @onclick="NavigateToManageVouchers">
             <h3>Vouchers</h3>
@@ -69,27 +69,3 @@
     </div>
 </div>
 
-<style>
-  
-
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    .dashboard-item {
-        background-color: #D5598C; /* Text color */
-        color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        cursor: pointer; /* Change cursor to indicate clickable */
-        transition: transform 0.3s, box-shadow 0.3s; /* Add transition effect */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add drop shadow */
-    }
-
-        .dashboard-item:hover {
-            transform: scale(1.05); /* Scale effect on hover */
-        }
-</style>

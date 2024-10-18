@@ -1,0 +1,128 @@
+﻿@page "/cart"
+@inject NavigationManager Navigation
+
+<div class="container cart-container">
+    <h1>My Cart</h1>
+    <div class="cart-content">
+        <div class="cart-items">
+            @foreach (var item in cartItems)
+            {
+                <div class="cart-item">
+                    <img src="@item.ImageUrl" alt="@item.ProductName" class="product-image" />
+                    <div class="item-details">
+                        <h4>@item.ProductName</h4>
+                        <p>@item.Description</p>
+                        <div class="pricing-info">
+                            <span>Each</span>
+                            <span>@item.Price</span>
+                            <span>Quantity</span>
+                            <div class="quantity-control">
+                                <button @onclick="() => UpdateQuantity(item, -1)">&#8722;</button>
+                                <input type="number" value="@item.Quantity" readonly />
+                                <button @onclick="() => UpdateQuantity(item, 1)">&#43;</button>
+                            </div>
+                            <span>Total</span>
+                            <span>@(item.Price * item.Quantity)</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="cart-summary">
+                <div>@cartItems.Count items</div>
+                <div>Total: @cartItems.Sum(item => item.Price * item.Quantity).ToString("C")</div>
+            </div>
+        </div>
+
+        <div class="cart-actions">
+            <div class="form-group">
+                <label>Select Branch</label>
+                <select @bind="selectedBranch" class="form-control">
+                    <option value="Port Elizabeth">Port Elizabeth</option>
+                    <option value="Cape Town">Cape Town</option>
+                    <option value="Johannesburg">Johannesburg</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Enter Voucher Code</label>
+                <input type="text" class="form-control" placeholder="Voucher Code" @bind="voucherCode" />
+                <button class="btn btn-primary" @onclick="ApplyVoucher">Submit</button>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Method:</label>
+                <div class="payment-method">
+                    <label for="pay-now">Pay now:</label>
+                    <input type="radio" id="pay-now" name="payment" value="Pay now" />
+
+                    <label for="in-person">In person:</label>
+                    <input type="radio" id="in-person" name="payment" value="In person" checked />
+                </div>
+            </div>
+
+            <div class="cart-total">
+                <div>Discount: @(discount)</div>
+                <div>Total: @(cartItems.Sum(item => item.Price * item.Quantity - discount))</div>
+            </div>
+
+            <button class="btn btn-pink" @onclick="ProceedToCheckout">Checkout</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<CartItem> cartItems = new List<CartItem>
+    {
+        new CartItem
+        {
+            ProductName = "Mashed Peas",
+            Description = "Cream filled donuts with potato as a side and some peas which are mashed and goopy",
+            Price = 55.00M,
+            Quantity = 1,
+            ImageUrl = "/Assets/mashed_peas.png"
+        },
+        new CartItem
+        {
+            ProductName = "Mashed Peas",
+            Description = "Cream filled donuts with potato as a side and some peas which are mashed and goopy",
+            Price = 55.00M,
+            Quantity = 2,
+            ImageUrl = "/Assets/mashed_peas.png"
+        }
+    };
+
+    private string selectedBranch = "Port Elizabeth";
+    private string voucherCode = string.Empty;
+    private decimal discount = 0M;
+
+    private void UpdateQuantity(CartItem item, int change)
+    {
+        if (item.Quantity + change >= 1)
+        {
+            item.Quantity += change;
+        }
+    }
+
+    private void ApplyVoucher()
+    {
+        // Placeholder for voucher logic
+        if (voucherCode == "DISCOUNT50")
+        {
+            discount = 50M; // Apply a flat discount for demo purposes
+        }
+    }
+
+    private void ProceedToCheckout()
+    {
+        Navigation.NavigateTo("/checkout");
+    }
+
+    public class CartItem
+    {
+        public string ProductName { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public string ImageUrl { get; set; }
+    }
+}

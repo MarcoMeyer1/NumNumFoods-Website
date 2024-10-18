@@ -1,0 +1,31 @@
+﻿.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.dashboard-item {
+    background-color: #D5598C;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+    .dashboard-item:hover {
+        transform: scale(1.05);
+    }
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Single-column layout on mobile */
+    }
+
+    .dashboard-item {
+        padding: 15px;
+    }
+}

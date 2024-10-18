@@ -15,11 +15,7 @@
                     <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Home</NavLink>
                 </li>
                 <li class="nav-item">
-
-                    <NavLink class="nav-link" href="aboutUs">About Us</NavLink>
-
                     <NavLink class="nav-link" href="products">Our Products</NavLink>
-
                 </li>
                 <li class="nav-item">
                     <NavLink class="nav-link" href="login">Login</NavLink>
@@ -30,14 +26,24 @@
                 <li class="nav-item">
                     <NavLink class="nav-link" href="weather">Weather</NavLink>
                 </li>
-
-
                 @if (UserState.Role == "admin")
                 {
                     <li class="nav-item">
                         <NavLink class="nav-link" href="/admin-dashboard">Admin Dashboard</NavLink>
                     </li>
                 }
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">
+                        <img src="/Assets/Cart.png" alt="Cart" class="nav-icon" />
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">
+                        <img src="/Assets/ic_profile (1).png" alt="Profile" class="nav-icon" />
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

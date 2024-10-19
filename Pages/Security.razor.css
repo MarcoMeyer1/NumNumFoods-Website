@@ -1,0 +1,93 @@
+﻿.security-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px; /* Increased padding */
+    text-align: center;
+}
+
+.security-title {
+    font-size: 4rem; /* Larger title */
+    font-weight: bold; /* Bold text */
+    margin-bottom: 50px; /* Extra space below the title */
+}
+
+.security-settings {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+    margin-bottom: 60px; /* Increased space below the form section */
+}
+
+.left-section, .right-section {
+    width: 45%; /* Keep even widths */
+}
+
+.checkbox-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px; /* Extra space below the checkbox */
+}
+
+.checkbox-input {
+    width: 35px; /* Larger checkbox */
+    height: 35px;
+    margin-right: 15px; /* Increased space between checkbox and label */
+}
+
+.checkbox-section label {
+    font-size: 1.8rem; /* Bigger and bolder */
+    font-weight: bold;
+}
+
+.email-section label, .right-section label {
+    display: block;
+    margin-bottom: 15px; /* Increased space below labels */
+    font-size: 1.6rem; /* Larger labels */
+    font-weight: bold; /* Bold labels */
+    text-align: left;
+}
+
+.input-field {
+    width: 100%;
+    padding: 20px; /* Larger input padding */
+    font-size: 1.6rem; /* Larger font size for inputs */
+    margin-bottom: 25px; /* More space between fields */
+    border: 2px solid #ccc; /* Thicker border */
+    border-radius: 8px; /* Slightly larger radius */
+}
+
+.change-password-link {
+    display: block;
+    font-size: 1.4rem; /* Bigger font size for link */
+    color: #d5598c;
+    text-decoration: underline;
+    margin-top: -10px;
+    text-align: right;
+    cursor: pointer;
+}
+
+    .change-password-link:hover {
+        color: #9c114a;
+    }
+
+/* Privacy Policy Section */
+.privacy-policy h2 {
+    font-size: 2.5rem; /* Larger privacy policy heading */
+    font-weight: bold; /* Bold heading */
+    margin-bottom: 30px; /* Increased space below the heading */
+}
+
+.policy-box {
+    background-color: #f5f5f5;
+    padding: 30px; /* Increased padding */
+    border: 2px solid #ccc; /* Thicker border */
+    border-radius: 8px; /* Larger border radius */
+    text-align: left;
+}
+
+    .policy-box p {
+        margin: 0;
+        font-size: 1.4rem; /* Larger text for privacy policy */
+        line-height: 1.8;
+    }

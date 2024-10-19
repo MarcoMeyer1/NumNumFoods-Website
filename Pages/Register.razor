@@ -18,28 +18,24 @@
                 <div class="error-message">@ErrorMessage</div>
             }
 
-            <label for="fullname">Full name</label>
             <input type="text" id="fullname" @bind="FullName" placeholder="Full name" />
             @if (ShowFullNameError)
             {
                 <div class="validation-error">Full Name is required</div>
             }
 
-            <label for="email">Email</label>
             <input type="email" id="email" @bind="Email" placeholder="Email" />
             @if (ShowEmailError)
             {
                 <div class="validation-error">Please enter a valid email</div>
             }
 
-            <label for="password">Password</label>
             <input type="password" id="password" @bind="Password" placeholder="Password" />
             @if (ShowPasswordError)
             {
                 <div class="validation-error">Password must be at least 6 characters</div>
             }
 
-            <label for="confirm-password">Confirm password</label>
             <input type="password" id="confirm-password" @bind="ConfirmPassword" placeholder="Confirm password" />
             @if (ShowConfirmPasswordError)
             {
@@ -74,11 +70,9 @@
 
     private async Task RegisterUser()
     {
-        // Clear error flags
         ShowFullNameError = ShowEmailError = ShowPasswordError = ShowConfirmPasswordError = false;
         ErrorMessage = string.Empty;
 
-        // Validate the form inputs
         if (string.IsNullOrWhiteSpace(FullName))
         {
             ShowFullNameError = true;
@@ -105,7 +99,6 @@
 
         try
         {
-            // Prepare the registration model
             var registrationData = new
             {
                 FullName = FullName,
@@ -113,17 +106,14 @@
                 Password = Password
             };
 
-            // Call the Register API endpoint
             var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/register", registrationData);
 
             if (response.IsSuccessStatusCode)
             {
-                // Navigate to the login page after successful registration
                 Navigation.NavigateTo("/login");
             }
             else
             {
-                // Handle any errors from the server
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 ErrorMessage = $"Registration failed: {errorResponse}";
             }
@@ -134,7 +124,6 @@
         }
     }
 
-    // Basic email validation
     private bool IsValidEmail(string email)
     {
         try

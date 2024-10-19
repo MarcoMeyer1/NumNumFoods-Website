@@ -1,0 +1,64 @@
+﻿:root {
+    --name-phone-gap: 20px; /* Set the gap between the name and phone number */
+}
+
+.address-book-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: left; /* Align the entire content to the left */
+    background-color: #fff;
+}
+
+.address-book-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center; /* Title aligned to the left */
+}
+
+.address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between address boxes */
+    align-items: center; /* Align the boxes to the left */
+}
+
+.address-box {
+    width: 60%; /* Set the width of the address boxes */
+    background-color: #FADADD; /* Light pink background for the box */
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #ccc; /* Default border color */
+    text-align: center; /* Align the text inside the box to the left */
+}
+
+    .address-box.selected {
+        border: 2px solid #ccc; /* Blue border for selected address */
+    }
+
+.name-phone-row {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    gap: 60px; /* Add gap between name and phone number */
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px; /* Space below the name-phone row */
+}
+
+.address-name, .address-phone {
+    margin: 0;
+    text-align: center; /* Ensure both the name and phone are centered */
+}
+
+.address-details {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.address-type {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: bold;
+}

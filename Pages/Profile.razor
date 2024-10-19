@@ -1,0 +1,35 @@
+﻿@page "/profile"
+@inject NavigationManager Navigation
+
+<div class="profile-container">
+    <div class="profile-box">
+        <div class="profile-header">
+            <img src="/Assets/ProfileIcon.png" alt="Profile Icon" class="profile-img" />
+            <div class="profile-info">
+                <h2>Jane Smith</h2>
+                <p>janesmith@gmail.com</p>
+            </div>
+        </div>
+        <hr class="profile-divider" />
+        <div class="profile-options">
+            <a href="/account-settings" class="profile-item">
+                <i class="fas fa-cog"></i> Account Settings
+            </a>
+            <a href="/profile/billing-information" class="profile-item">
+                <i class="fas fa-credit-card"></i> Billing Information
+            </a>
+            <a href="/order-history" class="profile-item">
+                <i class="fas fa-history"></i> Order History
+            </a>
+            <a href="/security" class="profile-item">
+                <i class="fas fa-lock"></i> Security
+            </a>
+            <a href="/switch-account" class="profile-item">
+                <i class="fas fa-user"></i> Switch Account
+            </a>
+            <a href="/logout" class="profile-item logout">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+    </div>
+</div>

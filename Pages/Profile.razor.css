@@ -1,0 +1,91 @@
+﻿.profile-container {
+    width: 100%;
+    max-width: 1200px; /* Increased max width to take up more space */
+    margin: 50px auto;
+    padding: 60px; /* Increased padding */
+    background-color: #f5f5f5; /* Darker white background */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    border: 1px solid #ddd; /* Subtle border */
+}
+
+.profile-box {
+    padding: 40px; /* Add inner padding to create space inside the box */
+    background-color: #fff; /* White background for the box */
+    border-radius: 12px;
+    border: 2px solid #e0e0e0; /* Slightly darker border for the box */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* A bit stronger shadow for the box */
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-img {
+    width: 180px; /* Increase image size */
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 40px; /* More space between the image and text */
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 36px; /* Larger font size for profile name */
+    font-weight: 600;
+    color: #333;
+}
+
+.profile-info p {
+    margin: 10px 0 0 0;
+    font-size: 20px; /* Larger font size for email */
+    color: #666;
+}
+
+.profile-divider {
+    border: none;
+    border-top: 2px solid #ddd;
+    margin: 30px 0;
+}
+
+.profile-options {
+    margin-top: 40px;
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 22px; /* Larger font size for options */
+    font-weight: 500;
+    margin: 16px 0;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+    .profile-item i {
+        margin-right: 20px;
+        font-size: 26px; /* Larger icons */
+        color: #333;
+    }
+
+    .profile-item:hover {
+        background-color: #f0f0f0;
+    }
+
+.logout {
+    color: red;
+    font-weight: 600;
+}
+
+    .logout:hover {
+        background-color: #ffe5e5;
+    }

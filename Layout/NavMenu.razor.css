@@ -1,17 +1,24 @@
+.navbar {
+    background-color: #D5598C; 
+    height: 4.5rem; 
+    display: flex;
+    align-items: center;
+}
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.5);
 }
 
 .top-row {
-    height: 3.5rem;
-    background-color: #e91e63; 
+    height: 4.5rem; 
+    background-color: #D5598C; 
     display: flex;
     align-items: center;
 }
 
 .navbar-brand {
-    font-size: 1.3rem;
+    font-size: 1.6rem; 
     color: white;
 }
 
@@ -23,16 +30,16 @@
 
 .nav-item {
     padding: 0 1rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem; 
 }
 
     .nav-item ::deep a {
         color: white;
         border-radius: 4px;
-        height: 3rem;
+        height: 4rem; 
         display: flex;
         align-items: center;
-        line-height: 3rem;
+        line-height: 4rem;
         font-weight: bold;
     }
 
@@ -47,19 +54,17 @@
         }
 
 .navbar-nav .nav-icon {
-    width: 24px; /* Size adjustment to make sure it fits in the navbar */
-    height: 24px; /* Ensure the height fits */
-    filter:invert(1) !important;
-    margin-left: 15px; /* Add space between the icons */
-    vertical-align: middle; /* Align them vertically in the navbar */
+    width: 30px;
+    height: 30px;
+    filter: invert(1) !important;
+    margin-left: 15px;
+    vertical-align: middle;
 }
 
-/* Ensure the icons align to the right */
 .navbar-nav.ms-auto {
     margin-left: auto;
 }
 
-/* Make sure the navbar and icons are responsive for mobile */
 @media (max-width: 768px) {
     .navbar-nav.ms-auto {
         margin-top: 10px;

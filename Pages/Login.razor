@@ -7,18 +7,24 @@
 @inject UserState UserState
 
 <div class="login-page">
+    <!-- Left Side (Image Section) -->
     <div class="login-left">
         <div class="logo-container">
+            <!-- Logo Image -->
             <img src="Assets/numnumfoods-logo.png" alt="NumNum Logo" class="logo" />
         </div>
         <div class="image-container">
+            <!-- Background Image -->
             <img src="Assets/login-background.jpg" alt="Background Image" class="background-image" />
         </div>
     </div>
 
+    <!-- Right Side (Form Section) -->
     <div class="login-right">
+        <!-- Title -->
         <h2 class="login-title">Login</h2>
 
+        <!-- Error message display -->
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
             <div class="error-message">
@@ -26,6 +32,7 @@
             </div>
         }
 
+        <!-- Login Form -->
         <div class="login-form">
             <label for="email">Username or email</label>
             <input type="text" id="email" @bind="Email" placeholder="Username or email" />
@@ -33,29 +40,36 @@
             <label for="password">Password</label>
             <input type="password" id="password" @bind="Password" placeholder="Password" />
 
+            <!-- Remember me checkbox -->
             <div class="remember-me">
                 <input type="checkbox" id="remember-me" @bind="RememberMe" />
                 <label for="remember-me">Remember me</label>
             </div>
 
+            <!-- Login Button -->
             <button @onclick="LoginUser" class="login-button">Login</button>
+
+            <!-- Forgot Password link -->
             <a href="/forgot-password" class="forgot-password">Forgot password?</a>
 
+            <!-- Register Link -->
             <div class="register-link">
                 <p>Don't have an account? <a href="/register">Register now!</a></p>
             </div>
 
+            <!-- OR Divider -->
             <div class="or-divider">
                 <span>or</span>
             </div>
 
+            <!-- Google and Apple Login Buttons -->
             <button class="google-login">
-                <img src="/Assets/google_logo-google_icongoogle-512.png" alt="Google Icon" />
+                <img src="Assets/google_logo-google_icongoogle-512.png" alt="Google Icon" />
                 Continue with Google
             </button>
 
             <button class="apple-login">
-                <img src="/Assets/Apple Icon.png" alt="Apple Icon" />
+                <img src="Assets/Apple Icon.png" alt="Apple Icon" />
                 Continue with Apple
             </button>
         </div>
@@ -63,51 +77,53 @@
 </div>
 
 @code {
+    // Properties to store user input data
     private string Email { get; set; } = string.Empty;
     private string Password { get; set; } = string.Empty;
     private bool RememberMe { get; set; } = false;
     private string ErrorMessage { get; set; } = string.Empty;
 
+    // Function to handle user login
     private async Task LoginUser()
     {
         try
         {
+            // Prepare login data to send to the API
             var loginData = new
             {
                 Email = Email,
                 Password = Password
             };
 
+            // Send the login request to the API
             var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/login", loginData);
 
             if (response.IsSuccessStatusCode)
             {
-                // Get the user object, including role
-                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>(); // Assuming LoginResponse has the User object
+                // If login is successful, get the user role and store it in session storage
+                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
 
-                // Store the user's role in session storage
+                // Store the user's role using UserState and sessionStorage
                 UserState.SetRole(loginResponse.User.Role);
                 await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
 
-                // Log the stored role for debugging
+                // Debugging info: log the role in console
                 Console.WriteLine($"User role set in session storage: {loginResponse.User.Role}");
 
-                // Redirect to the homepage after login
+                // Redirect the user to the homepage after successful login
                 Navigation.NavigateTo("/");
             }
             else
             {
+                // If login fails, display an error message
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 ErrorMessage = $"Login failed: {errorResponse}";
             }
         }
         catch (Exception ex)
         {
+            // Handle any errors that occur during the login process
             ErrorMessage = $"An error occurred: {ex.Message}";
         }
     }
-
-
-
-
 }

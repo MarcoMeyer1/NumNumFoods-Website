@@ -1,0 +1,35 @@
+﻿@page "/security"
+
+<div class="security-page">
+    <h1 class="security-title">Security</h1>
+
+    <div class="security-settings">
+        <!-- Left section with the checkbox and email input -->
+        <div class="left-section">
+            <div class="checkbox-section">
+                <input type="checkbox" id="enable-2fa" class="checkbox-input" />
+                <label for="enable-2fa">Enable 2 factor authentication</label>
+            </div>
+
+            <div class="email-section">
+                <label for="email-2fa">Email used for 2 factor authentication</label>
+                <input type="email" id="email-2fa" class="input-field" placeholder="johndoe@gmail.com" />
+            </div>
+        </div>
+
+        <!-- Right section with the password input -->
+        <div class="right-section">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="input-field" placeholder="**********" />
+            <a href="/change-password" class="change-password-link">Change password</a>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Section -->
+    <div class="privacy-policy">
+        <h2>Privacy policy</h2>
+        <div class="policy-box">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget nisi at nisi fermentum congue. Vivamus ac libero quis felis rutrum pretium...</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+﻿@page "/manage-products"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+
+<div class="product-management">
+    <h1>Product Management</h1>
+
+    <div class="product-inputs">
+        <button @onclick="CreateNewProduct">Add New Product</button>
+        <button @onclick="CreateNewCategory">Add New Category</button> <!-- Create Category Button -->
+    </div>
+
+    <h2>Product List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Location</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Location</td>
+                    <td>R@product.Price</td>
+                    <td>@product.StockQuantity</td>
+                    <td>
+                        <button @onclick="() => EditProduct(product.ProductId)">Edit</button>
+                        <button @onclick="() => DeleteProduct(product.ProductId)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2>Category List</h2> <!-- New Category List Section -->
+    <table>
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Age Range</th>
+                <th>Container Size</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>@category.AgeRange</td> <!-- Added Age Range -->
+                    <td>@category.ContainerSize</td> <!-- Added Container Size -->
+                    <td>
+                        <button @onclick="() => DeleteCategory(category.CategoryId)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<Product> Products { get; set; } = new List<Product>();
+    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>(); // Categories list
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchProducts();
+        await FetchCategories(); // Fetch categories on initialization
+    }
+
+    private async Task FetchProducts()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/getAll");
+        if (response.IsSuccessStatusCode)
+        {
+            Products = await response.Content.ReadFromJsonAsync<List<Product>>();
+        }
+    }
+
+    private async Task FetchCategories()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/productcategory/getAll");
+        if (response.IsSuccessStatusCode)
+        {
+            Categories = await response.Content.ReadFromJsonAsync<List<ProductCategory>>();
+        }
+    }
+
+    private void CreateNewProduct()
+    {
+        Navigation.NavigateTo("/create-product");
+    }
+
+    private void CreateNewCategory()
+    {
+        Navigation.NavigateTo("/create-category"); // Redirect to the create category page
+    }
+
+    private async Task DeleteProduct(int id)
+    {
+        var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{id}");
+        if (response.IsSuccessStatusCode)
+        {
+            await FetchProducts();
+        }
+    }
+
+    private async Task DeleteCategory(int id)
+    {
+        var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/{id}");
+        if (response.IsSuccessStatusCode)
+        {
+            await FetchCategories(); // Refresh the category list
+        }
+    }
+
+    private void EditProduct(int id)
+    {
+        Navigation.NavigateTo($"/edit-product/{id}");
+    }
+}

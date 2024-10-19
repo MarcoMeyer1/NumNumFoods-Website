@@ -1,0 +1,50 @@
+﻿.product-management {
+    background-color: #efbfcd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.product-inputs {
+    margin-bottom: 20px;
+}
+
+    .product-inputs button {
+        padding: 8px 15px;
+        background-color: #D5598C;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .product-inputs button:hover {
+            background-color: #C5497A;
+        }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #D5598C;
+    color: #fff;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .product-management {
+        padding: 10px; /* Reduce padding */
+    }
+
+    table {
+        display: block;
+        overflow-x: auto; /* Allow horizontal scrolling on small screens */
+    }
+}

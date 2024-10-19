@@ -1,0 +1,112 @@
+﻿@page "/create-product"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Headers; 
+
+<div class="create-product">
+    <h1>Create New Product</h1>
+
+    <input type="text" placeholder="Name" @bind="Name" />
+    <input type="text" placeholder="Description" @bind="Description" />
+    <input type="number" placeholder="Price" @bind="Price" />
+    <input type="number" placeholder="Stock Quantity" @bind="StockQuantity" />
+
+    <select @bind="SelectedCategoryId">
+        <option value="">Select Category</option>
+        @foreach (var category in Categories)
+        {
+            <option value="@category.CategoryId">@category.Name</option>
+        }
+    </select>
+
+    <input type="text" placeholder="Stock Status (In Stock/Out of Stock)" @bind="StockStatus" />
+
+    <InputFile OnChange="OnFileChange" />
+    <button @onclick="SubmitNewProduct">Submit New Product</button>
+</div>
+
+@code {
+    private string Name { get; set; }
+    private string Description { get; set; }
+    private decimal Price { get; set; }
+    private int StockQuantity { get; set; }
+    private int? SelectedCategoryId { get; set; }
+    private string StockStatus { get; set; } // Added property for Stock Status
+    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
+    private IBrowserFile selectedFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchCategories();
+    }
+
+    private async Task FetchCategories()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/productcategory/getAll");
+        if (response.IsSuccessStatusCode)
+        {
+            Categories = await response.Content.ReadFromJsonAsync<List<ProductCategory>>();
+        }
+    }
+
+    private async Task SubmitNewProduct()
+    {
+        var stockStatus = StockQuantity > 0 ? "In Stock" : null; // Set StockStatus based on quantity
+
+        var newProduct = new ProductCreateRequest
+            {
+                Name = Name,
+                Description = Description,
+                Price = Price,
+                StockQuantity = StockQuantity,
+                CategoryId = SelectedCategoryId,
+                StockStatus = stockStatus // Include stock status
+            };
+
+        // Handle file upload logic if necessary
+        if (selectedFile != null)
+        {
+            // Logic to handle file upload can go here
+            newProduct.ImageUrl = await UploadFile(selectedFile); // Implement UploadFile method
+        }
+
+        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/product/create", newProduct);
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/manage-products");
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error creating product: {errorMessage}"); // Output detailed error message for debugging
+        }
+    }
+
+
+
+
+
+    private async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+    }
+
+    private async Task<string> UploadFile(IBrowserFile file)
+    {
+        using var content = new MultipartFormDataContent();
+        var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)); // 10 MB max size
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+        content.Add(fileContent, "file", file.Name);
+
+        var response = await Http.PostAsync("https://your-upload-url/api/upload", content); // Your file upload endpoint
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsStringAsync(); // Adjust based on your API response structure
+        }
+
+        return null; // Handle error accordingly
+    }
+
+}

@@ -1,0 +1,35 @@
+﻿@page "/create-category"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+
+<div class="create-category">
+    <h1>Create New Category</h1>
+
+    <input type="text" placeholder="Category Name" @bind="Name" />
+    <input type="text" placeholder="Age Range" @bind="AgeRange" />
+    <input type="text" placeholder="Container Size" @bind="ContainerSize" />
+    <button @onclick="SubmitNewCategory">Submit New Category</button>
+</div>
+
+@code {
+    private string Name { get; set; }
+    private string AgeRange { get; set; }
+    private string ContainerSize { get; set; }
+
+    private async Task SubmitNewCategory()
+    {
+        var newCategory = new ProductCategory
+            {
+                Name = Name,
+                AgeRange = AgeRange,
+                ContainerSize = ContainerSize
+            };
+
+        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/productcategory/create", newCategory);
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/manage-categories"); // Assuming you have a page to manage categories
+        }
+    }
+}

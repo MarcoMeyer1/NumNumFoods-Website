@@ -1,14 +1,13 @@
 ﻿.login-page {
     display: flex;
     height: 100vh;
-    background-color: #333;
-    color: #fff;
+    background-color: #fff;
+    color: #333;
 }
 
 .login-left {
-    width: 50%;
+    width: 60%; /* Make the image section wider */
     position: relative;
-    background-color: #f5f5f5;
 }
 
 .logo-container {
@@ -18,8 +17,8 @@
 }
 
 .logo {
-    width: 80px;
-    height: 80px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
 }
 
@@ -36,71 +35,95 @@
 }
 
 .login-right {
-    width: 50%;
-    background-color: #e91e63;
-    padding: 40px;
+    width: 40%; /* Keep the form section width */
+    padding: 70px; /* Add more padding */
+    background-color: #D5598C;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center; /* Center form content horizontally */
+    color: white;
 }
 
 .login-title {
-    font-size: 2em;
-    margin-bottom: 20px;
+    font-size: 3.5rem; /* Increase the size of the title */
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #fff;
+    text-align: center; /* Center the title */
 }
 
 .login-form {
     width: 100%;
+    max-width: 500px; /* Increase the width */
+    margin-bottom: 40px;
 }
 
     .login-form label {
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 12px; /* Increase space between label and input */
         font-weight: bold;
+        color: #fff;
+        font-size: 1.4rem; /* Increase label font size */
     }
 
     .login-form input[type="text"],
     .login-form input[type="password"] {
         width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 5px;
+        padding: 20px; /* Increase padding */
+        margin-bottom: 25px;
+        border-radius: 0px; /* Rectangular inputs */
         border: none;
+        background-color: #fff;
+        color: #333;
+        font-size: 1.5rem; /* Increase input font size */
     }
 
 .remember-me {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
+    color: #fff;
+    font-size: 1.3rem; /* Increase remember me font size */
 }
 
-    .remember-me label {
-        margin-left: 5px;
+    .remember-me input[type="checkbox"] {
+        width: 20px;
+        height: 20px; /* Increase checkbox size */
+        margin-right: 10px; /* Space between checkbox and label */
     }
 
 .login-button {
     width: 100%;
-    padding: 10px;
-    background-color: #7b1fa2;
+    padding: 25px; /* Make the button bigger */
+    background-color: #9C114A;
     border: none;
-    border-radius: 5px;
+    border-radius: 0px; /* Rectangular button */
     color: #fff;
+    font-size: 1.7rem; /* Increase button font size */
     cursor: pointer;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
+    transition: background-color 0.3s ease;
 }
+
+    .login-button:hover {
+        background-color: #7b0e3a;
+    }
 
 .forgot-password {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     color: #fff;
-    text-align: right;
+    text-align: center; /* Center the Forgot Password text */
     text-decoration: underline;
     cursor: pointer;
+    font-size: 1.4rem; /* Increase font size */
 }
 
 .register-link {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 1.4rem; /* Increase register link font size */
+    text-align: center; /* Center the register link */
 }
 
     .register-link a {
@@ -111,31 +134,39 @@
 
 .or-divider {
     text-align: center;
-    margin: 15px 0;
+    margin: 45px 0;
+    color: #fff;
 }
 
     .or-divider span {
-        background-color: #e91e63;
+        background-color: #D5598C;
         padding: 0 10px;
+        color: white;
     }
 
 .google-login,
 .apple-login {
     width: 100%;
-    padding: 10px;
+    padding: 20px; /* Make the social login buttons bigger */
     background-color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 0px; /* Rectangular buttons */
     color: #333;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.4rem; /* Increase button font size */
 }
 
     .google-login img,
     .apple-login img {
-        width: 20px;
-        margin-right: 10px;
+        width: 28px; /* Increase the icon size */
+        margin-right: 15px;
+    }
+
+    .google-login:hover,
+    .apple-login:hover {
+        background-color: #f1f1f1;
     }

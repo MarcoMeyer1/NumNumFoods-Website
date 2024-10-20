@@ -1,0 +1,54 @@
+﻿@page "/add-stock"
+@inject NavigationManager Navigation
+
+<div class="add-stock-container">
+    <h1>Add New Stock</h1>
+
+    <div class="stock-form">
+        <label for="product">Product Name</label>
+        <input type="text" id="product" placeholder="Enter product name" @bind="newStock.Product" />
+
+        <label for="location">Location</label>
+        <input type="text" id="location" placeholder="Enter location" @bind="newStock.Location" />
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" placeholder="Enter quantity" @bind="newStock.Quantity" />
+
+        <label for="status">Status</label>
+        <select id="status" @bind="newStock.Status">
+            <option value="In Stock">In Stock</option>
+            <option value="Low on Stock">Low on Stock</option>
+            <option value="Receiving Stock">Receiving Stock</option>
+        </select>
+
+        <div class="button-container">
+            <button class="add-stock-button" @onclick="AddNewStock">Add Stock</button>
+            <button class="cancel-button" @onclick="Cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private StockItem newStock = new StockItem();
+
+    private void AddNewStock()
+    {
+        // Sample logic for adding stock (frontend-only for now)
+        Console.WriteLine($"Added: {newStock.Product}, {newStock.Location}, {newStock.Quantity}, {newStock.Status}");
+        Navigation.NavigateTo("/manage-stock");
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/manage-stock");
+    }
+
+    // Sample StockItem class
+    private class StockItem
+    {
+        public string Product { get; set; }
+        public string Location { get; set; }
+        public int Quantity { get; set; }
+        public string Status { get; set; }
+    }
+}

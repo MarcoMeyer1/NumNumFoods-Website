@@ -1,5 +1,6 @@
 ﻿@page "/manage-stock"
 @inject HttpClient Http
+@inject NavigationManager Navigation
 
 <div class="stock-management-container">
     <h1>Current Stock</h1>
@@ -13,7 +14,7 @@
                 <option value="@location">@location</option>
             }
         </select>
-        <button class="add-stock-button">+ New Stock</button>
+        <button class="add-stock-button" @onclick="NavigateToAddStock">+ New Stock</button>
     </div>
 
     <div class="stock-table-background">
@@ -22,6 +23,7 @@
                 <thead>
                     <tr>
                         <th>Product</th>
+                        <th>Location</th>
                         <th>Items</th>
                         <th>Status</th>
                     </tr>
@@ -31,6 +33,7 @@
                     {
                         <tr>
                             <td>@stock.Product</td>
+                            <td>@stock.Location</td>
                             <td>@stock.Quantity Units</td>
                             <td class="status-column">
                                 <span class="@GetStatusClass(stock.Status)">
@@ -105,5 +108,10 @@
         public string Location { get; set; }
         public int Quantity { get; set; }
         public string Status { get; set; }
+    }
+
+    private void NavigateToAddStock()
+    {
+        Navigation.NavigateTo("/add-stock");
     }
 }

@@ -9,17 +9,15 @@
         <input type="text" id="product" placeholder="Enter product name" @bind="newStock.Product" />
 
         <label for="location">Location</label>
-        <input type="text" id="location" placeholder="Enter location" @bind="newStock.Location" />
+        <select id="location" @bind="newStock.Location">
+            @foreach (var location in locations)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
 
         <label for="quantity">Quantity</label>
         <input type="number" id="quantity" placeholder="Enter quantity" @bind="newStock.Quantity" />
-
-        <label for="status">Status</label>
-        <select id="status" @bind="newStock.Status">
-            <option value="In Stock">In Stock</option>
-            <option value="Low on Stock">Low on Stock</option>
-            <option value="Receiving Stock">Receiving Stock</option>
-        </select>
 
         <div class="button-container">
             <button class="add-stock-button" @onclick="AddNewStock">Add Stock</button>
@@ -31,10 +29,18 @@
 @code {
     private StockItem newStock = new StockItem();
 
+    // Sample predefined locations
+    private List<string> locations = new List<string>
+    {
+        "Port Elizabeth",
+        "Cape Town",
+        "East London"
+    };
+
     private void AddNewStock()
     {
         // Sample logic for adding stock (frontend-only for now)
-        Console.WriteLine($"Added: {newStock.Product}, {newStock.Location}, {newStock.Quantity}, {newStock.Status}");
+        Console.WriteLine($"Added: {newStock.Product}, {newStock.Location}, {newStock.Quantity}");
         Navigation.NavigateTo("/manage-stock");
     }
 
@@ -49,6 +55,5 @@
         public string Product { get; set; }
         public string Location { get; set; }
         public int Quantity { get; set; }
-        public string Status { get; set; }
     }
 }

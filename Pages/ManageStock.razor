@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <button class="update-stock-button">Update Stock Count</button>
+    <button class="update-stock-button" @onclick="NavigateToUpdateStock">Update Stock Count</button>
 </div>
 
 @code {
@@ -113,5 +113,10 @@
     private void NavigateToAddStock()
     {
         Navigation.NavigateTo("/add-stock");
+    }
+
+    private void NavigateToUpdateStock()
+    {
+        Navigation.NavigateTo("/update-stock");
     }
 }

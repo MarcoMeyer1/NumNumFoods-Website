@@ -35,7 +35,7 @@ else
                 {
                     <tr>
                         <td>@item.Product.Name</td>
-                        <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="100" /></td>
+                        <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" /></td>
                         <td>@item.Quantity</td>
                         <td>@item.Price.ToString("C")</td>
                         <td>@(item.Price * item.Quantity).ToString("C")</td>
@@ -43,19 +43,26 @@ else
                 }
             </tbody>
         </table>
-        <div class="order-total">
-            <h3>Total Amount: @totalAmount.ToString("C")</h3>
+
+        <div class="order-summary">
+            <div class="order-total">
+                <h3>Total Amount: @totalAmount.ToString("C")</h3>
+            </div>
         </div>
-        <div class="branch-selection">
-            <label>Select Branch:</label>
-            <select @bind="selectedBranchId">
-                @foreach (var branch in branches)
-                {
-                    <option value="@branch.BranchId">@branch.Name</option>
-                }
-            </select>
+
+        <div class="checkout-actions">
+            <div class="form-group">
+                <label>Select Branch:</label>
+                <select @bind="selectedBranchId" class="form-control">
+                    @foreach (var branch in branches)
+                    {
+                        <option value="@branch.BranchId">@branch.Name</option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn-pink confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
         </div>
-        <button class="confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
     </div>
 }
 

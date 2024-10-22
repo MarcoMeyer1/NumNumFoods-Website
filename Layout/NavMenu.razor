@@ -49,6 +49,7 @@
         UserState.OnChange += StateHasChanged; // Subscribe to changes
     }
 
+
     public void Dispose()
     {
         UserState.OnChange -= StateHasChanged; // Unsubscribe to avoid memory leaks

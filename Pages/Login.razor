@@ -95,6 +95,7 @@
 
                 // Optionally, store user info in local storage for persistence
                 await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userState", JsonSerializer.Serialize(UserState));
+                await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
 
                 // Redirect the user to the homepage after successful login
                 Navigation.NavigateTo("/");

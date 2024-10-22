@@ -2,6 +2,9 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@using NumNumFoods.Models
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <div class="container cart-container">
     <h1>My Cart</h1>
@@ -96,21 +99,29 @@
     private string selectedBranch = "Port Elizabeth";
     private string voucherCode = string.Empty;
     private decimal discount = 0M;
-    private string paymentMethod { get; set; } = "Pay now";
+    private string paymentMethod = "In person";
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCartItems();
+        int userId = UserState.UserId;
+
+        if (userId == 0)
+        {
+            // User is not logged in; redirect to login page or show a message
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadCartItems(userId);
     }
     private void OnPaymentMethodChanged(ChangeEventArgs e)
     {
         paymentMethod = e.Value.ToString();
     }
-    private async Task LoadCartItems()
+    private async Task LoadCartItems(int userId)
     {
         try
         {
-            int userId = GetCurrentUserId();
             var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/cart/user/{userId}");
             if (response.IsSuccessStatusCode)
             {
@@ -187,15 +198,7 @@
 
     private void ProceedToCheckout()
     {
-        // Implement checkout logic
         Navigation.NavigateTo("/checkout");
-    }
-
-    private int GetCurrentUserId()
-    {
-        // Implement logic to get the current user's ID
-        // For demo purposes, return a fixed user ID
-        return 1;
     }
 
     public class CartItem

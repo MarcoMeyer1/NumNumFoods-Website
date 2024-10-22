@@ -1,6 +1,9 @@
 ﻿@page "/products"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@using NumNumFoods.Models
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <PageTitle>Products</PageTitle>
 
@@ -131,7 +134,14 @@
 
     private void AddToCart(Product product)
     {
-        int userId = GetCurrentUserId();
+        int userId = UserState.UserId;
+
+        if (userId == 0)
+        {
+            // User is not logged in; redirect to login page or show a message
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
 
         var cartItem = new CartItem
         {
@@ -163,13 +173,6 @@
         {
             Console.WriteLine($"Exception in AddToCartAsync: {ex.Message}");
         }
-    }
-
-    private int GetCurrentUserId()
-    {
-        // Implement logic to get the current user's ID
-        // For demo purposes, return a fixed user ID
-        return 1;
     }
 
     private void GoToProductDetails(int productId)

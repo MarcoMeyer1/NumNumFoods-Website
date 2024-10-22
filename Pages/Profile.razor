@@ -1,35 +1,57 @@
 ﻿@page "/profile"
 @inject NavigationManager Navigation
+@using NumNumFoods.Services
+@inject UserState UserState 
 
 <div class="profile-container">
     <div class="profile-box">
         <div class="profile-header">
-            <img src="/Assets/ProfileIcon.png" alt="Profile Icon" class="profile-img" />
-            <div class="profile-info">
-                <h2>Jane Smith</h2>
-                <p>janesmith@gmail.com</p>
-            </div>
+            @if (UserState.IsLoggedIn) // Check if the user is logged in
+            {
+                <img src="/Assets/ProfileIcon.png" alt="Profile Icon" class="profile-img" />
+                <div class="profile-info">
+                    <h2>@UserState.UserFullName</h2> <!-- Display user's full name -->
+                    <p>@UserState.UserEmail</p> <!-- Display user's email -->
+                </div>
+            }
+            else
+            {
+                <div class="login-prompt">
+                    <h2>Please log in</h2>
+                    <button class="login-button" @onclick="NavigateToLogin">Log In</button> <!-- Log In button -->
+                </div>
+            }
         </div>
         <hr class="profile-divider" />
-        <div class="profile-options">
-            <a href="/account-settings" class="profile-item">
-                <i class="fas fa-cog"></i> Account Settings
-            </a>
-            <a href="/profile/billing-information" class="profile-item">
-                <i class="fas fa-credit-card"></i> Billing Information
-            </a>
-            <a href="/order-history" class="profile-item">
-                <i class="fas fa-history"></i> Order History
-            </a>
-            <a href="/security" class="profile-item">
-                <i class="fas fa-lock"></i> Security
-            </a>
-            <a href="/switch-account" class="profile-item">
-                <i class="fas fa-user"></i> Switch Account
-            </a>
-            <a href="/logout" class="profile-item logout">
-                <i class="fas fa-sign-out-alt"></i> Log Out
-            </a>
-        </div>
+        @if (UserState.IsLoggedIn) // Show profile options only if logged in
+        {
+            <div class="profile-options">
+                <a href="/account-settings" class="profile-item">
+                    <i class="fas fa-cog"></i> Account Settings
+                </a>
+                <a href="/profile/billing-information" class="profile-item">
+                    <i class="fas fa-credit-card"></i> Billing Information
+                </a>
+                <a href="/order-history" class="profile-item">
+                    <i class="fas fa-history"></i> Order History
+                </a>
+                <a href="/security" class="profile-item">
+                    <i class="fas fa-lock"></i> Security
+                </a>
+                <a href="/switch-account" class="profile-item">
+                    <i class="fas fa-user"></i> Switch Account
+                </a>
+                <a href="/logout" class="profile-item logout">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </div>
+        }
     </div>
 </div>
+
+@code {
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/login"); // Navigate to the login page
+    }
+}

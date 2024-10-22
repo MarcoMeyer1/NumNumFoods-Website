@@ -53,6 +53,10 @@ select, input[type="number"] {
     color: white;
 }
 
+    .update-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
 
 .cancel-button {
     background-color: #ccc;

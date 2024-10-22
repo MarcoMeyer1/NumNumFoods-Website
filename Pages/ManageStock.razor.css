@@ -39,6 +39,10 @@ h1 {
     cursor: pointer;
 }
 
+    .add-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
 /* Table Styling */
 .stock-table-background {
     background-color: rgba(143, 143, 143, 0.4); /* #8F8F8F with 40% opacity */
@@ -100,6 +104,10 @@ h1 {
     cursor: pointer;
     float: right;
 }
+
+    .update-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {

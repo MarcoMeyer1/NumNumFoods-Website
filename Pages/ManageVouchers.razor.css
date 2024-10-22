@@ -26,7 +26,7 @@
 
     .voucher-inputs button {
         padding: 8px 15px;
-        background-color: #D5598C;
+        background-color: #0097ff;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -34,7 +34,7 @@
     }
 
         .voucher-inputs button:hover {
-            background-color: #C5497A;
+            background-color: #007acc;
         }
 
 .delete-button {

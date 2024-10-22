@@ -37,7 +37,20 @@ textarea {
     margin-top: 15px;
 }
 
-.create-post-button, .clear-posts-button {
+.create-post-button {
+    padding: 10px 15px;
+    background-color: #0097ff; /* Button color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .create-post-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
+.clear-posts-button {
     padding: 10px 15px;
     background-color: #D5598C; /* Button color */
     color: #fff;
@@ -46,7 +59,7 @@ textarea {
     cursor: pointer;
 }
 
-    .create-post-button:hover, .clear-posts-button:hover {
+    .clear-posts-button:hover {
         background-color: #C5497A; /* Darker shade on hover */
     }
 

@@ -1,0 +1,81 @@
+﻿@page "/update-stock"
+@inject NavigationManager Navigation
+
+<div class="update-stock-container">
+    <h1>Update Stock</h1>
+
+    <div class="stock-update-form">
+        <label for="product">Product Name</label>
+        <select id="product" @bind="selectedProduct">
+            @foreach (var stock in stockList)
+            {
+                <option value="@stock.Product">@stock.Product</option>
+            }
+        </select>
+
+        <label for="location">Location</label>
+        <select id="location" @bind="selectedLocation">
+            @foreach (var location in locationList)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
+
+        <label for="quantity">New Quantity</label>
+        <input type="number" id="quantity" placeholder="Enter new quantity" @bind="updatedQuantity" />
+
+        <div class="button-container">
+            <button class="update-stock-button" @onclick="UpdateStockValue">Update Stock</button>
+            <button class="cancel-button" @onclick="CancelUpdate">Cancel</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string selectedProduct { get; set; } = "Strawberry"; // Default selected product
+    private string selectedLocation { get; set; } = "Port Elizabeth"; // Default selected location
+    private int updatedQuantity { get; set; }
+
+    // Sample stock list for the combobox
+    private List<StockItem> stockList = new()
+    {
+        new StockItem { Product = "Strawberry", Location = "Port Elizabeth", Quantity = 24 },
+        new StockItem { Product = "Peas", Location = "Cape Town", Quantity = 10 },
+        new StockItem { Product = "Kiwi", Location = "East London", Quantity = 18 },
+    };
+
+    // Sample location list for the location dropdown
+    private List<string> locationList = new()
+    {
+        "Port Elizabeth",
+        "Cape Town",
+        "East London"
+    };
+
+    // Function to simulate updating stock
+    private void UpdateStockValue()
+    {
+        var stockToUpdate = stockList.FirstOrDefault(s => s.Product == selectedProduct && s.Location == selectedLocation);
+        if (stockToUpdate != null)
+        {
+            stockToUpdate.Quantity = updatedQuantity;
+            Console.WriteLine($"Stock for {selectedProduct} in {selectedLocation} updated to {updatedQuantity}.");
+        }
+
+        Navigation.NavigateTo("/manage-stock");
+    }
+
+    // Function to cancel and navigate back
+    private void CancelUpdate()
+    {
+        Navigation.NavigateTo("/manage-stock");
+    }
+
+    // Sample StockItem class
+    private class StockItem
+    {
+        public string Product { get; set; }
+        public string Location { get; set; }
+        public int Quantity { get; set; }
+    }
+}

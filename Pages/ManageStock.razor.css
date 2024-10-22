@@ -1,0 +1,140 @@
+﻿.stock-management-container {
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+h1 {
+    color: #000000;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.stock-toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    padding: 8px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.location-dropdown {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.add-stock-button {
+    padding: 10px;
+    background-color: #0097ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .add-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
+/* Table Styling */
+.stock-table-background {
+    background-color: rgba(143, 143, 143, 0.4); /* #8F8F8F with 40% opacity */
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.stock-table-container {
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .stock-table th, .stock-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .stock-table th {
+        background-color: #D5598C;
+        color: white;
+    }
+
+.status-column span {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Status Classes */
+.status-instock {
+    background-color: #28a745;
+}
+
+.status-lowstock {
+    background-color: #dc3545;
+}
+
+.status-receiving {
+    background-color: #ffc107;
+}
+
+/* Update Stock Button */
+.update-stock-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #0097ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+    .update-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .search-input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .add-stock-button, .location-dropdown {
+        width: 100%;
+    }
+
+    .stock-toolbar {
+        flex-direction: column;
+    }
+
+    .stock-table {
+        font-size: 12px;
+    }
+
+        .stock-table th, .stock-table td {
+            padding: 8px;
+        }
+
+    .update-stock-button {
+        width: 100%;
+        text-align: center;
+        float: none;
+    }
+}

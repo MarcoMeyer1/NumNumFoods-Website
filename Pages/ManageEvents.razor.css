@@ -10,7 +10,7 @@ h1 {
 
 .new-event-button {
     padding: 10px 15px;
-    background-color: #D5598C;
+    background-color: #0097ff;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -19,7 +19,7 @@ h1 {
 }
 
     .new-event-button:hover {
-        background-color: #C5497A;
+        background-color: #007acc;
     }
 
 .events-list {

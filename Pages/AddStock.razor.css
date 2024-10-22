@@ -1,0 +1,80 @@
+﻿.add-stock-container {
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+h1 {
+    color: #000000;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.stock-form {
+    background-color: rgba(213, 89, 140, 0.1); /* Light pink form background */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+    input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        border-color: #D5598C; /* Pink border on focus */
+        outline: none;
+    }
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-stock-button, .cancel-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-stock-button {
+    background-color: #0097ff;
+    color: white;
+}
+
+    .add-stock-button:hover {
+        background-color: #007acc; /* Darker shade on hover */
+    }
+
+
+.cancel-button {
+    background-color: #ccc;
+    color: #333;
+}
+
+    .cancel-button:hover {
+        background-color: #999;
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+    }
+
+    .add-stock-button, .cancel-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

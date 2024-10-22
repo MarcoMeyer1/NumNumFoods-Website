@@ -1,0 +1,122 @@
+﻿@page "/manage-stock"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div class="stock-management-container">
+    <h1>Current Stock</h1>
+
+    <div class="stock-toolbar">
+        <input type="text" placeholder="Search..." class="search-input" @bind="searchTerm" />
+        <select @onchange="OnLocationChanged" class="location-dropdown">
+            <option value="">Select Location</option>
+            @foreach (var location in uniqueLocations)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
+        <button class="add-stock-button" @onclick="NavigateToAddStock">+ New Stock</button>
+    </div>
+
+    <div class="stock-table-background">
+        <div class="stock-table-container">
+            <table class="stock-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Location</th>
+                        <th>Items</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var stock in filteredStockList)
+                    {
+                        <tr>
+                            <td>@stock.Product</td>
+                            <td>@stock.Location</td>
+                            <td>@stock.Quantity Units</td>
+                            <td class="status-column">
+                                <span class="@GetStatusClass(stock.Status)">
+                                    @stock.Status
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="update-stock-button" @onclick="NavigateToUpdateStock">Update Stock Count</button>
+</div>
+
+@code {
+    private string searchTerm { get; set; } = string.Empty;
+    private string selectedLocation { get; set; } = string.Empty;
+
+    // Sample data
+    private List<StockItem> stockList = new()
+    {
+        new StockItem { Product = "Strawberry", Location = "Port Elizabeth", Quantity = 24, Status = "In Stock" },
+        new StockItem { Product = "Peas", Location = "Port Elizabeth", Quantity = 5, Status = "Low on Stock" },
+        new StockItem { Product = "Kiwi", Location = "Port Elizabeth", Quantity = 30, Status = "In Stock" },
+        new StockItem { Product = "Labels", Location = "Port Elizabeth", Quantity = 86, Status = "In Stock" },
+        new StockItem { Product = "Containers", Location = "Port Elizabeth", Quantity = 40, Status = "In Stock" },
+        new StockItem { Product = "Strawberry", Location = "Cape Town", Quantity = 10, Status = "Low on Stock" },
+        new StockItem { Product = "Peas", Location = "Cape Town", Quantity = 20, Status = "In Stock" },
+        new StockItem { Product = "Kiwi", Location = "Cape Town", Quantity = 8, Status = "Low on Stock" },
+        new StockItem { Product = "Labels", Location = "Cape Town", Quantity = 50, Status = "In Stock" },
+        new StockItem { Product = "Containers", Location = "Cape Town", Quantity = 15, Status = "Low on Stock" },
+        new StockItem { Product = "Strawberry", Location = "East London", Quantity = 15, Status = "In Stock" },
+        new StockItem { Product = "Peas", Location = "East London", Quantity = 8, Status = "Low on Stock" },
+        new StockItem { Product = "Kiwi", Location = "East London", Quantity = 5, Status = "Low on Stock" },
+        new StockItem { Product = "Labels", Location = "East London", Quantity = 70, Status = "In Stock" },
+        new StockItem { Product = "Containers", Location = "East London", Quantity = 12, Status = "In Stock" }
+    };
+
+    // Filtered list based on search term and location
+    private List<StockItem> filteredStockList =>
+        stockList.Where(s =>
+            (string.IsNullOrEmpty(searchTerm) || s.Product.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+            (string.IsNullOrEmpty(selectedLocation) || s.Location == selectedLocation)
+        ).ToList();
+
+    // Get unique locations for dropdown
+    private List<string> uniqueLocations => stockList.Select(s => s.Location).Distinct().ToList();
+
+    // Handle location change
+    private void OnLocationChanged(ChangeEventArgs e)
+    {
+        selectedLocation = e.Value.ToString();
+    }
+
+    // Class assignment based on stock status
+    private string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "In Stock" => "status-instock",
+            "Low on Stock" => "status-lowstock",
+            _ => "status-receiving"
+        };
+    }
+
+    // Sample StockItem class
+    private class StockItem
+    {
+        public string Product { get; set; }
+        public string Location { get; set; }
+        public int Quantity { get; set; }
+        public string Status { get; set; }
+    }
+
+    private void NavigateToAddStock()
+    {
+        Navigation.NavigateTo("/add-stock");
+    }
+
+    private void NavigateToUpdateStock()
+    {
+        Navigation.NavigateTo("/update-stock");
+    }
+}

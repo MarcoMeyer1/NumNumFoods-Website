@@ -29,15 +29,17 @@
         Navigation.NavigateTo("/manage-orders");
     }
 
-    private void NavigateToViewStock()
+    private void NavigateToManageStock()
     {
-        Navigation.NavigateTo("/view-stock");
+        Navigation.NavigateTo("/manage-stock");
     }
 
     private void NavigateToManageEvents()
     {
         Navigation.NavigateTo("/manage-events");
     }
+
+   
 }
 
 <div class="admin-dashboard">
@@ -56,7 +58,7 @@
             <h3>Orders</h3>
             <p>Manage Orders</p>
         </div>
-        <div class="dashboard-item" @onclick="NavigateToViewStock">
+        <div class="dashboard-item" @onclick="NavigateToManageStock">
             <h3>Stock</h3>
             <p>View Current Stock</p>
             <p>Add new Stock entry</p>

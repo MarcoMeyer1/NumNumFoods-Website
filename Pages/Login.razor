@@ -81,6 +81,7 @@
         {
             var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
             UserState.SetUser(loginResponse.User.FullName, loginResponse.User.Email, loginResponse.User.Role);
+            await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
 
             // Redirect the user to the homepage after successful login
             Navigation.NavigateTo("/");

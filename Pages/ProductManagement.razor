@@ -2,23 +2,27 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using NumNumFoods.Models
+@inject IJSRuntime JSRuntime
+
 
 <div class="product-management">
     <h1>Product Management</h1>
 
     <div class="product-inputs">
         <button @onclick="CreateNewProduct">Add New Product</button>
-        <button @onclick="CreateNewCategory">Add New Category</button> <!-- Create Category Button -->
+        <button @onclick="CreateNewCategory">Add New Category</button>
     </div>
 
     <h2>Product List</h2>
     <table>
         <thead>
             <tr>
+                <th>Image</th> <!-- New Image Column -->
                 <th>Product</th>
-                <th>Location</th>
+                <th>Description</th> <!-- Added Description Column -->
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Stock Status</th> <!-- Added Stock Status Column -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,10 +30,21 @@
             @foreach (var product in Products)
             {
                 <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            <img src="@product.ImageUrl" alt="@product.Name" width="100" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
                     <td>@product.Name</td>
-                    <td>@product.Location</td>
+                    <td>@product.Description</td>
                     <td>R@product.Price</td>
                     <td>@product.StockQuantity</td>
+                    <td>@product.StockStatus</td>
                     <td>
                         <button @onclick="() => EditProduct(product.ProductId)">Edit</button>
                         <button @onclick="() => DeleteProduct(product.ProductId)">Delete</button>
@@ -39,7 +54,7 @@
         </tbody>
     </table>
 
-    <h2>Category List</h2> <!-- New Category List Section -->
+    <h2>Category List</h2>
     <table>
         <thead>
             <tr>
@@ -54,8 +69,8 @@
             {
                 <tr>
                     <td>@category.Name</td>
-                    <td>@category.AgeRange</td> <!-- Added Age Range -->
-                    <td>@category.ContainerSize</td> <!-- Added Container Size -->
+                    <td>@category.AgeRange</td>
+                    <td>@category.ContainerSize</td>
                     <td>
                         <button @onclick="() => DeleteCategory(category.CategoryId)">Delete</button>
                     </td>
@@ -67,12 +82,12 @@
 
 @code {
     private List<Product> Products { get; set; } = new List<Product>();
-    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>(); // Categories list
+    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
 
     protected override async Task OnInitializedAsync()
     {
         await FetchProducts();
-        await FetchCategories(); // Fetch categories on initialization
+        await FetchCategories();
     }
 
     private async Task FetchProducts()
@@ -81,6 +96,11 @@
         if (response.IsSuccessStatusCode)
         {
             Products = await response.Content.ReadFromJsonAsync<List<Product>>();
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Failed to fetch products: {errorMessage}");
         }
     }
 
@@ -91,6 +111,11 @@
         {
             Categories = await response.Content.ReadFromJsonAsync<List<ProductCategory>>();
         }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Failed to fetch categories: {errorMessage}");
+        }
     }
 
     private void CreateNewProduct()
@@ -100,24 +125,42 @@
 
     private void CreateNewCategory()
     {
-        Navigation.NavigateTo("/create-category"); // Redirect to the create category page
+        Navigation.NavigateTo("/create-category");
     }
 
     private async Task DeleteProduct(int id)
     {
-        var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{id}");
-        if (response.IsSuccessStatusCode)
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the product with ID {id}?");
+        if (confirmed)
         {
-            await FetchProducts();
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                await FetchProducts();
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to delete product: {errorMessage}");
+            }
         }
     }
 
     private async Task DeleteCategory(int id)
     {
-        var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/{id}");
-        if (response.IsSuccessStatusCode)
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category with ID {id}?");
+        if (confirmed)
         {
-            await FetchCategories(); // Refresh the category list
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                await FetchCategories();
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to delete category: {errorMessage}");
+            }
         }
     }
 

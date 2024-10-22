@@ -1,0 +1,195 @@
+﻿@page "/edit-product/{ProductId:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Headers
+
+<h1>Edit Product</h1>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (errorMessage != null)
+{
+    <p class="text-danger">@errorMessage</p>
+}
+else
+{
+    <div class="edit-product-form">
+        <input type="text" placeholder="Name" @bind="product.Name" />
+        <textarea placeholder="Description" @bind="product.Description"></textarea>
+        <input type="number" placeholder="Price" @bind="product.Price" />
+        <input type="number" placeholder="Stock Quantity" @bind="product.StockQuantity" />
+
+        <select @bind="product.CategoryId">
+            <option value="">Select Category</option>
+            @foreach (var category in Categories)
+            {
+                <option value="@category.CategoryId">@category.Name</option>
+            }
+        </select>
+
+        <div>
+            <label>Current Image:</label><br />
+            @if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                <img src="@product.ImageUrl" alt="@product.Name" width="200" />
+
+                <br />
+            }
+            else
+            {
+                <span>No Image</span>
+
+                <br />
+            }
+        </div>
+
+        <InputFile OnChange="OnFileChange" />
+        <button @onclick="SubmitUpdatedProduct">Save Changes</button>
+        <button @onclick="CancelEdit">Cancel</button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int ProductId { get; set; }
+
+    private Product product = new Product();
+    private bool isLoading = true;
+    private string errorMessage;
+    private IBrowserFile selectedFile;
+    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchCategories();
+        await FetchProduct();
+    }
+
+    private async Task FetchProduct()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{ProductId}");
+            if (response.IsSuccessStatusCode)
+            {
+                product = await response.Content.ReadFromJsonAsync<Product>();
+            }
+            else
+            {
+                errorMessage = $"Failed to load product with ID {ProductId}.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error fetching product: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task FetchCategories()
+    {
+        try
+        {
+            var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/productcategory/getAll");
+            if (response.IsSuccessStatusCode)
+            {
+                Categories = await response.Content.ReadFromJsonAsync<List<ProductCategory>>();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to fetch categories: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching categories: {ex.Message}");
+        }
+    }
+
+    private async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        Console.WriteLine($"File selected: {selectedFile.Name}");
+    }
+
+    private async Task SubmitUpdatedProduct()
+    {
+        try
+        {
+            // If a new image has been selected, upload it
+            if (selectedFile != null)
+            {
+                var newImageUrl = await UploadFile(selectedFile);
+                if (newImageUrl == null)
+                {
+                    Console.WriteLine("Image upload failed.");
+                    return; // Stop if the image upload fails
+                }
+                product.ImageUrl = newImageUrl;
+            }
+
+            // Update the product
+            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{ProductId}", product);
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/manage-products");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error updating product: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in SubmitUpdatedProduct: {ex.Message}");
+        }
+    }
+
+    private async Task<string> UploadFile(IBrowserFile file)
+    {
+        try
+        {
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)); // 10 MB max size
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "file", file.Name);
+
+            Console.WriteLine($"Uploading file: {file.Name}");
+
+            var response = await Http.PostAsync("https://numnumfoods-api.azurewebsites.net/api/product/upload", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var imageUrl = await response.Content.ReadAsStringAsync();
+                // Trim quotes if necessary
+                imageUrl = imageUrl.Trim('"');
+                Console.WriteLine($"File uploaded successfully. Image URL: {imageUrl}");
+                return imageUrl; // Return the image URL
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error during file upload: {errorMessage}");
+                return null; // Handle the failure gracefully
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception during file upload: {ex.Message}");
+            return null; // Handle the failure gracefully
+        }
+    }
+
+    private void CancelEdit()
+    {
+        Navigation.NavigateTo("/manage-products");
+    }
+}

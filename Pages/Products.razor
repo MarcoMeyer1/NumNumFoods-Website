@@ -1,4 +1,6 @@
 ﻿@page "/products"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <PageTitle>Products</PageTitle>
 
@@ -6,12 +8,11 @@
 
 <section class="product-page">
     <div class="filters-and-search">
-        <input type="text" placeholder="Search for products..." class="search-bar" @bind="searchTerm" />
-        <select class="sort-dropdown" @bind="selectedSort">
+        <input type="text" placeholder="Search for products..." class="search-bar" @bind="searchTerm" @bind:event="oninput" />
+        <select class="sort-dropdown" @onchange="SortProducts">
             <option value="default">Sort</option>
             <option value="price-asc">Price - Low to High</option>
             <option value="price-desc">Price - High to Low</option>
-            <option value="rating">Rating</option>
         </select>
     </div>
 
@@ -22,101 +23,176 @@
         }
     </div>
 
-    <h2>The Teeny Weeny Range</h2>
-    <div class="product-grid">
-        @foreach (var product in teenyWeenyProducts)
+    @if (groupedProducts != null && groupedProducts.Any())
+    {
+        @foreach (var categoryGroup in groupedProducts)
         {
-            <div class="product-card">
-                <img src="@product.ImageUrl" alt="@product.Name" />
-                <h3>@product.Name</h3>
-                <p>@product.Description</p>
-                <div class="product-rating">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <span @onclick="() => RateProduct(product, i)"
-                              class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
-                    }
-                </div>
-                <button class="add-to-cart-btn">Add to cart</button>
-                <!-- Navigate to product details -->
-                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.Id)">More info</button>
+            <h2>@(categoryGroup.Key ?? "Uncategorized")</h2>
+            <div class="product-grid">
+                @foreach (var product in categoryGroup)
+                {
+                    <div class="product-card">
+                        <img src="@product.ImageUrl" alt="@product.Name" />
+                        <h3>@product.Name</h3>
+                        <p>@product.Description</p>
+                        <div class="product-rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
+                            }
+                        </div>
+                        <p>Price: @product.Price.ToString("C")</p>
+                        <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
+                        <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
+                    </div>
+                }
             </div>
         }
-    </div>
-
-    <h2>The Itsy-Bitsy Range</h2>
-    <div class="product-grid">
-        @foreach (var product in itsyBitsyProducts)
-        {
-            <div class="product-card">
-                <img src="@product.ImageUrl" alt="@product.Name" />
-                <h3>@product.Name</h3>
-                <p>@product.Description</p>
-                <div class="product-rating">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <span @onclick="() => RateProduct(product, i)"
-                              class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
-                    }
-                </div>
-                <button class="add-to-cart-btn">Add to cart</button>
-                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.Id)">More info</button>
-            </div>
-        }
-    </div>
+    }
+    else
+    {
+        <p>Loading products...</p>
+    }
 </section>
 
 @code {
-    // Search term for binding
     private string searchTerm { get; set; } = "";
-
-    // Dropdown sorting value
     private string selectedSort { get; set; } = "default";
-
-    // Sample filter tags (for display purposes)
     private List<string> filterTags = new() { "For Babies", "6+ Months", "7+ Months", "Nutritious", "Smooth Texture" };
+    private List<Product> allProducts = new();
+    private IEnumerable<IGrouping<string, Product>> groupedProducts = Enumerable.Empty<IGrouping<string, Product>>();
+    private List<Product> filteredProducts = new();
 
-    // Sample products for dynamic content (These will be replaced by actual API data)
-    private List<Product> teenyWeenyProducts = new()
+    protected override async Task OnInitializedAsync()
     {
-        new Product { Id = 1, Name = "Mashed Peas", Description = "Creamy mashed peas rich in vitamins.", ImageUrl = "/Assets/Mashed_Peas.png", Rating = 4 },
-        new Product { Id = 2, Name = "Carrot Puree", Description = "Smooth carrot puree rich in beta-carotene.", ImageUrl = "/Assets/Carrot_Puree.png", Rating = 5 },
-        new Product { Id = 3, Name = "Apple & Banana Mix", Description = "A fruity mix of apples and bananas.", ImageUrl = "/Assets/Apple_Banana.png", Rating = 3 }
-    };
-
-    private List<Product> itsyBitsyProducts = new()
-    {
-        new Product { Id = 4, Name = "Pumpkin Puree", Description = "Smooth pumpkin puree full of vitamins.", ImageUrl = "/Assets/Pumpkin_Puree.png", Rating = 5 },
-        new Product { Id = 5, Name = "Sweet Potato Mash", Description = "Creamy sweet potato mash, perfect for your baby.", ImageUrl = "/Assets/Sweet_Potato.png", Rating = 4 },
-        new Product { Id = 6, Name = "Green Bean Mix", Description = "A nutritious mix of green beans and peas.", ImageUrl = "/Assets/Green_Beans.png", Rating = 2 }
-    };
-
-    // Handle rating (for front-end only)
-    private void RateProduct(Product product, int rating)
-    {
-        product.Rating = rating;
+        await LoadProducts();
+        FilterAndGroupProducts();
     }
 
-    // Handle filter application (not functional now, just a placeholder)
+    private async Task LoadProducts()
+    {
+        try
+        {
+            var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/getAll");
+            if (response.IsSuccessStatusCode)
+            {
+                allProducts = await response.Content.ReadFromJsonAsync<List<Product>>();
+                // Initialize ratings (if you have ratings in the database, you can remove this)
+                foreach (var product in allProducts)
+                {
+                    product.Rating = 0; // Default rating
+                }
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load products: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadProducts: {ex.Message}");
+        }
+    }
+
+    private void FilterAndGroupProducts()
+    {
+        // Apply search filter
+        filteredProducts = allProducts.Where(p => string.IsNullOrEmpty(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        // Apply sorting
+        if (selectedSort == "price-asc")
+        {
+            filteredProducts = filteredProducts.OrderBy(p => p.Price).ToList();
+        }
+        else if (selectedSort == "price-desc")
+        {
+            filteredProducts = filteredProducts.OrderByDescending(p => p.Price).ToList();
+        }
+
+        // Apply additional filters if needed (e.g., tags)
+
+        // Group products by category name, handling null values
+        groupedProducts = filteredProducts.GroupBy(p => p.CategoryName ?? "Uncategorized");
+    }
+
     private void ApplyFilter(string filterTag)
     {
-        // Logic for filtering products based on filterTag would go here
+        // Implement filtering logic based on filterTag
+        filteredProducts = allProducts.Where(p => p.Description != null && p.Description.Contains(filterTag, StringComparison.OrdinalIgnoreCase)).ToList();
+        FilterAndGroupProducts();
     }
 
-    // Navigate to Product Details page
-    [Inject] private NavigationManager NavigationManager { get; set; }
+    private void SortProducts(ChangeEventArgs e)
+    {
+        selectedSort = e.Value.ToString();
+        FilterAndGroupProducts();
+    }
+
+    private void AddToCart(Product product)
+    {
+        int userId = GetCurrentUserId();
+
+        var cartItem = new CartItem
+        {
+            UserId = userId,
+            ProductId = product.ProductId,
+            Quantity = 1,
+            Price = product.Price
+        };
+
+        _ = AddToCartAsync(cartItem);
+    }
+
+    private async Task AddToCartAsync(CartItem cartItem)
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/cart/add", cartItem);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Product added to cart successfully.");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to add product to cart: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in AddToCartAsync: {ex.Message}");
+        }
+    }
+
+    private int GetCurrentUserId()
+    {
+        // Implement logic to get the current user's ID
+        // For demo purposes, return a fixed user ID
+        return 1;
+    }
+
     private void GoToProductDetails(int productId)
     {
         NavigationManager.NavigateTo($"/product-details/{productId}");
     }
 
-    // Sample product class
     public class Product
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
         public int Rating { get; set; } // Rating from 1 to 5
+        public string CategoryName { get; set; } // Add this property to hold the category name
+    }
+
+    public class CartItem
+    {
+        public int UserId { get; set; } // User ID
+        public int ProductId { get; set; } // Product ID
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

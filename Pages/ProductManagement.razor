@@ -90,6 +90,12 @@
         await FetchCategories();
     }
 
+    private void EditProduct(int id)
+    {
+        Navigation.NavigateTo($"/edit-product/{id}");
+    }
+
+
     private async Task FetchProducts()
     {
         var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/getAll");
@@ -164,8 +170,5 @@
         }
     }
 
-    private void EditProduct(int id)
-    {
-        Navigation.NavigateTo($"/edit-product/{id}");
-    }
+  
 }

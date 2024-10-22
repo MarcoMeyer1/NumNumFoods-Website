@@ -1,0 +1,52 @@
+﻿.create-product {
+    background-color: #efbfcd; /* Light pink background */
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px; /* Set a max width for larger screens */
+    margin: 20px auto; /* Center the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
+}
+
+    .create-product h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .create-product input {
+        width: 100%; /* Full width for input fields */
+        padding: 10px;
+        border: 1px solid #ccc; /* Light grey border */
+        border-radius: 4px; /* Rounded corners */
+        margin-bottom: 15px; /* Space between inputs */
+    }
+
+    .create-product button {
+        width: 100%; /* Full width for button */
+        padding: 10px;
+        background-color: #D5598C; /* Button color */
+        color: #fff; /* White text */
+        border: none; /* No border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        font-size: 16px; /* Larger font size */
+    }
+
+        .create-product button:hover {
+            background-color: #C5497A; /* Darker pink on hover */
+        }
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .create-product {
+        padding: 15px; /* Reduce padding on smaller screens */
+    }
+
+        .create-product h1 {
+            font-size: 1.5rem; /* Smaller heading on mobile */
+        }
+
+        .create-product input,
+        .create-product button {
+            font-size: 14px; /* Smaller font size on mobile */
+        }
+}

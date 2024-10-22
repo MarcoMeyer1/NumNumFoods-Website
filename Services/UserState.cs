@@ -5,6 +5,9 @@
         public event Action OnChange;
 
         private string _role;
+        private string _userFullName;
+        private string _userEmail;
+        private bool _isLoggedIn;
 
         public string Role
         {
@@ -19,12 +22,51 @@
             }
         }
 
-        public void SetRole(string role)
+        public string UserFullName
         {
+            get => _userFullName;
+            private set
+            {
+                if (_userFullName != value)
+                {
+                    _userFullName = value;
+                    NotifyStateChanged();
+                }
+            }
+        }
+
+        public string UserEmail
+        {
+            get => _userEmail;
+            private set
+            {
+                if (_userEmail != value)
+                {
+                    _userEmail = value;
+                    NotifyStateChanged();
+                }
+            }
+        }
+
+        public bool IsLoggedIn => _isLoggedIn; // Property to check login status
+
+        public void SetUser(string fullName, string email, string role)
+        {
+            UserFullName = fullName;
+            UserEmail = email;
             Role = role;
+            _isLoggedIn = true; // Set the user as logged in
+        }
+
+        public void Logout()
+        {
+            _userFullName = null;
+            _userEmail = null;
+            Role = null;
+            _isLoggedIn = false; // Set the user as logged out
+            NotifyStateChanged();
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
-
 }

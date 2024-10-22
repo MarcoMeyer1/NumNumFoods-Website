@@ -3,7 +3,7 @@
 @inject NavigationManager Navigation
 @using NumNumFoods.Models
 @using Microsoft.AspNetCore.Components.Forms
-@using System.Net.Http.Headers; 
+@using System.Net.Http.Headers
 
 <div class="create-product">
     <h1>Create New Product</h1>
@@ -21,8 +21,6 @@
         }
     </select>
 
-    <input type="text" placeholder="Stock Status (In Stock/Out of Stock)" @bind="StockStatus" />
-
     <InputFile OnChange="OnFileChange" />
     <button @onclick="SubmitNewProduct">Submit New Product</button>
 </div>
@@ -33,13 +31,18 @@
     private decimal Price { get; set; }
     private int StockQuantity { get; set; }
     private int? SelectedCategoryId { get; set; }
-    private string StockStatus { get; set; } // Added property for Stock Status
-    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
     private IBrowserFile selectedFile;
+    private List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
 
     protected override async Task OnInitializedAsync()
     {
         await FetchCategories();
+    }
+
+    private async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        Console.WriteLine($"File selected: {selectedFile.Name}");
     }
 
     private async Task FetchCategories()
@@ -48,65 +51,88 @@
         if (response.IsSuccessStatusCode)
         {
             Categories = await response.Content.ReadFromJsonAsync<List<ProductCategory>>();
+            Console.WriteLine("Fetched categories successfully.");
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Failed to fetch categories: {errorMessage}");
         }
     }
 
     private async Task SubmitNewProduct()
     {
-        var stockStatus = StockQuantity > 0 ? "In Stock" : null; // Set StockStatus based on quantity
+        try
+        {
+            var newProduct = new ProductCreateRequest
+                {
+                    Name = Name,
+                    Description = Description,
+                    Price = Price,
+                    StockQuantity = StockQuantity,
+                    CategoryId = SelectedCategoryId
+                };
 
-        var newProduct = new ProductCreateRequest
+            // Upload the image and get the URL
+            if (selectedFile != null)
             {
-                Name = Name,
-                Description = Description,
-                Price = Price,
-                StockQuantity = StockQuantity,
-                CategoryId = SelectedCategoryId,
-                StockStatus = stockStatus // Include stock status
-            };
+                newProduct.ImageUrl = await UploadFile(selectedFile);
+                if (newProduct.ImageUrl == null)
+                {
+                    Console.WriteLine("Image upload failed.");
+                    return; // Stop if the image upload fails
+                }
+            }
 
-        // Handle file upload logic if necessary
-        if (selectedFile != null)
-        {
-            // Logic to handle file upload can go here
-            newProduct.ImageUrl = await UploadFile(selectedFile); // Implement UploadFile method
+            // Create the product with the image URL
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/product/create", newProduct);
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/manage-products");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error creating product: {errorMessage}");
+            }
         }
-
-        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/product/create", newProduct);
-        if (response.IsSuccessStatusCode)
+        catch (Exception ex)
         {
-            Navigation.NavigateTo("/manage-products");
+            Console.WriteLine($"Exception in SubmitNewProduct: {ex.Message}");
         }
-        else
-        {
-            var errorMessage = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Error creating product: {errorMessage}"); // Output detailed error message for debugging
-        }
-    }
-
-
-
-
-
-    private async Task OnFileChange(InputFileChangeEventArgs e)
-    {
-        selectedFile = e.File;
     }
 
     private async Task<string> UploadFile(IBrowserFile file)
     {
-        using var content = new MultipartFormDataContent();
-        var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)); // 10 MB max size
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-        content.Add(fileContent, "file", file.Name);
-
-        var response = await Http.PostAsync("https://your-upload-url/api/upload", content); // Your file upload endpoint
-        if (response.IsSuccessStatusCode)
+        try
         {
-            return await response.Content.ReadAsStringAsync(); // Adjust based on your API response structure
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)); // 10 MB max size
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "file", file.Name);
+
+            Console.WriteLine($"Uploading file: {file.Name}");
+
+            var response = await Http.PostAsync("https://numnumfoods-api.azurewebsites.net/api/product/upload", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var imageUrl = await response.Content.ReadAsStringAsync();
+                // Trim quotes if necessary
+                imageUrl = imageUrl.Trim('"');
+                Console.WriteLine($"File uploaded successfully. Image URL: {imageUrl}");
+                return imageUrl; // Return the image URL
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error during file upload: {errorMessage}");
+                return null; // Handle the failure gracefully
+            }
         }
-
-        return null; // Handle error accordingly
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception during file upload: {ex.Message}");
+            return null; // Handle the failure gracefully
+        }
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using System.Text.Json
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
@@ -75,20 +76,56 @@
     {
         var loginData = new { Email, Password };
 
-        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/login", loginData);
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
-            UserState.SetUser(loginResponse.User.FullName, loginResponse.User.Email, loginResponse.User.Role);
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/login", loginData);
 
-            // Redirect the user to the homepage after successful login
-            Navigation.NavigateTo("/");
+            if (response.IsSuccessStatusCode)
+            {
+                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+                // Debugging: Output the received login response
+                Console.WriteLine("Login response received:");
+                Console.WriteLine(JsonSerializer.Serialize(loginResponse));
+
+                // Debugging: Output the UserId
+                Console.WriteLine($"Logged in user ID: {loginResponse.User.UserId}");
+
+                UserState.SetUser(loginResponse.User.UserId, loginResponse.User.FullName, loginResponse.User.Email, loginResponse.User.Role);
+
+                // Optionally, store user info in local storage for persistence
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userState", JsonSerializer.Serialize(UserState));
+                await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
+
+                // Redirect the user to the homepage after successful login
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                ErrorMessage = $"Login failed: {errorResponse}";
+                Console.WriteLine($"Login failed: {errorResponse}"); // Debugging
+            }
         }
-        else
+        catch (Exception ex)
         {
-            var errorResponse = await response.Content.ReadAsStringAsync();
-            ErrorMessage = $"Login failed: {errorResponse}";
+            ErrorMessage = "An error occurred during login.";
+            Console.WriteLine($"Exception in LoginUser: {ex.Message}"); // Debugging
         }
+    }
+
+    public class LoginResponse
+    {
+        public User User { get; set; }
+        public string Token { get; set; }
+    }
+
+    public class User
+    {
+        public int UserId { get; set; } // Ensure UserId is included
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        // Other properties as needed
     }
 }

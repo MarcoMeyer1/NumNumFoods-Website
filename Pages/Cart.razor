@@ -1,105 +1,182 @@
 ﻿@page "/cart"
+@inject HttpClient Http
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using NumNumFoods.Models
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <div class="container cart-container">
     <h1>My Cart</h1>
-    <div class="cart-content">
-        <div class="cart-items">
-            @foreach (var item in cartItems)
-            {
-                <div class="cart-item">
-                    <img src="@item.ImageUrl" alt="@item.ProductName" class="product-image" />
-                    <div class="item-details">
-                        <h4>@item.ProductName</h4>
-                        <p>@item.Description</p>
-                        <div class="pricing-info">
-                            <span>Each</span>
-                            <span>@item.Price</span>
-                            <span>Quantity</span>
-                            <div class="quantity-control">
-                                <button @onclick="() => UpdateQuantity(item, -1)">&#8722;</button>
-                                <input type="number" value="@item.Quantity" readonly />
-                                <button @onclick="() => UpdateQuantity(item, 1)">&#43;</button>
+    @if (cartItems == null)
+    {
+        <p>Loading cart items...</p>
+    }
+    else if (!cartItems.Any())
+    {
+        <p>Your cart is empty.</p>
+    }
+    else
+    {
+        <div class="cart-content">
+            <div class="cart-items">
+                @foreach (var item in cartItems)
+                {
+                    <div class="cart-item">
+                        <img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" />
+                        <div class="item-details">
+                            <h4>@item.Product.Name</h4>
+                            <p>@item.Product.Description</p>
+                            <div class="pricing-info">
+                                <div>
+                                    <span>Each: </span>
+                                    <span>@item.Price.ToString("C")</span>
+                                </div>
+                                <div>
+                                    <span>Quantity: </span>
+                                    <div class="quantity-control">
+                                        <button @onclick="() => UpdateQuantity(item, -1)">&#8722;</button>
+                                        <input type="number" value="@item.Quantity" readonly />
+                                        <button @onclick="() => UpdateQuantity(item, 1)">&#43;</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>Total: </span>
+                                    <span>@(item.Price * item.Quantity).ToString("C")</span>
+                                </div>
+                                <button class="remove-btn" @onclick="() => RemoveFromCart(item.CartId)">Remove</button>
                             </div>
-                            <span>Total</span>
-                            <span>@(item.Price * item.Quantity)</span>
                         </div>
                     </div>
-                </div>
-            }
-            <div class="cart-summary">
-                <div>@cartItems.Count items</div>
-                <div>Total: @cartItems.Sum(item => item.Price * item.Quantity).ToString("C")</div>
-            </div>
-        </div>
-
-        <div class="cart-actions">
-            <div class="form-group">
-                <label>Select Branch</label>
-                <select @bind="selectedBranch" class="form-control">
-                    <option value="Port Elizabeth">Port Elizabeth</option>
-                    <option value="Cape Town">Cape Town</option>
-                    <option value="Johannesburg">Johannesburg</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Enter Voucher Code</label>
-                <input type="text" class="form-control" placeholder="Voucher Code" @bind="voucherCode" />
-                <button class="btn btn-primary" @onclick="ApplyVoucher">Submit</button>
-            </div>
-
-            <div class="form-group">
-                <label>Payment Method:</label>
-                <div class="payment-method">
-                    <label for="pay-now">Pay now:</label>
-                    <input type="radio" id="pay-now" name="payment" value="Pay now" />
-
-                    <label for="in-person">In person:</label>
-                    <input type="radio" id="in-person" name="payment" value="In person" checked />
+                }
+                <div class="cart-summary">
+                    <div>@cartItems.Count items</div>
+                    <div>Total: @cartItems.Sum(item => item.Price * item.Quantity).ToString("C")</div>
                 </div>
             </div>
 
-            <div class="cart-total">
-                <div>Discount: @(discount)</div>
-                <div>Total: @(cartItems.Sum(item => item.Price * item.Quantity - discount))</div>
-            </div>
+            <div class="cart-actions">
+               
 
-            <button class="btn btn-pink" @onclick="ProceedToCheckout">Checkout</button>
+                <div class="form-group">
+                    <label>Enter Voucher Code</label>
+                    <input type="text" class="form-control" placeholder="Voucher Code" @bind="voucherCode" />
+                    <button class="btn btn-primary" @onclick="ApplyVoucher">Submit</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method:</label>
+                    <div class="payment-method">
+                        <label for="pay-now">Pay now:</label>
+                        <input type="radio" id="pay-now" name="payment" value="Pay now" @onchange="OnPaymentMethodChanged" />
+
+                        <label for="in-person">In person:</label>
+                        <input type="radio" id="in-person" name="payment" value="In person" @onchange="OnPaymentMethodChanged" />
+
+                    </div>
+                </div>
+
+                <div class="cart-total">
+                    <div>Discount: @discount.ToString("C")</div>
+                    <div>Total: @(cartItems.Sum(item => item.Price * item.Quantity) - discount).ToString("C")</div>
+                </div>
+
+                <button class="btn btn-pink" @onclick="ProceedToCheckout">Checkout</button>
+            </div>
         </div>
-    </div>
+    }
 </div>
 
 @code {
-    private List<CartItem> cartItems = new List<CartItem>
-    {
-        new CartItem
-        {
-            ProductName = "Mashed Peas",
-            Description = "Cream filled donuts with potato as a side and some peas which are mashed and goopy",
-            Price = 55.00M,
-            Quantity = 1,
-            ImageUrl = "/Assets/mashed_peas.png"
-        },
-        new CartItem
-        {
-            ProductName = "Mashed Peas",
-            Description = "Cream filled donuts with potato as a side and some peas which are mashed and goopy",
-            Price = 55.00M,
-            Quantity = 2,
-            ImageUrl = "/Assets/mashed_peas.png"
-        }
-    };
-
+    private List<CartItem> cartItems;
     private string selectedBranch = "Port Elizabeth";
     private string voucherCode = string.Empty;
     private decimal discount = 0M;
+    private string paymentMethod = "In person";
 
-    private void UpdateQuantity(CartItem item, int change)
+    protected override async Task OnInitializedAsync()
     {
-        if (item.Quantity + change >= 1)
+        int userId = UserState.UserId;
+
+        if (userId == 0)
         {
-            item.Quantity += change;
+            // User is not logged in; redirect to login page or show a message
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadCartItems(userId);
+    }
+    private void OnPaymentMethodChanged(ChangeEventArgs e)
+    {
+        paymentMethod = e.Value.ToString();
+    }
+    private async Task LoadCartItems(int userId)
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/cart/user/{userId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var cartItemsFromApi = await response.Content.ReadFromJsonAsync<List<CartItem>>();
+                // Fetch product details for each cart item
+                foreach (var item in cartItemsFromApi)
+                {
+                    var productResponse = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{item.ProductId}");
+                    if (productResponse.IsSuccessStatusCode)
+                    {
+                        item.Product = await productResponse.Content.ReadFromJsonAsync<Product>();
+                    }
+                }
+                cartItems = cartItemsFromApi;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load cart items: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadCartItems: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateQuantity(CartItem item, int change)
+    {
+        int newQuantity = item.Quantity + change;
+        if (newQuantity >= 1)
+        {
+            item.Quantity = newQuantity;
+            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/cart/update/{item.CartId}", item.Quantity);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Cart item quantity updated.");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to update cart item quantity: {error}");
+            }
+        }
+    }
+
+    private async Task RemoveFromCart(int cartId)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to remove this item from the cart?");
+        if (confirmed)
+        {
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/cart/remove/{cartId}");
+            if (response.IsSuccessStatusCode)
+            {
+                cartItems.RemoveAll(item => item.CartId == cartId);
+                Console.WriteLine("Item removed from cart.");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to remove item from cart: {error}");
+            }
         }
     }
 
@@ -119,10 +196,20 @@
 
     public class CartItem
     {
-        public string ProductName { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
+        public int CartId { get; set; }
+        public int UserId { get; set; } // User ID
+        public int ProductId { get; set; } // Product ID
         public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public Product Product { get; set; } // Associated product
+    }
+
+    public class Product
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
     }
 }

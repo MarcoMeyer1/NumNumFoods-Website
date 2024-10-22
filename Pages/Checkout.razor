@@ -1,0 +1,243 @@
+﻿@page "/checkout"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using NumNumFoods.Models
+@using NumNumFoods.Services
+@inject UserState UserState
+
+<h1>Checkout</h1>
+
+@if (cartItems == null)
+{
+    <p>Loading cart items...</p>
+}
+else if (!cartItems.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <div class="checkout-container">
+        <h2>Order Summary</h2>
+        <table class="order-summary-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <th>Price Each</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in cartItems)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" /></td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@(item.Price * item.Quantity).ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="order-summary">
+            <div class="order-total">
+                <h3>Total Amount: @totalAmount.ToString("C")</h3>
+            </div>
+        </div>
+
+        <div class="checkout-actions">
+            <div class="form-group">
+                <label>Select Branch:</label>
+                <select @bind="selectedBranchId" class="form-control">
+                    @foreach (var branch in branches)
+                    {
+                        <option value="@branch.BranchId">@branch.Name</option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn-pink confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<CartItem> cartItems;
+    private decimal totalAmount;
+    private int selectedBranchId;
+    private List<Branch> branches = new List<Branch>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        int userId = UserState.UserId;
+
+        if (userId == 0)
+        {
+            // User is not logged in; redirect to login page or show a message
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadBranches();
+        await LoadCartItems(userId);
+    }
+
+    private async Task LoadCartItems(int userId)
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/cart/user/{userId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var cartItemsFromApi = await response.Content.ReadFromJsonAsync<List<CartItem>>();
+                // Fetch product details for each cart item
+                foreach (var item in cartItemsFromApi)
+                {
+                    var productResponse = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{item.ProductId}");
+                    if (productResponse.IsSuccessStatusCode)
+                    {
+                        item.Product = await productResponse.Content.ReadFromJsonAsync<Product>();
+                    }
+                }
+                cartItems = cartItemsFromApi;
+                totalAmount = cartItems.Sum(item => item.Price * item.Quantity);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load cart items: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadCartItems: {ex.Message}");
+        }
+    }
+
+    private async Task LoadBranches()
+    {
+        try
+        {
+            var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/branch/getAll");
+            if (response.IsSuccessStatusCode)
+            {
+                branches = await response.Content.ReadFromJsonAsync<List<Branch>>();
+                if (branches.Any())
+                {
+                    selectedBranchId = branches.First().BranchId;
+                }
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load branches: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadBranches: {ex.Message}");
+        }
+    }
+
+    private async Task ConfirmOrder()
+    {
+        int userId = UserState.UserId;
+
+        if (userId == 0)
+        {
+            // User is not logged in; redirect to login page or show a message
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to confirm the order?");
+        if (confirmed)
+        {
+            var newOrder = new Order
+                {
+                    CustomerId = userId,
+                    BranchId = selectedBranchId,
+                    TotalPrice = totalAmount,
+                    Status = "Pending",
+                    OrderDate = DateTime.Now,
+                    OrderItems = cartItems.Select(item => new OrderItem
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        ProductName = item.Product.Name,
+                        ImageUrl = item.Product.ImageUrl
+                    }).ToList()
+                };
+
+            try
+            {
+                var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/order/create", newOrder);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Order created successfully.");
+                    // Optionally, navigate to an order confirmation page
+                    Navigation.NavigateTo("/order-confirmation");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Failed to create order: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in ConfirmOrder: {ex.Message}");
+            }
+        }
+    }
+
+    public class CartItem
+    {
+        public int CartId { get; set; }
+        public int UserId { get; set; } // User ID
+        public int ProductId { get; set; } // Product ID
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public Product Product { get; set; } // Associated product
+    }
+
+    public class Product
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    public class Order
+    {
+        public int CustomerId { get; set; }
+        public int BranchId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; }
+        public DateTime OrderDate { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
+    }
+
+    public class OrderItem
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+        public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
+    }
+
+    public class Branch
+    {
+        public int BranchId { get; set; }
+        public string Name { get; set; }
+    }
+}

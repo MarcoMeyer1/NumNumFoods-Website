@@ -4,6 +4,7 @@
     {
         public event Action OnChange;
 
+        public int UserId { get; private set; } // Added UserId property
         private string _role;
         private string _userFullName;
         private string _userEmail;
@@ -50,16 +51,19 @@
 
         public bool IsLoggedIn => _isLoggedIn; // Property to check login status
 
-        public void SetUser(string fullName, string email, string role)
+        public void SetUser(int userId, string fullName, string email, string role)
         {
+            UserId = userId; // Set the UserId
             UserFullName = fullName;
             UserEmail = email;
             Role = role;
             _isLoggedIn = true; // Set the user as logged in
+            NotifyStateChanged();
         }
 
         public void Logout()
         {
+            UserId = 0; // Reset the UserId
             _userFullName = null;
             _userEmail = null;
             Role = null;

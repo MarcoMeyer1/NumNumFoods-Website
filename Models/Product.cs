@@ -4,25 +4,31 @@ namespace NumNumFoods.Models
 {
     public class Product
     {
-        [Key]
-        public int ProductId { get; set; } // Ensure this property exists
-        public string Name { get; set; } // Name of the product
-        public string Description { get; set; } // Description of the product
-        public decimal Price { get; set; } // Price of the product
-        public int StockQuantity { get; set; } // Available stock quantity
-        public string Location { get; set; } // Location where the product is available
+        public int ProductId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public decimal Price { get; set; }
+
+        public int StockQuantity { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public string StockStatus { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 
     public class ProductCategory
     {
-        [Key]
-        public int CategoryId { get; set; } // Unique identifier for the category
+        public int CategoryId { get; set; }
 
-        [Required]
-        public string Name { get; set; } // Name of the category
+        public string Name { get; set; }
 
-        public string AgeRange { get; set; } // Optional: Age range for products in this category
+        public string AgeRange { get; set; }
 
-        public string ContainerSize { get; set; } // Optional: Size of the container for products in this category
+        public string ContainerSize { get; set; }
     }
 }

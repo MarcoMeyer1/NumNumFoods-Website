@@ -1,0 +1,81 @@
+﻿@page "/admin/orders/summary/{OrderID}"
+@inject NavigationManager Navigation
+
+@code {
+    [Parameter] public string OrderID { get; set; }
+
+    private Order orderDetails;
+
+    protected override void OnInitialized()
+    {
+        // Simulate data retrieval based on OrderID (use sample data for now)
+        orderDetails = orders.FirstOrDefault(o => o.OrderID == OrderID);
+    }
+
+    // Reuse the same Order class from the main page
+    private List<Order> orders = new List<Order>
+    {
+        new Order { OrderID = "858521", Customer = "Hannah White", Items = 3, Total = "R165",
+            OrderItems = new List<OrderItem>
+            {
+                new OrderItem { Name = "Mashed Peas", Description = "A delicious side of mashed peas", Price = "R55", Quantity = 1, ImageUrl = "/assets/Mashed_Peas.png" },
+                new OrderItem { Name = "Cream Donuts", Description = "Cream-filled donuts", Price = "R55", Quantity = 2, ImageUrl = "/assets/Mashed_Peas.png" } // Assuming placeholder for now
+            }
+        }
+    };
+
+    public class Order
+    {
+        public string OrderID { get; set; }
+        public string Customer { get; set; }
+        public int Items { get; set; }
+        public string Total { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
+    }
+
+    public class OrderItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Price { get; set; }
+        public int Quantity { get; set; }
+        public string ImageUrl { get; set; } // New field for image URL
+    }
+}
+
+@if (orderDetails != null)
+{
+    <div class="order-summary">
+        <h1>Order Summary for @orderDetails.OrderID</h1>
+        <h2>Customer: @orderDetails.Customer</h2>
+        <p>Total Items: @orderDetails.Items</p>
+        <p>Total Amount: @orderDetails.Total</p>
+
+        <div class="order-items">
+            @foreach (var item in orderDetails.OrderItems)
+            {
+                <div class="order-item">
+                    <div class="item-details">
+                        <h3>@item.Name</h3>
+                        <p>@item.Description</p>
+                        <p><strong>Quantity:</strong> @item.Quantity</p>
+                        <p><strong>Price:</strong> R@item.Price</p>
+                        <p><strong>Total:</strong> R@((decimal.Parse(item.Price.TrimStart('R')) * item.Quantity).ToString("F2"))</p>
+                    </div>
+
+                    <!-- Image for each order item -->
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <div class="item-image">
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>Order not found.</p>
+}

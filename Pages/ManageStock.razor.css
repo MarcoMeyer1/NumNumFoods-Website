@@ -1,112 +1,135 @@
-﻿.stock-management-container {
-    padding: 20px;
-    background-color: #fafafa;
-    border-radius: 8px;
+﻿/* Main container for stock management */
+
+.stock-management-container {
+    padding: 30px;
+    background-color: #FAF9F6; /* Lighter background color */
+    border-radius: 12px;
 }
 
+/* Header */
 h1 {
-    color: #000000;
+    color: #333; /* Darker color for text */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Add some margin below the heading */
+    font-size: 2.5rem; /* Increase font size */
+    font-weight: bold;
 }
 
+/* Toolbar with search and location dropdown */
 .stock-toolbar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: -60px; /* Increase margin between the toolbar and table */
+    align-items: center; /* Vertically align elements */
 }
 
+/* Search input smaller in length */
 .search-input {
-    padding: 8px;
-    width: 60%;
+    padding: 12px; /* Larger padding for input */
+    width: 20%; /* Reduced width to make search bar smaller */
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px; /* Rounded corners */
+    font-size: 1rem;
 }
 
+/* Align select and button with the table */
 .location-dropdown {
-    padding: 8px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-left: 10px;
+    border-radius: 8px;
+    margin-left: 700px;
+    font-size: 1rem;
 }
 
 .add-stock-button {
-    padding: 10px;
-    background-color: #0097ff;
-    color: white;
+    padding: 12px 20px; /* Larger button */
+    background-color: #FADADD;
+    color: black;
+    font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
     .add-stock-button:hover {
-        background-color: #007acc; /* Darker shade on hover */
+        background-color: lightpink; /* Darker shade on hover */
     }
 
-/* Table Styling */
+/* Table Background Styling */
 .stock-table-background {
-    background-color: rgba(143, 143, 143, 0.4); /* #8F8F8F with 40% opacity */
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
+    background-color: #f1f1f1; /* Light grey background for the table container */
+    border-radius: 12px; /* Rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for card-like appearance */
+    margin-top: 20px; /* Increase the margin above the table */
 }
 
+/* Table Container */
 .stock-table-container {
     overflow-x: auto;
-    background-color: white;
-    border-radius: 8px;
+    background-color: white; /* Pure white background for the table */
+    border-radius: 10px;
 }
 
+/* Stock Table Styling */
 .stock-table {
     width: 100%;
     border-collapse: collapse;
 }
 
     .stock-table th, .stock-table td {
-        padding: 10px;
+        padding: 15px; /* Larger padding */
         border: 1px solid #ddd;
         text-align: left;
+        font-size: 1.1rem;
     }
 
     .stock-table th {
-        background-color: #D5598C;
-        color: white;
+        background-color: #FADADD; /* Pinkish background for table headers */
+        color: black;
+        font-weight: bold;
+        font-size: 1.2rem; /* Larger font size */
     }
 
+/* Status Column Styling */
 .status-column span {
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 8px 15px;
+    border-radius: 6px;
     color: white;
     font-weight: bold;
+    font-size: 1rem; /* Increase font size */
 }
 
 /* Status Classes */
 .status-instock {
-    background-color: #28a745;
+    background-color: #28a745; /* Green for In Stock */
 }
 
 .status-lowstock {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red for Low Stock */
 }
 
 .status-receiving {
-    background-color: #ffc107;
+    background-color: #ffc107; /* Yellow for Receiving Stock */
 }
 
 /* Update Stock Button */
 .update-stock-button {
     margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #0097ff;
-    color: white;
+    padding: 12px 25px; /* Larger padding */
+    background-color: #FADADD;
+    color: black;
+    font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 1rem;
     float: right;
 }
 
     .update-stock-button:hover {
-        background-color: #007acc; /* Darker shade on hover */
+        background-color: lightpink; /* Darker shade on hover */
     }
 
 /* Mobile Responsiveness */
@@ -118,6 +141,7 @@ h1 {
 
     .add-stock-button, .location-dropdown {
         width: 100%;
+        margin-bottom: 10px;
     }
 
     .stock-toolbar {
@@ -125,11 +149,11 @@ h1 {
     }
 
     .stock-table {
-        font-size: 12px;
+        font-size: 0.9rem;
     }
 
         .stock-table th, .stock-table td {
-            padding: 8px;
+            padding: 10px;
         }
 
     .update-stock-button {

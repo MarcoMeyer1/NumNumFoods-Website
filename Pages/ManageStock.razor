@@ -3,8 +3,8 @@
 @inject NavigationManager Navigation
 
 <div class="stock-management-container">
-    <h1>Current Stock</h1>
 
+    <!-- Stock Toolbar (search, location dropdown, add stock button) -->
     <div class="stock-toolbar">
         <input type="text" placeholder="Search..." class="search-input" @bind="searchTerm" @oninput="FilterStockList" />
         <select @onchange="OnLocationChanged" class="location-dropdown">
@@ -17,6 +17,10 @@
         <button class="add-stock-button" @onclick="NavigateToAddStock">+ New Stock</button>
     </div>
 
+    <!-- Move the Current Stock Heading Here, right above the table -->
+    <h1>Current Stock</h1>
+
+    <!-- Table Background -->
     <div class="stock-table-background">
         <div class="stock-table-container">
             <table class="stock-table">

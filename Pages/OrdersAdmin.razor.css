@@ -1,0 +1,114 @@
+﻿.order-management-container {
+    padding: 30px;
+    background-color: #FAF9F6; /* Lighter background */
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+/* Header */
+.dashboard-header h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Toolbar (search and dropdown side by side) */
+.order-toolbar {
+    display: flex;
+    justify-content: space-between; /* Keep search bar on the right */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Filter dropdown on the left */
+.filter-dropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff; /* Remove weird border, add a white background */
+    width: 200px; /* Set a fixed width */
+}
+
+.btn-order-summary {
+    background-color: #ff7f7f; /* Light red background */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+    .btn-order-summary:hover {
+        background-color: #ff4f4f; /* Darker red on hover */
+    }
+
+/* Search Bar on the right */
+.search-bar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .search-bar input {
+        padding: 12px;
+        width: 250px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+/* Table container (similar to stock) */
+.orders-table-container {
+    background-color: #fff; /* White background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-top: 20px;
+}
+
+/* Orders Table Styling */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .orders-table th, .orders-table td {
+        padding: 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+        font-size: 1.1rem;
+    }
+
+    .orders-table th {
+        background-color: #FADADD; /* Pinkish background for headers */
+        color: black;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .orders-table td select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 150px; /* Dropdown width consistency */
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .order-toolbar {
+        flex-direction: column;
+    }
+
+    .search-bar input, .filter-dropdown {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}

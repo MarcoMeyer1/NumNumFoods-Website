@@ -1,0 +1,129 @@
+﻿@page "/admin/orders"
+@inject NavigationManager Navigation
+
+<div class="order-management">
+    <div class="dashboard-header">
+        <h1>Order Management</h1>
+    </div>
+
+    <!-- Dropdown for filtering order status -->
+    <div class="filter-dropdown">
+        <select @onchange="FilterOrdersByStatus" class="status-dropdown">
+            <option value="All">All Orders</option>
+            <option value="Completed">Completed</option>
+            <option value="Processing">Processing</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Quick Search" @bind="searchTerm" />
+    </div>
+
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th><input type="checkbox" /></th>
+                <th>Order ID</th>
+                <th>Date/Time</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment Method</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in filteredOrders)
+            {
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>@order.OrderID</td>
+                    <td>@order.Date</td>
+                    <td>@order.Customer</td>
+                    <td>
+                        <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
+                            @foreach (var status in availableStatuses)
+                            {
+                                <option value="@status" selected="@(status == order.Status)">@status</option>
+                            }
+                        </select>
+                    </td>
+                    <td>@order.Items</td>
+                    <td>@order.Total</td>
+                    <td>@order.PaymentMethod</td>
+                    <td>
+                        <!-- Order Summary Button -->
+                        <button @onclick="() => NavigateToOrderSummary(order.OrderID)" class="btn-order-summary">
+                            Order Summary
+                        </button>
+                    </td> <!-- New cell for the button -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<Order> orders = new List<Order>
+    {
+        new Order { OrderID = "858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethod = "In Person" },
+        new Order { OrderID = "858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethod = "In Person" },
+    };
+
+    private List<string> availableStatuses = new List<string> { "Processing", "Completed", "Cancelled" };
+    private List<Order> filteredOrders;
+    private string selectedStatus = "All";
+    private string searchTerm = "";
+
+    // Method to filter orders by status
+    private void FilterOrdersByStatus(ChangeEventArgs e)
+    {
+        selectedStatus = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    // Apply status and search filters
+    private void ApplyFilters()
+    {
+        filteredOrders = orders
+            .Where(o => (selectedStatus == "All" || o.Status == selectedStatus) &&
+                        (string.IsNullOrEmpty(searchTerm) || o.Customer.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+    }
+
+    // Method to update the order status
+    private void UpdateOrderStatus(Order order, string newStatus)
+    {
+        order.Status = newStatus;
+        ApplyFilters(); // Reapply filters in case the status change affects visibility
+    }
+
+    private void NavigateToOrderSummary(string orderId)
+    {
+        if (!string.IsNullOrWhiteSpace(orderId))
+        {
+            Navigation.NavigateTo($"/admin/orders/summary/{orderId}", forceLoad: true); // forceLoad added for reliability
+        }
+    }
+
+    // Initial load
+    protected override void OnInitialized()
+    {
+        filteredOrders = orders;
+    }
+
+    public class Order
+    {
+        public string OrderID { get; set; }
+        public string Date { get; set; }
+        public string Customer { get; set; }
+        public string Status { get; set; }
+        public int Items { get; set; }
+        public string Total { get; set; }
+        public string PaymentMethod { get; set; }
+    }
+}

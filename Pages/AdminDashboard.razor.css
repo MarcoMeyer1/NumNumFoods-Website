@@ -1,31 +1,59 @@
 ﻿.dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr); /* Keep the three-column layout for larger screens */
+    gap: 30px; /* Increased gap between grid items */
+    padding: 30px; /* Increased padding around the grid */
+    background-color: #fff;
+    border-radius: 20px; /* Larger rounding for the grid container */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
 }
 
 .dashboard-item {
-    background-color: #D5598C;
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+    background-color: #FADADD;
+    color: #000; /* Default text color */
+    padding: 30px; /* Increased padding inside each item */
+    border-radius: 15px; /* Larger rounding for each item */
+    text-align: left;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Increased shadow size */
 }
 
+    .dashboard-item h3 {
+        font-size: 2rem; /* Larger heading */
+        font-weight: bold;
+        margin-bottom: 15px; /* Increased margin below heading */
+        color: #000; /* Heading text remains black */
+    }
+
+    .dashboard-item p {
+        font-size: 1.2rem; /* Larger paragraph text */
+        margin: 10px 0; /* Increased space between paragraphs */
+        color: #d5598c; /* Paragraph text color updated */
+    }
+
     .dashboard-item:hover {
-        transform: scale(1.05);
+        transform: scale(1.05); /* Increased hover scaling effect */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
     }
 
 /* Media query for responsiveness */
 @media (max-width: 768px) {
     .dashboard-grid {
-        grid-template-columns: 1fr; /* Single-column layout on mobile */
+        grid-template-columns: 1fr; /* Single-column layout for mobile */
+        padding: 20px; /* Increased padding on mobile */
     }
 
     .dashboard-item {
-        padding: 15px;
+        padding: 25px; /* Larger padding for mobile */
     }
+
+        .dashboard-item h3 {
+            font-size: 1.8rem; /* Larger heading for mobile */
+        }
+
+        .dashboard-item p {
+            font-size: 1.1rem; /* Larger text for mobile */
+            color: #d5598c; /* Ensures paragraph text remains this color on mobile */
+        }
 }

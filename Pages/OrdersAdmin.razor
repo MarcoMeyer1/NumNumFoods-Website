@@ -6,15 +6,18 @@
         <h1>Order Management</h1>
     </div>
 
-    <div class="tabs">
-        <button class="tab-button active">All Orders</button>
-        <button class="tab-button">Completed</button>
-        <button class="tab-button">Processing</button>
-        <button class="tab-button">Cancelled</button>
+    <!-- Dropdown for filtering order status -->
+    <div class="filter-dropdown">
+        <select @onchange="FilterOrdersByStatus" class="status-dropdown">
+            <option value="All">All Orders</option>
+            <option value="Completed">Completed</option>
+            <option value="Processing">Processing</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
     </div>
 
     <div class="search-bar">
-        <input type="text" placeholder="Quick Search" />
+        <input type="text" placeholder="Quick Search" @bind="searchTerm" />
     </div>
 
     <table class="orders-table">
@@ -31,8 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Example Order Rows -->
-            @foreach (var order in orders)
+            @foreach (var order in filteredOrders)
             {
                 <tr>
                     <td><input type="checkbox" /></td>
@@ -40,15 +42,16 @@
                     <td>@order.Date</td>
                     <td>@order.Customer</td>
                     <td>
-                        <select class="status-dropdown">
-                            <option selected>@order.Status</option>
+                        <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
+                            @foreach (var status in availableStatuses)
+                            {
+                                <option value="@status" selected="@(status == order.Status)">@status</option>
+                            }
                         </select>
                     </td>
                     <td>@order.Items</td>
                     <td>@order.Total</td>
-                    <td>
-                        <img src="@order.PaymentMethodIcon" alt="Payment Method" class="payment-icon" />
-                    </td>
+                    <td>@order.PaymentMethod</td> 
                 </tr>
             }
         </tbody>
@@ -58,12 +61,46 @@
 @code {
     private List<Order> orders = new List<Order>
     {
-        new Order { OrderID = "#858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethodIcon = "mastercard.png" },
-        new Order { OrderID = "#858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethodIcon = "yoco.png" },
-        new Order { OrderID = "#853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethodIcon = "visa.png" },
-        new Order { OrderID = "#858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethodIcon = "" },
+        new Order { OrderID = "#858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethod = "In Person" },
+        new Order { OrderID = "#858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "#853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "#858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethod = "In Person" },
         // Add more sample orders
     };
+
+    private List<string> availableStatuses = new List<string> { "Processing", "Completed", "Cancelled" };
+    private List<Order> filteredOrders;
+    private string selectedStatus = "All";
+    private string searchTerm = "";
+
+    // Method to filter orders by status
+    private void FilterOrdersByStatus(ChangeEventArgs e)
+    {
+        selectedStatus = e.Value.ToString();
+        ApplyFilters();
+    }
+
+    // Apply status and search filters
+    private void ApplyFilters()
+    {
+        filteredOrders = orders
+            .Where(o => (selectedStatus == "All" || o.Status == selectedStatus) &&
+                        (string.IsNullOrEmpty(searchTerm) || o.Customer.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+    }
+
+    // Method to update the order status
+    private void UpdateOrderStatus(Order order, string newStatus)
+    {
+        order.Status = newStatus;
+        ApplyFilters(); // Reapply filters in case the status change affects visibility
+    }
+
+    // Initial load
+    protected override void OnInitialized()
+    {
+        filteredOrders = orders;
+    }
 
     public class Order
     {
@@ -73,6 +110,6 @@
         public string Status { get; set; }
         public int Items { get; set; }
         public string Total { get; set; }
-        public string PaymentMethodIcon { get; set; }
+        public string PaymentMethod { get; set; }
     }
 }

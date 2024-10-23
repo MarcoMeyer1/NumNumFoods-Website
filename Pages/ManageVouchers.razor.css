@@ -1,4 +1,13 @@
 ﻿/* Main container for voucher management */
+/* Center the Voucher Management heading */
+.voucher-management h1 {
+    text-align: center; /* Center the heading */
+    font-size: 2.75rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    padding-bottom: 0px;
+}
+
 .voucher-management {
     background-color: #fff; /* White background for overall container */
     padding: 30px;
@@ -6,12 +15,16 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-    /* Center the Voucher Management heading */
-    .voucher-management h1 {
-        text-align: center;
-        font-size: 2rem;
-        margin-bottom: 20px;
-    }
+  .voucher-management {
+    background-color: #fff; /* White background for overall container */
+    padding: 30px; /* Adjusted padding for spacing */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    display: flex;
+    flex-direction: column; /* Stack New Voucher and Active Voucher vertically */
+    gap: 50px; /* This creates the gap between the two sections */
+}
+
 
 /* New Voucher and Active Vouchers sections with pink backgrounds */
 .new-voucher, .active-vouchers {
@@ -23,7 +36,7 @@
 
 /* Add larger visual gap between New Voucher and Active Vouchers sections */
 .new-voucher {
-    margin-bottom: 40px; /* Larger margin to create a visual gap between the cards */
+    margin-bottom: 50px;
 }
 
 /* Center content in the New Voucher section */
@@ -71,9 +84,10 @@
     .voucher-inputs button {
         padding: 10px 20px; /* Larger button size */
         background-color: #D5598C; /* Pink button */
-        color: #fff;
+        color: black;
         border: none;
         border-radius: 6px;
+        font-weight: bold;
         font-size: 1.1rem;
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -81,7 +95,7 @@
     }
 
         .voucher-inputs button:hover {
-            background-color: #C04A78; /* Darker pink on hover */
+            background-color: lightpink; /* Darker pink on hover */
         }
 
 /* Table styling for Active Vouchers */
@@ -138,8 +152,8 @@ td {
 /* Delete button styling */
 .delete-button {
     padding: 8px 16px;
-    background-color: #ff4444;
-    color: #fff;
+    background-color: #e90505;
+    color: black;
     border: none;
     border-radius: 6px;
     font-size: 1rem;

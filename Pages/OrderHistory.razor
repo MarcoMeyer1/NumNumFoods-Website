@@ -1,0 +1,60 @@
+﻿@page "/profile/orderhistory"
+@inject NavigationManager Navigation
+
+<div class="order-history-page">
+    <h1 class="order-history-title">Orders</h1>
+
+    @foreach (var order in orders)
+    {
+        <div class="order-block">
+            <div class="order-details">
+                <p class="order-date">Delivered @order.DeliveryDate.ToString("ddd, dd MMM yyyy")</p>
+                <div class="order-images">
+                    @foreach (var image in order.ProductImages)
+                    {
+                        <img src="@image" alt="Product Image" class="order-image" />
+                    }
+                </div>
+            </div>
+            <button class="order-details-button" @onclick="() => NavigateToOrderDetails(order.OrderId)">Order Details</button>
+        </div>
+    }
+</div>
+
+@code {
+    // List of dynamic orders
+    private List<Order> orders = new List<Order>
+    {
+        new Order
+        {
+            OrderId = 160820532,
+            DeliveryDate = new DateTime(2024, 9, 18),
+            ProductImages = new List<string> { "Assets/product1.png", "Assets/product2.png", "Assets/product3.png" }
+        },
+        new Order
+        {
+            OrderId = 160820533,
+            DeliveryDate = new DateTime(2024, 7, 13),
+            ProductImages = new List<string> { "Assets/product4.png", "Assets/product5.png", "Assets/product6.png" }
+        },
+        new Order
+        {
+            OrderId = 160820534,
+            DeliveryDate = new DateTime(2024, 7, 11),
+            ProductImages = new List<string> { "Assets/product7.png", "Assets/product8.png" }
+        }
+    };
+
+    // Method to navigate to the order details page
+    private void NavigateToOrderDetails(int orderId)
+    {
+        Navigation.NavigateTo($"/profile/orderdetails/{orderId}");
+    }
+
+    public class Order
+    {
+        public int OrderId { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public List<string> ProductImages { get; set; }
+    }
+}

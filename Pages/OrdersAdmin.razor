@@ -1,0 +1,78 @@
+﻿@page "/admin/orders"
+@inject NavigationManager Navigation
+
+<div class="order-management">
+    <div class="dashboard-header">
+        <h1>Order Management</h1>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-button active">All Orders</button>
+        <button class="tab-button">Completed</button>
+        <button class="tab-button">Processing</button>
+        <button class="tab-button">Cancelled</button>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Quick Search" />
+    </div>
+
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th><input type="checkbox" /></th>
+                <th>Order ID</th>
+                <th>Date/Time</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example Order Rows -->
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>@order.OrderID</td>
+                    <td>@order.Date</td>
+                    <td>@order.Customer</td>
+                    <td>
+                        <select class="status-dropdown">
+                            <option selected>@order.Status</option>
+                        </select>
+                    </td>
+                    <td>@order.Items</td>
+                    <td>@order.Total</td>
+                    <td>
+                        <img src="@order.PaymentMethodIcon" alt="Payment Method" class="payment-icon" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<Order> orders = new List<Order>
+    {
+        new Order { OrderID = "#858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethodIcon = "mastercard.png" },
+        new Order { OrderID = "#858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethodIcon = "yoco.png" },
+        new Order { OrderID = "#853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethodIcon = "visa.png" },
+        new Order { OrderID = "#858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethodIcon = "" },
+        // Add more sample orders
+    };
+
+    public class Order
+    {
+        public string OrderID { get; set; }
+        public string Date { get; set; }
+        public string Customer { get; set; }
+        public string Status { get; set; }
+        public int Items { get; set; }
+        public string Total { get; set; }
+        public string PaymentMethodIcon { get; set; }
+    }
+}

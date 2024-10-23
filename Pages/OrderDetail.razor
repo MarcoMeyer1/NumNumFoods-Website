@@ -1,0 +1,67 @@
+﻿@page "/profile/orderdetails/{orderId:int}"
+@code {
+    [Parameter] public int orderId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // You can use the orderId to fetch data from your backend or display order details
+        Console.WriteLine($"Loaded Order Details for Order ID: {orderId}");
+    }
+}
+
+<div class="order-detail-page">
+    <h1 class="order-detail-title">Order #@orderId</h1>
+    <p class="order-detail-meta">ORDERED 14 SEP 2024 | PAID 14 SEP 2024</p>
+
+    <div class="order-summary-section">
+        <div class="summary-item">
+            <h3>Order Summary</h3>
+            <p>3 Items</p>
+            <p>Delivery: R 0</p>
+            <p><strong>Order Total: R 483</strong></p>
+            <p>Paid (Credit / Debit Card): R 233</p>
+            <p>Paid (Takealot Credit): -R 250</p>
+        </div>
+
+        <div class="payment-method-section">
+            <h3>Payment Method</h3>
+            <p>Credit / Debit Card</p>
+        </div>
+    </div>
+
+    <div class="order-items-section">
+        <h3>Delivered Wed, 18 Sep 2024</h3>
+
+        <div class="order-item">
+            <img src="Assets/mouse.png" alt="Wireless Gaming Mouse" class="order-item-image" />
+            <div class="order-item-details">
+                <p><strong>Foxxray BMW-60 Ariel Wireless Gaming Mouse</strong></p>
+                <p>Qty: 1</p>
+                <p>R 299</p>
+                <p>Sold by Baobab</p>
+            </div>
+        </div>
+
+        <div class="order-item">
+            <img src="Assets/cable.png" alt="3.5mm Audio Cable" class="order-item-image" />
+            <div class="order-item-details">
+                <p><strong>UGreen 10734 3.5mm Male to Male Round 1.5m Aud Cable</strong></p>
+                <p>Qty: 1</p>
+                <p>R 69</p>
+                <p>Sold by UGreen</p>
+            </div>
+        </div>
+
+        <div class="order-item">
+            <img src="Assets/laptop-stand.png" alt="Laptop Stand" class="order-item-image" />
+            <div class="order-item-details">
+                <p><strong>Adjustable Folding Laptop Stand - Grey</strong></p>
+                <p>Qty: 1</p>
+                <p>R 115</p>
+                <p>Sold by Swell Party</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="log-return-button">Log Return</button>
+</div>

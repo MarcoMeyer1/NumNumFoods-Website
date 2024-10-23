@@ -1,4 +1,5 @@
 ﻿@page "/add-stock"
+@inject HttpClient Http
 @inject NavigationManager Navigation
 
 <div class="add-stock-container">
@@ -8,11 +9,11 @@
         <label for="product">Product Name</label>
         <input type="text" id="product" placeholder="Enter product name" @bind="newStock.Product" />
 
-        <label for="location">Location</label>
+        <label for="location">Branch Location</label>
         <select id="location" @bind="newStock.Location">
-            @foreach (var location in locations)
+            @foreach (var branch in branches)
             {
-                <option value="@location">@location</option>
+                <option value="@branch.Name">@branch.Name</option>
             }
         </select>
 
@@ -28,20 +29,75 @@
 
 @code {
     private StockItem newStock = new StockItem();
+    private List<Branch> branches = new List<Branch>();
+    private string errorMessage;
+    private string successMessage;
 
-    // Sample predefined locations
-    private List<string> locations = new List<string>
+    protected override async Task OnInitializedAsync()
     {
-        "Port Elizabeth",
-        "Cape Town",
-        "East London"
-    };
+        await LoadBranches();
+    }
 
-    private void AddNewStock()
+    private async Task LoadBranches()
     {
-        // Sample logic for adding stock (frontend-only for now)
-        Console.WriteLine($"Added: {newStock.Product}, {newStock.Location}, {newStock.Quantity}");
-        Navigation.NavigateTo("/manage-stock");
+        try
+        {
+            // Fetch branches from the API
+            branches = await Http.GetFromJsonAsync<List<Branch>>("https://numnumfoods-api.azurewebsites.net/api/branch/getAll");
+
+            // Set default branch if any
+            if (branches.Any())
+            {
+                newStock.Location = branches.First().Name;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading branches: {ex.Message}";
+            Console.WriteLine(errorMessage);
+        }
+    }
+
+    private async Task AddNewStock()
+    {
+        if (string.IsNullOrEmpty(newStock.Product) || string.IsNullOrEmpty(newStock.Location) || newStock.Quantity <= 0)
+        {
+            errorMessage = "Please fill out all fields with valid data.";
+            return;
+        }
+
+        errorMessage = null;
+
+        try
+        {
+            // Determine the stock status based on the quantity
+            newStock.Status = newStock.Quantity <= 10 ? "Low on Stock" : "In Stock";
+
+            // Make an API call to create the new stock item
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/stock/create", newStock);
+
+            if (response.IsSuccessStatusCode)
+            {
+                successMessage = "Stock item added successfully.";
+                // Optionally, reset the form
+                newStock = new StockItem
+                    {
+                        Location = branches.FirstOrDefault()?.Name
+                    };
+                Console.WriteLine(successMessage);
+                Navigation.NavigateTo("/manage-stock");
+            }
+            else
+            {
+                errorMessage = $"Error adding stock item: {response.ReasonPhrase}";
+                Console.WriteLine(errorMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error adding stock item: {ex.Message}";
+            Console.WriteLine(errorMessage);
+        }
     }
 
     private void Cancel()
@@ -49,11 +105,26 @@
         Navigation.NavigateTo("/manage-stock");
     }
 
-    // Sample StockItem class
-    private class StockItem
+    // StockItem class
+    public class StockItem
     {
+        public int Id { get; set; }
         public string Product { get; set; }
         public string Location { get; set; }
         public int Quantity { get; set; }
+        public string Status { get; set; }
+    }
+
+    // Branch class
+    public class Branch
+    {
+        public int BranchId { get; set; }
+        public string Name { get; set; }
+        // Additional properties if needed
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

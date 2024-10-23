@@ -1,4 +1,5 @@
 ﻿@page "/update-stock"
+@inject HttpClient Http
 @inject NavigationManager Navigation
 
 <div class="update-stock-container">
@@ -7,9 +8,9 @@
     <div class="stock-update-form">
         <label for="product">Product Name</label>
         <select id="product" @bind="selectedProduct">
-            @foreach (var stock in stockList)
+            @foreach (var product in productList)
             {
-                <option value="@stock.Product">@stock.Product</option>
+                <option value="@product">@product</option>
             }
         </select>
 
@@ -32,50 +33,84 @@
 </div>
 
 @code {
-    private string selectedProduct { get; set; } = "Strawberry"; // Default selected product
-    private string selectedLocation { get; set; } = "Port Elizabeth"; // Default selected location
+    private List<string> productList = new();
+    private List<string> locationList = new();
+    private List<StockItem> stockList = new();
+
+    private string selectedProduct { get; set; }
+    private string selectedLocation { get; set; }
     private int updatedQuantity { get; set; }
 
-    // Sample stock list for the combobox
-    private List<StockItem> stockList = new()
+    protected override async Task OnInitializedAsync()
     {
-        new StockItem { Product = "Strawberry", Location = "Port Elizabeth", Quantity = 24 },
-        new StockItem { Product = "Peas", Location = "Cape Town", Quantity = 10 },
-        new StockItem { Product = "Kiwi", Location = "East London", Quantity = 18 },
-    };
-
-    // Sample location list for the location dropdown
-    private List<string> locationList = new()
-    {
-        "Port Elizabeth",
-        "Cape Town",
-        "East London"
-    };
-
-    // Function to simulate updating stock
-    private void UpdateStockValue()
-    {
-        var stockToUpdate = stockList.FirstOrDefault(s => s.Product == selectedProduct && s.Location == selectedLocation);
-        if (stockToUpdate != null)
-        {
-            stockToUpdate.Quantity = updatedQuantity;
-            Console.WriteLine($"Stock for {selectedProduct} in {selectedLocation} updated to {updatedQuantity}.");
-        }
-
-        Navigation.NavigateTo("/manage-stock");
+        await LoadStockData();
     }
 
-    // Function to cancel and navigate back
+    private async Task LoadStockData()
+    {
+        try
+        {
+            stockList = await Http.GetFromJsonAsync<List<StockItem>>("https://numnumfoods-api.azurewebsites.net/api/stock/getAll");
+            productList = stockList.Select(s => s.Product).Distinct().ToList();
+            locationList = stockList.Select(s => s.Location).Distinct().ToList();
+
+            // Set default selections
+            selectedProduct = productList.FirstOrDefault();
+            selectedLocation = locationList.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading stock data: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateStockValue()
+    {
+        try
+        {
+            var stockItem = stockList.FirstOrDefault(s => s.Product == selectedProduct && s.Location == selectedLocation);
+            if (stockItem != null)
+            {
+                stockItem.Quantity = updatedQuantity;
+
+                // Update status based on quantity
+                stockItem.Status = updatedQuantity <= 10 ? "Low on Stock" : "In Stock";
+
+                var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/stock/update/{stockItem.Id}", stockItem);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"Stock for {selectedProduct} in {selectedLocation} updated to {updatedQuantity}.");
+                    Navigation.NavigateTo("/manage-stock");
+                }
+                else
+                {
+                    Console.WriteLine("Error updating stock item.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Stock item not found.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating stock: {ex.Message}");
+        }
+    }
+
     private void CancelUpdate()
     {
         Navigation.NavigateTo("/manage-stock");
     }
 
-    // Sample StockItem class
-    private class StockItem
+    // StockItem class
+    public class StockItem
     {
+        public int Id { get; set; }
         public string Product { get; set; }
         public string Location { get; set; }
         public int Quantity { get; set; }
+        public string Status { get; set; }
     }
 }

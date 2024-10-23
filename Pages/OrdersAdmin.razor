@@ -31,6 +31,7 @@
                 <th>Items</th>
                 <th>Total</th>
                 <th>Payment Method</th>
+                <th>Actions</th> <!-- New column for actions -->
             </tr>
         </thead>
         <tbody>
@@ -51,7 +52,13 @@
                     </td>
                     <td>@order.Items</td>
                     <td>@order.Total</td>
-                    <td>@order.PaymentMethod</td> 
+                    <td>@order.PaymentMethod</td>
+                    <td>
+                        <!-- Order Summary Button -->
+                        <button @onclick="() => NavigateToOrderSummary(order.OrderID)" class="btn-order-summary">
+                            Order Summary
+                        </button>
+                    </td> <!-- New cell for the button -->
                 </tr>
             }
         </tbody>
@@ -61,11 +68,10 @@
 @code {
     private List<Order> orders = new List<Order>
     {
-        new Order { OrderID = "#858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethod = "In Person" },
-        new Order { OrderID = "#858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethod = "Online" },
-        new Order { OrderID = "#853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethod = "Online" },
-        new Order { OrderID = "#858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethod = "In Person" },
-        // Add more sample orders
+        new Order { OrderID = "858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethod = "In Person" },
+        new Order { OrderID = "858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethod = "Online" },
+        new Order { OrderID = "858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethod = "In Person" },
     };
 
     private List<string> availableStatuses = new List<string> { "Processing", "Completed", "Cancelled" };
@@ -94,6 +100,14 @@
     {
         order.Status = newStatus;
         ApplyFilters(); // Reapply filters in case the status change affects visibility
+    }
+
+    private void NavigateToOrderSummary(string orderId)
+    {
+        if (!string.IsNullOrWhiteSpace(orderId))
+        {
+            Navigation.NavigateTo($"/admin/orders/summary/{orderId}", forceLoad: true); // forceLoad added for reliability
+        }
     }
 
     // Initial load

@@ -42,6 +42,8 @@
                 <div class="validation-error">Passwords do not match</div>
             }
 
+            <input type="text" id="phone-number" @bind="PhoneNumber" placeholder="Phone Number (optional)" />
+
             <button @onclick="RegisterUser" class="create-account-button">Create Account</button>
             <a href="/login" class="login-instead">Login Instead</a>
 
@@ -60,6 +62,7 @@
     private string Email { get; set; } = string.Empty;
     private string Password { get; set; } = string.Empty;
     private string ConfirmPassword { get; set; } = string.Empty;
+    private string PhoneNumber { get; set; } = string.Empty;
 
     private string ErrorMessage { get; set; } = string.Empty;
 
@@ -103,7 +106,8 @@
             {
                 FullName = FullName,
                 Email = Email,
-                Password = Password
+                Password = Password,
+                PhoneNumber = string.IsNullOrWhiteSpace(PhoneNumber) ? null : PhoneNumber
             };
 
             var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/authentication/register", registrationData);

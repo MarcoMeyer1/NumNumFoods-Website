@@ -6,7 +6,7 @@
 
         public int UserId { get; private set; } // Added UserId property
         private string _role;
-        private string _userFullName;
+        public string _userFullName;
         private string _userEmail;
         private bool _isLoggedIn;
 

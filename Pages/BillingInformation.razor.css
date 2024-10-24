@@ -1,72 +1,82 @@
 ﻿.billing-info-page {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px; /* Increased the width */
     margin: 0 auto;
-    padding: 40px;
+    padding: 50px; /* Increased padding */
     text-align: center;
 }
 
 .billing-info-title {
-    font-size: 2.5rem;
+    font-size: 3rem; /* Made title bigger */
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 50px; /* Added more spacing below title */
 }
 
+/* Flexbox for the payment and billing sections */
+.billing-and-payment-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px; /* Increased gap between the two sections */
+}
+
+/* Payment method section styling */
 .payment-method-section {
-    background-color: #f0f0f0; /* Light gray background */
-    padding: 30px;
-    border-radius: 10px;
-    text-align: left; /* Left-align the content */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    background-color: #f0f0f0;
+    padding: 40px; /* Increased padding */
+    border-radius: 15px; /* More rounded corners */
+    text-align: left;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+    flex: 1;
 }
 
 .payment-method-heading {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+    font-size: 2rem; /* Made heading bigger */
+    margin-bottom: 30px; /* Increased space below heading */
     font-weight: bold;
 }
 
 .payment-card {
-    background-color: #fff; /* White background for the card */
-    padding: 20px;
-    border-radius: 8px;
+    background-color: #fff;
+    padding: 30px; /* Increased padding */
+    border-radius: 12px; /* Increased border radius */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+    margin-bottom: 40px; /* Increased margin between cards */
+    margin-right: 20px;
 }
 
 .card-logo {
-    width: 50px;
+    width: 60px; /* Increased logo size */
     height: auto;
 }
 
 .card-details {
     flex-grow: 1;
-    margin-left: 20px;
+    margin-left: 30px; /* Increased margin between logo and details */
 }
 
 .card-type {
-    font-size: 1.5rem;
+    font-size: 2rem; /* Made card type bigger */
     font-weight: bold;
     margin: 0;
 }
 
 .card-number, .card-expiry, .card-holder-email {
-    margin: 5px 0;
-    font-size: 1.2rem;
+    margin: 10px 0; /* Increased margin between details */
+    font-size: 1.5rem; /* Increased text size */
     color: #666;
 }
 
 .change-button {
     background-color: #d5598c;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 25px; /* Increased button size */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.4rem; /* Made button text bigger */
 }
 
     .change-button:hover {
@@ -76,13 +86,13 @@
 .payment-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 30px; /* Increased space between actions and cards */
 }
 
 .remove-payment-button, .add-payment-button {
     background-color: transparent;
     color: #333;
-    font-size: 1.3rem;
+    font-size: 1.5rem; /* Made action text bigger */
     border: none;
     cursor: pointer;
     font-weight: bold;
@@ -100,4 +110,69 @@
 
 .add-payment-button {
     color: #ccc;
+}
+
+/* Billing address section styling */
+.billing-address-section {
+    flex: 1;
+}
+
+.billing-card {
+    background-color: #e8e8e8;
+    padding: 30px; /* Increased padding */
+    border-radius: 12px; /* Increased border radius */
+    margin-bottom: 30px; /* Increased margin between address cards */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+    text-align: left;
+    padding-right: 55px;
+}
+
+.billing-details p {
+    margin: 5px 0;
+    font-size: 1.6rem; /* Made text bigger */
+    color: #333;
+}
+
+/* Spacing between the name and phone number in the address card */
+.billing-details .name-phone {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px; /* Added space between name/phone and address */
+    font-size: 1.7rem; /* Increased text size for name and phone number */
+}
+
+.address-type {
+    margin-top: 15px;
+    color: #888;
+    font-style: italic;
+}
+
+.add-new-address-button {
+    padding: 15px 25px; /* Increased button size */
+    background-color: #d5598c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.4rem; /* Increased text size */
+    margin-top: 30px;
+}
+
+    .add-new-address-button:hover {
+        background-color: #9c114a;
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .billing-and-payment-section {
+        flex-direction: column;
+    }
+
+    .billing-card {
+        padding: 20px; /* Smaller padding on mobile */
+    }
+
+    .card-details {
+        margin-left: 10px; /* Adjust margin on mobile */
+    }
 }

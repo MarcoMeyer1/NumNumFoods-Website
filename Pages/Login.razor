@@ -29,6 +29,13 @@
             </div>
         }
 
+        @if (!string.IsNullOrEmpty(SuccessMessage))
+        {
+            <div class="success-message">
+                <p>@SuccessMessage</p>
+            </div>
+        }
+
         <div class="login-form">
             <label for="email">Username or email</label>
             <input type="text" id="email" @bind="Email" placeholder="Username or email" />
@@ -43,7 +50,7 @@
 
             <button @onclick="LoginUser" class="login-button">Login</button>
 
-            <a href="/forgot-password" class="forgot-password">Forgot password?</a>
+            <a href="#" @onclick="SendForgotPasswordEmail" class="forgot-password">Forgot password?</a>
 
             <div class="register-link">
                 <p>Don't have an account? <a href="/register">Register now!</a></p>
@@ -71,6 +78,7 @@
     private string Password { get; set; } = string.Empty;
     private bool RememberMe { get; set; } = false;
     private string ErrorMessage { get; set; } = string.Empty;
+    private string SuccessMessage { get; set; } = string.Empty;
 
     private async Task LoginUser()
     {
@@ -111,6 +119,39 @@
         {
             ErrorMessage = "An error occurred during login.";
             Console.WriteLine($"Exception in LoginUser: {ex.Message}"); // Debugging
+        }
+    }
+
+    // New method for sending forgot password email
+    private async Task SendForgotPasswordEmail()
+    {
+        if (string.IsNullOrEmpty(Email))
+        {
+            ErrorMessage = "Please enter your email before requesting a password reset.";
+            return;
+        }
+
+        try
+        {
+            var forgotPasswordData = new { Email = this.Email };
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/account/forgot-password", forgotPasswordData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuccessMessage = "A password reset link has been sent to your email.";
+                ErrorMessage = string.Empty; // Clear any previous error message
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                ErrorMessage = $"Error sending forgot password email: {errorResponse}";
+                Console.WriteLine($"Error sending forgot password email: {errorResponse}");
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An error occurred while sending the password reset email.";
+            Console.WriteLine($"Exception in SendForgotPasswordEmail: {ex.Message}");
         }
     }
 

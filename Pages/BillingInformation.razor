@@ -3,7 +3,6 @@
 @using NumNumFoods.Services
 @inject UserState UserState
 @inject NavigationManager Navigation
-@using NumNumFoods.Models
 @using System.Net.Http.Json
 
 <div class="billing-info-page">
@@ -62,16 +61,8 @@
                             <p><strong>@address.FullName</strong> @address.PhoneNumber</p>
                             <p>
                                 @address.StreetAddress
-                                @if (!string.IsNullOrEmpty(address.ComplexBuilding))
-                                {
-                                    <span>, @address.ComplexBuilding</span>
-                                }
-                                @if (!string.IsNullOrEmpty(address.Suburb))
-                                {
-                                    <span>, @address.Suburb</span>
-                                }
                                 <br />
-                                @address.City, @address.Province, @address.PostalCode
+                                @address.City, @address.PostalCode
                             </p>
                             <p class="address-type">@address.AddressType</p>
                         </div>
@@ -113,7 +104,8 @@
             }
             else
             {
-                Console.WriteLine("Failed to load payment methods.");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load payment methods: {errorContent}");
             }
         }
         catch (Exception ex)
@@ -126,7 +118,7 @@
     {
         try
         {
-            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/paymentmethod/{cardId}/user/{UserState.UserId}");
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/paymentmethod/delete/{cardId}/user/{UserState.UserId}");
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Payment method removed successfully.");
@@ -134,7 +126,8 @@
             }
             else
             {
-                Console.WriteLine("Failed to remove payment method.");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to remove payment method: {errorContent}");
             }
         }
         catch (Exception ex)
@@ -175,7 +168,8 @@
             }
             else
             {
-                Console.WriteLine("Failed to load billing addresses.");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load billing addresses: {errorContent}");
             }
         }
         catch (Exception ex)
@@ -188,7 +182,7 @@
     {
         try
         {
-            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/billingaddress/{addressId}/user/{UserState.UserId}");
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/billingaddress/delete/{addressId}/user/{UserState.UserId}");
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Billing address removed successfully.");
@@ -196,7 +190,8 @@
             }
             else
             {
-                Console.WriteLine("Failed to remove billing address.");
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to remove billing address: {errorContent}");
             }
         }
         catch (Exception ex)
@@ -215,6 +210,7 @@
         public string ExpiryMonth { get; set; }
         public string ExpiryYear { get; set; }
         public string PaymentOption { get; set; }
+        public DateTime CreatedAt { get; set; } // Match your database schema
     }
 
     public class BillingAddress
@@ -224,11 +220,10 @@
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string StreetAddress { get; set; }
-        public string ComplexBuilding { get; set; } // Optional
-        public string Suburb { get; set; } // Optional
+        // Removed ComplexBuilding, Suburb, Province as they are not in your schema
         public string City { get; set; }
-        public string Province { get; set; }
         public string PostalCode { get; set; }
         public string AddressType { get; set; } // e.g., "Residential", "Business"
+        public DateTime CreatedAt { get; set; } // Match your database schema
     }
 }

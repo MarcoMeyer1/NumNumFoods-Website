@@ -1,9 +1,8 @@
 ﻿@page "/new-address"
 @inject NavigationManager Navigation
 @inject HttpClient Http
-@using NumNumFoods.Services
+@using Services
 @inject UserState UserState
-@using NumNumFoods.Models
 
 <div class="new-address-container">
     <h1 class="title">Add New Address</h1>
@@ -13,10 +12,7 @@
         <div class="error-message">@ErrorMessage</div>
     }
 
-<!-- Address Type Selection -->
-
-
-
+  
 
     <!-- Address Form Fields -->
     <div class="address-form">
@@ -32,33 +28,12 @@
 
         <div class="form-group">
             <label for="streetAddress">Street Address</label>
-            <input type="text" id="streetAddress" placeholder="Eg. 12 Ridge Street" @bind="billingAddress.StreetAddress" />
-        </div>
-
-        <div class="form-group">
-            <label for="complexBuilding">Complex / Building (Optional)</label>
-            <input type="text" id="complexBuilding" placeholder="Complex or Building Name, unit number or floor" @bind="billingAddress.ComplexBuilding" />
-        </div>
-
-        <div class="form-group">
-            <label for="suburb">Suburb</label>
-            <input type="text" id="suburb" placeholder="Suburb" @bind="billingAddress.Suburb" />
+            <input type="text" id="streetAddress" placeholder="Eg. 123 Main Street" @bind="billingAddress.StreetAddress" />
         </div>
 
         <div class="form-group">
             <label for="cityTown">City / Town</label>
             <input type="text" id="cityTown" placeholder="City / Town" @bind="billingAddress.City" />
-        </div>
-
-        <div class="form-group">
-            <label for="province">Province</label>
-            <select id="province" @bind="billingAddress.Province">
-                <option value="">Select Province</option>
-                <option value="Eastern Cape">Eastern Cape</option>
-                <option value="Western Cape">Western Cape</option>
-                <option value="Gauteng">Gauteng</option>
-                <!-- Add more provinces as needed -->
-            </select>
         </div>
 
         <div class="form-group">
@@ -108,7 +83,7 @@
 
         try
         {
-            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/billingaddress", billingAddress);
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/billingaddress/add", billingAddress);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Billing address added successfully.");
@@ -118,17 +93,16 @@
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Failed to add billing address: {errorContent}");
-                ErrorMessage = "Failed to add billing address.";
+                ErrorMessage = $"Failed to add billing address: {errorContent}";
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error adding billing address: {ex.Message}");
-            ErrorMessage = "An error occurred while adding the billing address.";
+            ErrorMessage = $"An error occurred while adding the billing address: {ex.Message}";
         }
     }
 
-    // Logic to cancel and navigate back
     private void Cancel()
     {
         Navigation.NavigateTo("/profile/billing-information");
@@ -137,15 +111,12 @@
     public class BillingAddress
     {
         public int AddressId { get; set; }
-        public int UserId { get; set; } // Foreign key to Users table
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string StreetAddress { get; set; }
-        public string ComplexBuilding { get; set; } // Optional
-        public string Suburb { get; set; }
         public string City { get; set; }
-        public string Province { get; set; }
         public string PostalCode { get; set; }
-        public string AddressType { get; set; } // e.g., "Residential", "Business"
+        public string AddressType { get; set; }
     }
 }

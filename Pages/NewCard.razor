@@ -1,9 +1,8 @@
 ﻿@page "/new-card"
 @inject NavigationManager Navigation
 @inject HttpClient Http
-@using NumNumFoods.Services
+@using Services
 @inject UserState UserState
-@using NumNumFoods.Models
 
 <div class="new-card-container">
     <h1 class="title">Add New Card</h1>
@@ -45,7 +44,6 @@
         </div>
 
         <!-- Removed CVV field due to security considerations -->
-        <!-- CVV should not be stored or sent to the server -->
 
         <div class="form-group">
             <label for="straightBudget">Straight/Budget</label>
@@ -65,7 +63,7 @@
 </div>
 
 @code {
-    private CardInfo card = new CardInfo();
+    private PaymentMethod card = new PaymentMethod();
     private string ErrorMessage;
 
     protected override void OnInitialized()
@@ -100,8 +98,8 @@
 
         try
         {
-            // Ensure the card data matches the API's expected model
-            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/paymentmethod", card);
+            // Updated the endpoint to match the API
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/paymentmethod/add", card);
 
             if (response.IsSuccessStatusCode)
             {
@@ -128,7 +126,7 @@
         Navigation.NavigateTo("/profile/billing-information");
     }
 
-    public class CardInfo
+    public class PaymentMethod
     {
         public int CardId { get; set; }
         public int UserId { get; set; }
@@ -136,7 +134,6 @@
         public string CardNumber { get; set; } // In production, handle securely
         public string ExpiryMonth { get; set; }
         public string ExpiryYear { get; set; }
-        // Removed CVV property for security reasons
         public string PaymentOption { get; set; } = "Straight";
     }
 }

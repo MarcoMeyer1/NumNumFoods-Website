@@ -1,5 +1,6 @@
 ﻿@page "/new-branch"
 @inject NavigationManager Navigation
+@inject HttpClient Http
 
 <h1 class="title">Add New Branch</h1>
 
@@ -34,6 +35,11 @@
         <input type="text" id="phoneNumber" @bind="newBranch.PhoneNumber" placeholder="Enter phone number" />
     </div>
 
+    @if (!string.IsNullOrEmpty(createBranchErrorMessage))
+    {
+        <p class="error-message">@createBranchErrorMessage</p>
+    }
+
     <div class="button-group">
         <button class="save-button" @onclick="AddNewBranch">Save Branch</button>
         <button class="cancel-button" @onclick="Cancel">Cancel</button>
@@ -43,17 +49,32 @@
 @code {
     // Branch model that matches the SQL table structure
     private Branch newBranch = new Branch();
+    private string createBranchErrorMessage = string.Empty;
 
-    // Function to handle adding a new branch
-    private void AddNewBranch()
+    // Function to handle adding a new branch via API
+    private async Task AddNewBranch()
     {
-        // This is where you'd normally add the new branch to the database
-        // You can simulate this for now or connect it to your service
+        try
+        {
+            createBranchErrorMessage = string.Empty;
 
-        Console.WriteLine($"Branch Added: {newBranch.Name}, {newBranch.Address}, {newBranch.City}, {newBranch.State}, {newBranch.ZipCode}, {newBranch.PhoneNumber}");
+            // API call to create a new branch
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/branch/create", newBranch);
 
-        // After adding, navigate back to the branches list
-        Navigation.NavigateTo("/branchlocations");
+            if (response.IsSuccessStatusCode)
+            {
+                // After successfully adding the branch, navigate back to the branches list
+                Navigation.NavigateTo("/branchlocations");
+            }
+            else
+            {
+                createBranchErrorMessage = $"Failed to create branch. Status code: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            createBranchErrorMessage = $"An error occurred while creating the branch: {ex.Message}";
+        }
     }
 
     private void Cancel()
@@ -62,7 +83,7 @@
         Navigation.NavigateTo("/branchlocations");
     }
 
-    // Branch class that matches your SQL structure
+    // Branch class matching the structure of the backend model
     private class Branch
     {
         public string Name { get; set; }
@@ -73,3 +94,4 @@
         public string PhoneNumber { get; set; }
     }
 }
+

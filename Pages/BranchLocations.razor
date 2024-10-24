@@ -1,0 +1,70 @@
+﻿@page "/branchlocations"
+@inject HttpClient Http
+
+@code {
+    // Model for branch
+    private class Branch
+    {
+        public int BranchId { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
+    // Sample data for branches (replace this with actual API data retrieval)
+    private List<Branch> branches = new List<Branch>
+    {
+        new Branch { BranchId = 1, Name = "Main Branch", Address = "123 Main St", City = "Port Elizabeth", State = "Eastern Cape", ZipCode = "6001", PhoneNumber = "041 123 4567" },
+        new Branch { BranchId = 2, Name = "North Branch", Address = "45 North St", City = "Cape Town", State = "Western Cape", ZipCode = "8001", PhoneNumber = "021 987 6543" },
+        new Branch { BranchId = 3, Name = "South Branch", Address = "678 South Rd", City = "Durban", State = "KwaZulu-Natal", ZipCode = "4001", PhoneNumber = "031 456 7890" }
+    };
+
+    // Method to delete branch (stub, replace with actual logic)
+    private void DeleteBranch(int branchId)
+    {
+        branches.RemoveAll(b => b.BranchId == branchId);
+    }
+}
+
+<div class="branch-management">
+    <h1>Branch Locations</h1>
+
+    <!-- Button to redirect to Add New Branch Page -->
+    <a href="/new-branch" class="add-new-branch-button">Add New Branch</a>
+
+    <!-- Branches Table -->
+    <h2>Branch List</h2>
+    <table class="branch-list-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var branch in branches)
+            {
+                <tr>
+                    <td>@branch.Name</td>
+                    <td>@branch.Address</td>
+                    <td>@branch.City</td>
+                    <td>@branch.State</td>
+                    <td>@branch.ZipCode</td>
+                    <td>@branch.PhoneNumber</td>
+                    <td>
+                        <button @onclick="() => DeleteBranch(branch.BranchId)" class="delete-button">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

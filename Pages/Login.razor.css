@@ -1,4 +1,5 @@
-﻿.login-page {
+﻿/* Base styles for larger screens */
+.login-page {
     display: flex;
     height: 100vh;
     background-color: #fff;
@@ -170,3 +171,88 @@
     .apple-login:hover {
         background-color: #f1f1f1;
     }
+
+/* Media queries for smaller screens (tablets, phones) */
+@media (max-width: 1024px) {
+    .login-left {
+        width: 50%;
+    }
+
+    .login-right {
+        width: 50%;
+        padding: 40px;
+    }
+
+    .login-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column;
+    }
+
+    .login-left,
+    .login-right {
+        width: 100%;
+    }
+
+    .login-right {
+        padding: 40px;
+    }
+
+    .login-title {
+        font-size: 2.5rem;
+    }
+
+    .login-form {
+        max-width: 400px;
+    }
+
+    .login-button {
+        padding: 20px;
+        font-size: 1.5rem;
+    }
+
+    .forgot-password,
+    .register-link {
+        font-size: 1.3rem;
+    }
+
+    .google-login,
+    .apple-login {
+        padding: 15px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-left {
+        display: none; /* Hide the image section for very small screens */
+    }
+
+    .login-right {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .login-title {
+        font-size: 2rem;
+    }
+
+    .login-form {
+        max-width: 100%;
+    }
+
+    .login-button {
+        padding: 15px;
+        font-size: 1.4rem;
+    }
+
+    .google-login,
+    .apple-login {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+}

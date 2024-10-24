@@ -1,50 +1,148 @@
 ﻿.product-management {
-    background-color: #efbfcd;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px;
+    background-color: #FAF9F6; /* Light beige background */
+    border-radius: 12px;
+    max-width: 1200px; /* Constrain width */
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
+/* Header */
+h1 {
+    color: #333; /* Dark text color */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Button container */
 .product-inputs {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: center; /* Center buttons */
+    gap: 20px; /* Space between buttons */
+    margin-bottom: 30px;
 }
 
+    /* Add New Product/Category buttons using stock management color scheme */
     .product-inputs button {
-        padding: 8px 15px;
-        background-color: #D5598C;
-        color: #fff;
+        padding: 12px 20px;
+        background-color: #FADADD; /* Soft pink background */
+        color: black; /* Dark text for contrast */
+        font-weight: bold;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
     }
 
         .product-inputs button:hover {
-            background-color: #C5497A;
+            background-color: lightpink; /* Slightly darker pink on hover */
         }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
-th, td {
-    padding: 12px;
+thead th {
+    padding: 15px;
+    background-color: #FADADD; /* Soft pink background for headers */
+    color: black; /* Dark text for contrast */
+    font-size: 1.1rem;
     text-align: left;
+}
+
+tbody td {
+    padding: 15px;
+    background-color: #FFFFFF; /* White background for table rows */
     border-bottom: 1px solid #ddd;
+    text-align: left;
 }
 
-th {
-    background-color: #D5598C;
-    color: #fff;
+tbody tr:nth-child(even) {
+    background-color: #f1f1f1; /* Light grey for alternating rows */
 }
 
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .product-management {
-        padding: 10px; /* Reduce padding */
+tbody td img {
+    border-radius: 6px;
+}
+
+/* Action buttons in table rows */
+table button {
+    padding: 8px 15px;
+    background-color: #FADADD; /* Soft pink background for buttons */
+    color: black; /* Dark text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+    table button:hover {
+        background-color: lightpink; /* Darker pink on hover */
     }
 
-    table {
+/* Category table section */
+h2 {
+    margin-top: 40px;
+    font-size: 1.8rem;
+    color: #333; /* Dark text */
+}
+
+/* Category table styling (similar to product table) */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .category-table th {
+        padding: 15px;
+        background-color: #FADADD; /* Soft pink background */
+        color: black; /* Dark text */
+        font-size: 1.1rem;
+        text-align: left;
+    }
+
+    .category-table td {
+        padding: 15px;
+        background-color: #FFFFFF; /* White background for rows */
+        border-bottom: 1px solid #ddd;
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .product-management {
+        padding: 20px;
+    }
+
+    .product-inputs {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    table, .category-table {
         display: block;
-        overflow-x: auto; /* Allow horizontal scrolling on small screens */
+        overflow-x: auto; /* Scrollable tables on mobile */
+        white-space: nowrap;
+    }
+
+        table button {
+            margin-bottom: 5px;
+        }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
     }
 }

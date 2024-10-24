@@ -18,12 +18,25 @@ else if (errorMessage != null)
 else
 {
     <div class="edit-product-form">
-        <input type="text" placeholder="Name" @bind="product.Name" />
-        <textarea placeholder="Description" @bind="product.Description"></textarea>
-        <input type="number" placeholder="Price" @bind="product.Price" />
-        <input type="number" placeholder="Stock Quantity" @bind="product.StockQuantity" />
+        <!-- Product Name Input -->
+        <label for="name">Product Name</label>
+        <input type="text" id="name" placeholder="Enter product name" @bind="product.Name" />
 
-        <select @bind="product.CategoryId">
+        <!-- Description Input -->
+        <label for="description">Product Description</label>
+        <textarea id="description" placeholder="Enter product description" @bind="product.Description"></textarea>
+
+        <!-- Price Input -->
+        <label for="price">Product Price</label>
+        <input type="number" id="price" placeholder="Enter product price" @bind="product.Price" />
+
+        <!-- Stock Quantity Input -->
+        <label for="stockQuantity">Stock Quantity</label>
+        <input type="number" id="stockQuantity" placeholder="Enter stock quantity" @bind="product.StockQuantity" />
+
+        <!-- Category Dropdown -->
+        <label for="category">Category</label>
+        <select id="category" @bind="product.CategoryId">
             <option value="">Select Category</option>
             @foreach (var category in Categories)
             {
@@ -31,6 +44,7 @@ else
             }
         </select>
 
+        <!-- Current Image Section -->
         <div>
             <label>Current Image:</label><br />
             @if (!string.IsNullOrEmpty(product.ImageUrl))
@@ -47,9 +61,13 @@ else
             }
         </div>
 
-        <InputFile OnChange="OnFileChange" />
-        <button @onclick="SubmitUpdatedProduct">Save Changes</button>
-        <button @onclick="CancelEdit">Cancel</button>
+        <!-- File Input for New Image -->
+        <InputFile id="imageUpload" OnChange="OnFileChange" />
+
+        <div class="button-container">
+            <button @onclick="SubmitUpdatedProduct">Save Changes</button>
+            <button @onclick="CancelEdit">Cancel</button>
+        </div>
     </div>
 }
 

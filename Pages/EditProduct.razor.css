@@ -1,2 +1,101 @@
-﻿body {
+﻿.edit-product-form {
+    background-color: #FAF9F6; /* Light beige background */
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 1200px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header styling similar to stock management page */
+h1 {
+    color: #333; /* Dark text color */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Input fields */
+.edit-product-form input,
+.edit-product-form textarea,
+.edit-product-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd; /* Light grey border */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    background-color: #FFFFFF; /* White background for inputs */
+}
+
+/* Textarea styling */
+.edit-product-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Buttons */
+.edit-product-form button {
+    padding: 12px 20px;
+    background-color: #FADADD; /* Soft pink background */
+    color: black; /* Dark text for contrast */
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+    /* Hover effect for buttons */
+    .edit-product-form button:hover {
+        background-color: lightpink; /* Slightly darker pink on hover */
+    }
+
+/* Image styling */
+.edit-product-form img {
+    display: block;
+    margin: 0 auto 20px auto; /* Center the image and add bottom space */
+    border-radius: 8px;
+    max-width: 200px; /* Keep the image a reasonable size */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers the buttons horizontally */
+    gap: 20px; /* Space between the buttons */
+    margin-top: 20px; /* Adds some space above the buttons */
+}
+
+    .button-container button {
+        padding: 12px 20px;
+        background-color: #FADADD; /* Soft pink background */
+        color: black; /* Dark text */
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+        .button-container button:hover {
+            background-color: lightpink; /* Darker pink on hover */
+        }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .edit-product-form {
+        padding: 20px;
+        max-width: 100%;
+    }
+
+        .edit-product-form button {
+            width: 100%; /* Full width buttons on mobile */
+            margin-bottom: 15px;
+        }
 }

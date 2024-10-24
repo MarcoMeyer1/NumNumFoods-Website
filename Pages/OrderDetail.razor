@@ -1,67 +1,128 @@
 ﻿@page "/profile/orderdetails/{orderId:int}"
+@inject HttpClient Http
+@using NumNumFoods.Services
+@inject UserState UserState
+@inject NavigationManager Navigation
+@using System.Net.Http.Json
+
 @code {
     [Parameter] public int orderId { get; set; }
 
-    protected override void OnInitialized()
+    private Order order;
+
+    protected override async Task OnInitializedAsync()
     {
-        // You can use the orderId to fetch data from your backend or display order details
-        Console.WriteLine($"Loaded Order Details for Order ID: {orderId}");
+        int userId = UserState.UserId;
+
+        if (userId == 0)
+        {
+            // User is not logged in; redirect to login page
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadOrderDetails(orderId, userId);
+    }
+
+    private async Task LoadOrderDetails(int orderId, int userId)
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/order/{orderId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var fetchedOrder = await response.Content.ReadFromJsonAsync<Order>();
+                if (fetchedOrder.CustomerId != userId)
+                {
+                    // The order does not belong to the current user
+                    Console.WriteLine("Unauthorized access to order.");
+                    Navigation.NavigateTo("/profile/orderhistory");
+                    return;
+                }
+                order = fetchedOrder;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                Console.WriteLine($"Order with ID {orderId} not found.");
+                Navigation.NavigateTo("/profile/orderhistory");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load order: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadOrderDetails: {ex.Message}");
+        }
+    }
+
+    public class Order
+    {
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public int BranchId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; } // e.g., "Pending", "Completed"
+        public DateTime OrderDate { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    }
+
+    public class OrderItem
+    {
+        public int OrderItemId { get; set; }
+        public int OrderId { get; set; } // Foreign key to Orders table
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; } // Price at the time of ordering
+        public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
 
-<div class="order-detail-page">
-    <h1 class="order-detail-title">Order #@orderId</h1>
-    <p class="order-detail-meta">ORDERED 14 SEP 2024 | PAID 14 SEP 2024</p>
+@if (order == null)
+{
+    <p>Loading order details...</p>
+}
+else
+{
+    <div class="order-detail-page">
+        <h1 class="order-detail-title">Order #@order.OrderId</h1>
+        <p class="order-detail-meta">ORDERED @order.OrderDate.ToString("dd MMM yyyy") | STATUS: @order.Status</p>
 
-    <div class="order-summary-section">
-        <div class="summary-item">
-            <h3>Order Summary</h3>
-            <p>3 Items</p>
-            <p>Delivery: R 0</p>
-            <p><strong>Order Total: R 483</strong></p>
-            <p>Paid (Credit / Debit Card): R 233</p>
-            <p>Paid (Takealot Credit): -R 250</p>
+        <div class="order-summary-section">
+            <div class="summary-item">
+                <h3>Order Summary</h3>
+                <p>@order.OrderItems.Count Items</p>
+                <p>Delivery: R 0</p>
+                <p><strong>Order Total: R @order.TotalPrice</strong></p>
+                <!-- You can include more payment details if available -->
+            </div>
+
+            <div class="payment-method-section">
+                <h3>Payment Method</h3>
+                <p>In Person</p> <!-- Update this if you have payment method data -->
+            </div>
         </div>
 
-        <div class="payment-method-section">
-            <h3>Payment Method</h3>
-            <p>Credit / Debit Card</p>
+        <div class="order-items-section">
+            <h3>Order Items</h3>
+
+            @foreach (var item in order.OrderItems)
+            {
+                <div class="order-item">
+                    <img src="@item.ImageUrl" alt="@item.ProductName" class="order-item-image" />
+                    <div class="order-item-details">
+                        <p><strong>@item.ProductName</strong></p>
+                        <p>Qty: @item.Quantity</p>
+                        <p>R @item.Price</p>
+                      
+                    </div>
+                </div>
+            }
         </div>
+
+     
     </div>
-
-    <div class="order-items-section">
-        <h3>Delivered Wed, 18 Sep 2024</h3>
-
-        <div class="order-item">
-            <img src="Assets/mouse.png" alt="Wireless Gaming Mouse" class="order-item-image" />
-            <div class="order-item-details">
-                <p><strong>Foxxray BMW-60 Ariel Wireless Gaming Mouse</strong></p>
-                <p>Qty: 1</p>
-                <p>R 299</p>
-                <p>Sold by Baobab</p>
-            </div>
-        </div>
-
-        <div class="order-item">
-            <img src="Assets/cable.png" alt="3.5mm Audio Cable" class="order-item-image" />
-            <div class="order-item-details">
-                <p><strong>UGreen 10734 3.5mm Male to Male Round 1.5m Aud Cable</strong></p>
-                <p>Qty: 1</p>
-                <p>R 69</p>
-                <p>Sold by UGreen</p>
-            </div>
-        </div>
-
-        <div class="order-item">
-            <img src="Assets/laptop-stand.png" alt="Laptop Stand" class="order-item-image" />
-            <div class="order-item-details">
-                <p><strong>Adjustable Folding Laptop Stand - Grey</strong></p>
-                <p>Qty: 1</p>
-                <p>R 115</p>
-                <p>Sold by Swell Party</p>
-            </div>
-        </div>
-    </div>
-
-    <button class="log-return-button">Log Return</button>
-</div>
+}

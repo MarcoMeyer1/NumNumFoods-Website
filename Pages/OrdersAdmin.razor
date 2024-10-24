@@ -1,5 +1,6 @@
 ﻿@page "/admin/orders"
 @inject NavigationManager Navigation
+@inject HttpClient Http
 
 <div class="order-management">
     <div class="dashboard-header">
@@ -8,16 +9,17 @@
 
     <!-- Dropdown for filtering order status -->
     <div class="filter-dropdown">
-        <select @onchange="FilterOrdersByStatus" class="status-dropdown">
-            <option value="All">All Orders</option>
-            <option value="Completed">Completed</option>
-            <option value="Processing">Processing</option>
-            <option value="Cancelled">Cancelled</option>
+        <select @bind="selectedStatus" class="status-dropdown">
+            <option value="ALL">All Orders</option>
+            @foreach (var status in availableStatuses)
+            {
+                <option value="@status">@status</option>
+            }
         </select>
     </div>
 
     <div class="search-bar">
-        <input type="text" placeholder="Quick Search" @bind="searchTerm" />
+        <input type="text" placeholder="Quick Search" @bind="searchTerm" @oninput="ApplyFilters" />
     </div>
 
     <table class="orders-table">
@@ -35,95 +37,164 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var order in filteredOrders)
+            @if (filteredOrders == null)
             {
                 <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>@order.OrderID</td>
-                    <td>@order.Date</td>
-                    <td>@order.Customer</td>
-                    <td>
-                        <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
-                            @foreach (var status in availableStatuses)
-                            {
-                                <option value="@status" selected="@(status == order.Status)">@status</option>
-                            }
-                        </select>
-                    </td>
-                    <td>@order.Items</td>
-                    <td>@order.Total</td>
-                    <td>@order.PaymentMethod</td>
-                    <td>
-                        <!-- Order Summary Button -->
-                        <button @onclick="() => NavigateToOrderSummary(order.OrderID)" class="btn-order-summary">
-                            Order Summary
-                        </button>
-                    </td> <!-- New cell for the button -->
+                    <td colspan="9">Loading orders...</td>
                 </tr>
+            }
+            else if (!filteredOrders.Any())
+            {
+                <tr>
+                    <td colspan="9">No orders found.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var order in filteredOrders)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@order.OrderId</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@order.CustomerName</td>
+                        <td>
+                            <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
+                                @foreach (var status in availableStatuses)
+                                {
+                                    <option value="@status" selected="@(status == order.Status)">@status</option>
+                                }
+                            </select>
+                        </td>
+                        <td>@order.OrderItems.Count</td>
+                        <td>@order.TotalPrice.ToString("C")</td>
+                        <td>@order.PaymentMethod</td>
+                        <td>
+                            <!-- Order Summary Button -->
+                            <button @onclick="() => NavigateToOrderSummary(order.OrderId)" class="btn-order-summary">
+                                Order Summary
+                            </button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 </div>
 
 @code {
-    private List<Order> orders = new List<Order>
-    {
-        new Order { OrderID = "858521", Date = "11/05/2024", Customer = "Hannah White", Status = "Processing", Items = 3, Total = "R165", PaymentMethod = "In Person" },
-        new Order { OrderID = "858892", Date = "11/05/2024", Customer = "Jackson Bile", Status = "Completed", Items = 1, Total = "R55", PaymentMethod = "Online" },
-        new Order { OrderID = "853721", Date = "07/05/2024", Customer = "Luke Miles", Status = "Processing", Items = 1, Total = "R55", PaymentMethod = "Online" },
-        new Order { OrderID = "858732", Date = "04/05/2024", Customer = "Marco Jacob", Status = "Cancelled", Items = 1, Total = "R55", PaymentMethod = "In Person" },
-    };
-
-    private List<string> availableStatuses = new List<string> { "Processing", "Completed", "Cancelled" };
+    private List<Order> orders;
     private List<Order> filteredOrders;
+    private List<string> availableStatuses = new List<string> { "Pending", "Processing", "Completed", "Cancelled" };
     private string selectedStatus = "All";
     private string searchTerm = "";
 
-    // Method to filter orders by status
-    private void FilterOrdersByStatus(ChangeEventArgs e)
+    protected override async Task OnInitializedAsync()
     {
-        selectedStatus = e.Value.ToString();
-        ApplyFilters();
+        await LoadOrders();
+    }
+
+    private async Task LoadOrders()
+    {
+        try
+        {
+            var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/order/all");
+            if (response.IsSuccessStatusCode)
+            {
+                orders = await response.Content.ReadFromJsonAsync<List<Order>>();
+                ApplyFilters();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load orders: {error}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadOrders: {ex.Message}");
+        }
     }
 
     // Apply status and search filters
     private void ApplyFilters()
     {
+        if (orders == null)
+        {
+            filteredOrders = new List<Order>();
+            return;
+        }
+
         filteredOrders = orders
             .Where(o => (selectedStatus == "All" || o.Status == selectedStatus) &&
-                        (string.IsNullOrEmpty(searchTerm) || o.Customer.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                        (string.IsNullOrEmpty(searchTerm) ||
+                         o.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                         o.OrderId.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
             .ToList();
     }
 
     // Method to update the order status
-    private void UpdateOrderStatus(Order order, string newStatus)
+    private async Task UpdateOrderStatus(Order order, string newStatus)
     {
+        var oldStatus = order.Status;
         order.Status = newStatus;
+
+        try
+        {
+            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/order/updateStatus/{order.OrderId}", newStatus);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Order {order.OrderId} status updated to {newStatus}.");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to update order status: {error}");
+                order.Status = oldStatus; // Revert status on failure
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in UpdateOrderStatus: {ex.Message}");
+            order.Status = oldStatus; // Revert status on exception
+        }
+
         ApplyFilters(); // Reapply filters in case the status change affects visibility
     }
 
-    private void NavigateToOrderSummary(string orderId)
+    private void NavigateToOrderSummary(int orderId)
     {
-        if (!string.IsNullOrWhiteSpace(orderId))
-        {
-            Navigation.NavigateTo($"/admin/orders/summary/{orderId}", forceLoad: true); // forceLoad added for reliability
-        }
+        Navigation.NavigateTo($"/admin/orders/summary/{orderId}");
     }
 
-    // Initial load
-    protected override void OnInitialized()
+    // Method to handle search input change
+    private void OnSearchTermChanged(ChangeEventArgs e)
     {
-        filteredOrders = orders;
+        searchTerm = e.Value.ToString();
+        ApplyFilters();
     }
 
     public class Order
     {
-        public string OrderID { get; set; }
-        public string Date { get; set; }
-        public string Customer { get; set; }
-        public string Status { get; set; }
-        public int Items { get; set; }
-        public string Total { get; set; }
-        public string PaymentMethod { get; set; }
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public int BranchId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; } // e.g., "Pending", "Processing", "Completed", "Cancelled"
+        public DateTime OrderDate { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public string CustomerName { get; set; }
+        public string PaymentMethod { get; set; } // Add this property if available
+    }
+
+    public class OrderItem
+    {
+        public int OrderItemId { get; set; }
+        public int OrderId { get; set; } // Foreign key to Orders table
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; } // Price at the time of ordering
+        public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

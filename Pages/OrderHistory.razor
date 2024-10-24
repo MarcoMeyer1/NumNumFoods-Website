@@ -1,49 +1,79 @@
 ﻿@page "/profile/orderhistory"
 @inject NavigationManager Navigation
+@inject HttpClient Http
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <div class="order-history-page">
     <h1 class="order-history-title">Orders</h1>
 
-    @foreach (var order in orders)
+    @if (orders == null)
     {
-        <div class="order-block">
-            <div class="order-details">
-                <p class="order-date">Delivered @order.DeliveryDate.ToString("ddd, dd MMM yyyy")</p>
-                <div class="order-images">
-                    @foreach (var image in order.ProductImages)
-                    {
-                        <img src="@image" alt="Product Image" class="order-image" />
-                    }
+        <p>Loading orders...</p>
+    }
+    else if (!orders.Any())
+    {
+        <p>You have no orders.</p>
+    }
+    else
+    {
+        @foreach (var order in orders)
+        {
+            <div class="order-block">
+                <div class="order-details">
+                    <p class="order-date">Ordered on @order.OrderDate.ToString("ddd, dd MMM yyyy")</p>
+                    <div class="order-images">
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <img src="@item.ImageUrl" alt="@item.ProductName" class="order-image" />
+                        }
+                    </div>
                 </div>
+                <button class="order-details-button" @onclick="() => NavigateToOrderDetails(order.OrderId)">Order Details</button>
             </div>
-            <button class="order-details-button" @onclick="() => NavigateToOrderDetails(order.OrderId)">Order Details</button>
-        </div>
+        }
     }
 </div>
 
 @code {
-    // List of dynamic orders
-    private List<Order> orders = new List<Order>
+    private List<Order> orders;
+
+    protected override async Task OnInitializedAsync()
     {
-        new Order
+        int userId = UserState.UserId;
+
+        if (userId == 0)
         {
-            OrderId = 160820532,
-            DeliveryDate = new DateTime(2024, 9, 18),
-            ProductImages = new List<string> { "Assets/product1.png", "Assets/product2.png", "Assets/product3.png" }
-        },
-        new Order
-        {
-            OrderId = 160820533,
-            DeliveryDate = new DateTime(2024, 7, 13),
-            ProductImages = new List<string> { "Assets/product4.png", "Assets/product5.png", "Assets/product6.png" }
-        },
-        new Order
-        {
-            OrderId = 160820534,
-            DeliveryDate = new DateTime(2024, 7, 11),
-            ProductImages = new List<string> { "Assets/product7.png", "Assets/product8.png" }
+            // User is not logged in; redirect to login page
+            Navigation.NavigateTo("/login");
+            return;
         }
-    };
+
+        await LoadOrders(userId);
+    }
+
+    private async Task LoadOrders(int userId)
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/order/user/{userId}");
+            if (response.IsSuccessStatusCode)
+            {
+                orders = await response.Content.ReadFromJsonAsync<List<Order>>();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load orders: {error}");
+                orders = new List<Order>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadOrders: {ex.Message}");
+            orders = new List<Order>();
+        }
+    }
 
     // Method to navigate to the order details page
     private void NavigateToOrderDetails(int orderId)
@@ -54,7 +84,22 @@
     public class Order
     {
         public int OrderId { get; set; }
-        public DateTime DeliveryDate { get; set; }
-        public List<string> ProductImages { get; set; }
+        public int CustomerId { get; set; }
+        public int BranchId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; } // e.g., "Pending", "Completed"
+        public DateTime OrderDate { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    }
+
+    public class OrderItem
+    {
+        public int OrderItemId { get; set; }
+        public int OrderId { get; set; } // Foreign key to Orders table
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; } // Price at the time of ordering
+        public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

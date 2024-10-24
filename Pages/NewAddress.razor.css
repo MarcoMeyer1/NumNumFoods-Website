@@ -1,0 +1,109 @@
+﻿.new-address-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Address type selection (residential/business) */
+.address-type-selection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+    .address-type-selection label {
+        background-color: #f0f0f0;
+        padding: 15px 20px;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .address-type-selection input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    .address-type-selection label:hover {
+        background-color: #e0e0e0;
+    }
+
+    .address-type-selection input[type="radio"]:checked + label {
+        background-color: #d5598c;
+        color: #fff;
+    }
+
+/* Form styling */
+.address-form {
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #d5598c;
+        }
+
+/* Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.save-button, .cancel-button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.save-button {
+    background-color: #0097ff;
+    color: white;
+}
+
+    .save-button:hover {
+        background-color: #007acc;
+    }
+
+.cancel-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+    .cancel-button:hover {
+        background-color: #ccc;
+    }

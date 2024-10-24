@@ -1,0 +1,46 @@
+﻿@page "/profile-settings"
+@inject NavigationManager Navigation
+
+<div class="profile-settings-container">
+    <h1>Account Details</h1>
+
+    <form class="profile-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="John" @bind="user.Name" />
+
+        <label for="surname">Surname</label>
+        <input type="text" id="surname" placeholder="Doe" @bind="user.Surname" />
+
+        <label for="email">Email (unchangeable)</label>
+        <input type="email" id="email" placeholder="johndoe@gmail.com" value="@user.Email" disabled />
+
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" placeholder="0726488587" @bind="user.ContactNumber" />
+
+        <button type="button" class="confirm-button" @onclick="ConfirmChanges">Confirm Changes</button>
+    </form>
+</div>
+
+@code {
+    private User user = new User
+        {
+            Name = "John",
+            Surname = "Doe",
+            Email = "johndoe@gmail.com",
+            ContactNumber = "0726488587"
+        };
+
+    private void ConfirmChanges()
+    {
+        // Save changes logic
+        Console.WriteLine("Changes confirmed for user: " + user.Name);
+    }
+
+    public class User
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public string ContactNumber { get; set; }
+    }
+}

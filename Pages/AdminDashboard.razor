@@ -38,6 +38,11 @@
     {
         Navigation.NavigateTo("/manage-events");
     }
+
+    private void NavigateToManageBranches()
+    {
+        Navigation.NavigateTo("/branchlocations"); // Updated route for BranchLocations page
+    }
 }
 
 <div class="admin-dashboard">
@@ -65,6 +70,10 @@
         <div class="dashboard-item" @onclick="NavigateToManageEvents">
             <h3>Other</h3>
             <p>Manage Events</p>
+        </div>
+        <div class="dashboard-item" @onclick="NavigateToManageBranches">
+            <h3>Branches</h3>
+            <p>Manage Branch Locations</p>
         </div>
     </div>
 </div>

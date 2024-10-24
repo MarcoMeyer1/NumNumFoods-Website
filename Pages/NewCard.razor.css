@@ -1,0 +1,87 @@
+﻿.new-card-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.card-form {
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #d5598c;
+        }
+
+.expiry-date-group {
+    display: flex;
+    gap: 20px;
+}
+
+    .expiry-date-group select {
+        flex: 1;
+    }
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.save-button, .cancel-button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+
+.save-button {
+    background-color: #0097ff;
+    color: white;
+}
+
+    .save-button:hover {
+        background-color: #007acc;
+    }
+
+.cancel-button {
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+}
+
+    .cancel-button:hover {
+        background-color: #ccc;
+    }

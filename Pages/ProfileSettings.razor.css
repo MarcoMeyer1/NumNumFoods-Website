@@ -1,0 +1,87 @@
+﻿.profile-settings-container {
+    width: 100%;
+    max-width: 600px; /* Made the container wider */
+    margin: 60px auto; /* Increased margin for better spacing */
+    padding: 30px; /* Increased padding for a roomier layout */
+    background-color: #fff;
+    border-radius: 12px; /* Increased border radius for smoother corners */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for a floating effect */
+    text-align: center;
+}
+
+    .profile-settings-container h1 {
+        font-size: 2.2rem; /* Increased font size */
+        margin-bottom: 25px; /* Slightly larger spacing below */
+        color: #333;
+        font-weight: 700; /* Made the font slightly bolder */
+    }
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+}
+
+    .profile-form label {
+        text-align: left;
+        font-weight: bold;
+        margin-bottom: 10px; /* Increased space between label and input */
+        font-size: 1.2rem; /* Larger label font size */
+        color: #333;
+    }
+
+    .profile-form input {
+        padding: 15px; /* Increased padding for larger input fields */
+        margin-bottom: 25px; /* More space between input fields */
+        border: 2px solid #ccc; /* Thicker border for input fields */
+        border-radius: 8px; /* More rounded input corners */
+        font-size: 1.2rem; /* Larger font size for better readability */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+    }
+
+        .profile-form input:focus {
+            border-color: #D5598C; /* Pink border on focus */
+            box-shadow: 0 0 5px rgba(213, 89, 140, 0.5); /* Add box-shadow on focus */
+            outline: none;
+        }
+
+        .profile-form input[disabled] {
+            background-color: #f1f1f1; /* Slightly darker background for disabled input */
+            color: #999; /* Lighter text color for disabled input */
+        }
+
+.confirm-button {
+    padding: 15px; /* Increased padding for a larger button */
+    background-color: lightpink;
+    color: black;
+    border: none;
+    border-radius: 8px; /* More rounded button */
+    font-size: 1.3rem; /* Larger font size */
+    font-weight: bold; /* Make the button text bold */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Button shadow */
+}
+
+    .confirm-button:hover {
+        background-color: #C04A78; /* Darker pink on hover */
+        transform: scale(1.05); /* Slight scaling effect on hover */
+    }
+
+    .confirm-button:active {
+        transform: scale(0.98); /* Button presses down when clicked */
+    }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .profile-settings-container {
+        padding: 20px; /* Reduce padding on smaller screens */
+    }
+
+    .profile-form input {
+        font-size: 1.1rem; /* Slightly smaller font size on mobile */
+    }
+
+    .confirm-button {
+        font-size: 1.2rem; /* Adjust button size for mobile */
+    }
+}

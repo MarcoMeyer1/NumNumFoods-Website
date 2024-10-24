@@ -1,0 +1,65 @@
+﻿@page "/new-card"
+
+<div class="new-card-container">
+    <h1 class="title">Add New Card</h1>
+
+    <form class="card-form">
+        <div class="form-group">
+            <label for="nameOnCard">Name on Card</label>
+            <input type="text" id="nameOnCard" placeholder="Enter name on card">
+        </div>
+
+        <div class="form-group">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" placeholder="Enter card number">
+        </div>
+
+        <div class="form-group">
+            <label for="expiryDate">Expiry Date</label>
+            <div class="expiry-date-group">
+                <select id="expiryMonth">
+                    <option value="">Month</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+                <select id="expiryYear">
+                    <option value="">Year</option>
+                    @for (int year = 2024; year <= 2040; year++)
+                    {
+                        <option value="@year">@year</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="Enter CVV">
+        </div>
+
+        <div class="form-group">
+            <label for="straightBudget">Straight/Budget</label>
+            <select id="straightBudget">
+                <option value="straight">Straight</option>
+                <option value="budget">Budget</option>
+            </select>
+            <small>South African issued cards only</small>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button type="submit" class="save-button">Save Card</button>
+            <a href="/profile/billing-information" class="cancel-button">Cancel</a>
+        </div>
+    </form>
+</div>

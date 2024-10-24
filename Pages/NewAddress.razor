@@ -1,0 +1,79 @@
+﻿@page "/new-address"
+@inject NavigationManager Navigation
+
+<div class="new-address-container">
+    <h1 class="title">Add New Address</h1>
+
+    <!-- Address Type Selection -->
+    <div class="address-type-selection">
+        <label>
+            <input type="radio" name="addressType" value="Residential" checked /> Residential
+        </label>
+        <label>
+            <input type="radio" name="addressType" value="Business" /> Business
+        </label>
+    </div>
+
+    <!-- Address Form Fields -->
+    <div class="address-form">
+        <div class="form-group">
+            <label for="recipientName">Recipient Name</label>
+            <input type="text" id="recipientName" placeholder="Enter recipient name" />
+        </div>
+
+        <div class="form-group">
+            <label for="recipientMobile">Recipient Mobile Number</label>
+            <input type="text" id="recipientMobile" placeholder="Enter mobile number" />
+        </div>
+
+        <div class="form-group">
+            <label for="streetAddress">Street Address</label>
+            <input type="text" id="streetAddress" placeholder="Eg. 12 Ridge Street" />
+        </div>
+
+        <div class="form-group">
+            <label for="complexBuilding">Complex / Building (Optional)</label>
+            <input type="text" id="complexBuilding" placeholder="Complex or Building Name, unit number or floor" />
+        </div>
+
+        <div class="form-group">
+            <label for="suburb">Suburb</label>
+            <input type="text" id="suburb" placeholder="Suburb" />
+        </div>
+
+        <div class="form-group">
+            <label for="cityTown">City / Town</label>
+            <input type="text" id="cityTown" placeholder="City / Town" />
+        </div>
+
+        <div class="form-group">
+            <label for="province">Province</label>
+            <select id="province">
+                <option value="">Select Province</option>
+                <option value="Eastern Cape">Eastern Cape</option>
+                <option value="Western Cape">Western Cape</option>
+                <option value="Gauteng">Gauteng</option>
+                <!-- Add more provinces as needed -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" id="postalCode" placeholder="Postal Code" />
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="cancel-button" @onclick="Cancel">Cancel</button>
+        <button class="save-button">Save Address</button>
+    </div>
+</div>
+
+@code {
+    // Logic to cancel and navigate back
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/profile/billing-information");
+    }
+}

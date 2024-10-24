@@ -58,6 +58,7 @@ else
                     {
                         <option value="@branch.BranchId">@branch.Name</option>
                     }
+                    }
                 </select>
             </div>
 
@@ -78,7 +79,7 @@ else
 
         if (userId == 0)
         {
-            // User is not logged in; redirect to login page or show a message
+            // User is not logged in; redirect to login page
             Navigation.NavigateTo("/login");
             return;
         }
@@ -150,7 +151,6 @@ else
 
         if (userId == 0)
         {
-            // User is not logged in; redirect to login page or show a message
             Navigation.NavigateTo("/login");
             return;
         }
@@ -181,7 +181,7 @@ else
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Order created successfully.");
-                    // Optionally, navigate to an order confirmation page
+                    // Navigate to an order confirmation page
                     Navigation.NavigateTo("/order-confirmation");
                 }
                 else
@@ -221,7 +221,7 @@ else
         public int CustomerId { get; set; }
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } // e.g., "Pending", "Completed"
         public DateTime OrderDate { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
@@ -230,7 +230,7 @@ else
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public decimal Price { get; set; } // Price at the time of ordering
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }

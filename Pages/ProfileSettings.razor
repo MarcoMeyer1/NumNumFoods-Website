@@ -1,46 +1,104 @@
 ﻿@page "/profile-settings"
 @inject NavigationManager Navigation
+@inject HttpClient Http
+@using NumNumFoods.Services
+@inject UserState UserState
 
 <div class="profile-settings-container">
     <h1>Account Details</h1>
 
     <form class="profile-form">
-        <label for="name">Name</label>
-        <input type="text" id="name" placeholder="John" @bind="user.Name" />
-
-        <label for="surname">Surname</label>
-        <input type="text" id="surname" placeholder="Doe" @bind="user.Surname" />
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" @bind="user.FullName" />
 
         <label for="email">Email (unchangeable)</label>
-        <input type="email" id="email" placeholder="johndoe@gmail.com" value="@user.Email" disabled />
+        <input type="email" id="email" value="@user.Email" disabled />
 
-        <label for="contact">Contact Number</label>
-        <input type="text" id="contact" placeholder="0726488587" @bind="user.ContactNumber" />
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" id="phoneNumber" @bind="user.PhoneNumber" />
 
         <button type="button" class="confirm-button" @onclick="ConfirmChanges">Confirm Changes</button>
     </form>
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="error-message">@ErrorMessage</div>
+    }
 </div>
 
 @code {
-    private User user = new User
-        {
-            Name = "John",
-            Surname = "Doe",
-            Email = "johndoe@gmail.com",
-            ContactNumber = "0726488587"
-        };
+    private User user = new User();
+    private string ErrorMessage { get; set; } = string.Empty;
 
-    private void ConfirmChanges()
+    protected override async Task OnInitializedAsync()
     {
-        // Save changes logic
-        Console.WriteLine("Changes confirmed for user: " + user.Name);
+        if (!UserState.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadUserProfile();
+    }
+
+    private async Task LoadUserProfile()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/profile/{UserState.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                user = await response.Content.ReadFromJsonAsync<User>();
+                Console.WriteLine($"[LoadUserProfile] User data loaded: {System.Text.Json.JsonSerializer.Serialize(user)}");
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[LoadUserProfile] Failed to load user profile. Error: {errorContent}");
+                ErrorMessage = $"Failed to load user profile: {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[LoadUserProfile] Exception: {ex.Message}");
+            ErrorMessage = $"Error loading user profile: {ex.Message}";
+        }
+    }
+
+    private async Task ConfirmChanges()
+    {
+        try
+        {
+            // Log the user data being sent
+            var userDataJson = System.Text.Json.JsonSerializer.Serialize(user);
+            Console.WriteLine($"[ConfirmChanges] Sending user data: {userDataJson}");
+
+            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/profile/update/{UserState.UserId}", user);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("[ConfirmChanges] Profile updated successfully.");
+                // Update UserState if necessary
+                UserState._userFullName = user.FullName;
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[ConfirmChanges] Failed to update profile. Error: {errorContent}");
+                ErrorMessage = $"Failed to update profile: {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ConfirmChanges] Exception: {ex.Message}");
+            ErrorMessage = $"Error updating profile: {ex.Message}";
+        }
     }
 
     public class User
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public int UserId { get; set; } // Ensure UserId is included
+        public string FullName { get; set; }
         public string Email { get; set; }
-        public string ContactNumber { get; set; }
+        public string PhoneNumber { get; set; } // New property
     }
 }

@@ -1,4 +1,10 @@
 ﻿@page "/profile/billing-information"
+@inject HttpClient Http
+@using NumNumFoods.Services
+@inject UserState UserState
+@inject NavigationManager Navigation
+@using NumNumFoods.Models
+@using System.Net.Http.Json
 
 <div class="billing-info-page">
     <h1 class="billing-info-title">Billing Information</h1>
@@ -6,48 +12,223 @@
     <div class="billing-and-payment-section">
         <!-- Payment Method Section -->
         <div class="payment-method-section">
-            <h2 class="payment-method-heading">Payment Method</h2>
+            <h2 class="payment-method-heading">Payment Methods</h2>
 
-            <div class="payment-card">
-                <img src="Assets/MasterCard.png" alt="MasterCard" class="card-logo" />
-                <div class="card-details">
-                    <p class="card-type">Master Card</p>
-                    <p class="card-number">**** **** **** 4002</p>
-                    <p class="card-expiry">Expiry: 09/25</p>
-                    <p class="card-holder-email">johndoe@gmail.com</p>
-                </div>
-                <button class="change-button">Change</button>
-            </div>
+            @if (paymentMethods == null)
+            {
+                <p>Loading payment methods...</p>
+            }
+            else if (paymentMethods.Count == 0)
+            {
+                <p>No payment methods found.</p>
+            }
+            else
+            {
+                @foreach (var method in paymentMethods)
+                {
+                    <div class="payment-card">
+                        <div class="card-details">
+                            <p class="card-type">@GetCardType(method.CardNumber)</p>
+                            <p class="card-number">**** **** **** @GetLastFourDigits(method.CardNumber)</p>
+                            <p class="card-expiry">Expiry: @method.ExpiryMonth/@method.ExpiryYear</p>
+                            <p class="card-holder-name">@method.NameOnCard</p>
+                        </div>
+                        <button class="remove-payment-button" @onclick="() => RemovePaymentMethod(method.CardId)">✖ Remove</button>
+                    </div>
+                }
+            }
 
-            <div class="payment-actions">
-                <button class="remove-payment-button">✖ Remove Payment Method</button>
-                <!-- Updated the button to navigate to the NewCard page -->
-                <a href="/new-card" class="add-payment-button">➕ Add Payment Method</a>
-            </div>
+            <a href="/new-card" class="add-payment-button">➕ Add Payment Method</a>
         </div>
 
         <!-- Billing Address Section -->
         <div class="billing-address-section">
-            <h2 class="payment-method-heading">Billing Address</h2>
+            <h2 class="payment-method-heading">Billing Addresses</h2>
 
-            <div class="billing-card">
-                <div class="billing-details">
-                    <p><strong>John</strong> 0726488867</p>
-                    <p>27 Walmer park,<br />Port Elizabeth, 1234</p>
-                    <p class="address-type">Residential</p>
-                </div>
-            </div>
+            @if (billingAddresses == null)
+            {
+                <p>Loading billing addresses...</p>
+            }
+            else if (billingAddresses.Count == 0)
+            {
+                <p>No billing addresses found.</p>
+            }
+            else
+            {
+                @foreach (var address in billingAddresses)
+                {
+                    <div class="billing-card">
+                        <div class="billing-details">
+                            <p><strong>@address.FullName</strong> @address.PhoneNumber</p>
+                            <p>
+                                @address.StreetAddress
+                                @if (!string.IsNullOrEmpty(address.ComplexBuilding))
+                                {
+                                    <span>, @address.ComplexBuilding</span>
+                                }
+                                @if (!string.IsNullOrEmpty(address.Suburb))
+                                {
+                                    <span>, @address.Suburb</span>
+                                }
+                                <br />
+                                @address.City, @address.Province, @address.PostalCode
+                            </p>
+                            <p class="address-type">@address.AddressType</p>
+                        </div>
+                        <button class="remove-address-button" @onclick="() => RemoveBillingAddress(address.AddressId)">✖ Remove</button>
+                    </div>
+                }
+            }
 
-            <div class="billing-card">
-                <div class="billing-details">
-                    <p><strong>Jane</strong> 0726488866</p>
-                    <p>23 Newton park,<br />Port Elizabeth, 1235</p>
-                    <p class="address-type">Business</p>
-                </div>
-            </div>
-
-            <!-- Updated the button to navigate to the NewAddress page -->
             <a href="/new-address" class="add-new-address-button">Add New Address</a>
         </div>
     </div>
 </div>
+
+@code {
+    private List<BillingAddress> billingAddresses;
+    private List<PaymentMethod> paymentMethods;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserState.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        await LoadPaymentMethods();
+        await LoadBillingAddresses();
+    }
+
+    // Payment Methods Logic
+    private async Task LoadPaymentMethods()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/paymentmethod/user/{UserState.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                paymentMethods = await response.Content.ReadFromJsonAsync<List<PaymentMethod>>();
+            }
+            else
+            {
+                Console.WriteLine("Failed to load payment methods.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading payment methods: {ex.Message}");
+        }
+    }
+
+    private async Task RemovePaymentMethod(int cardId)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/paymentmethod/{cardId}/user/{UserState.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Payment method removed successfully.");
+                await LoadPaymentMethods();
+            }
+            else
+            {
+                Console.WriteLine("Failed to remove payment method.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error removing payment method: {ex.Message}");
+        }
+    }
+
+    private string GetCardType(string cardNumber)
+    {
+        // Simple logic to determine card type based on the card number prefix
+        if (string.IsNullOrEmpty(cardNumber)) return "Unknown Card";
+
+        if (cardNumber.StartsWith("4")) return "Visa";
+        if (cardNumber.StartsWith("5")) return "MasterCard";
+        if (cardNumber.StartsWith("3")) return "American Express";
+        return "Unknown Card";
+    }
+
+    private string GetLastFourDigits(string cardNumber)
+    {
+        if (string.IsNullOrEmpty(cardNumber) || cardNumber.Length < 4)
+        {
+            return "****";
+        }
+        return cardNumber.Substring(cardNumber.Length - 4);
+    }
+
+    // Billing Addresses Logic
+    private async Task LoadBillingAddresses()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/billingaddress/user/{UserState.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                billingAddresses = await response.Content.ReadFromJsonAsync<List<BillingAddress>>();
+            }
+            else
+            {
+                Console.WriteLine("Failed to load billing addresses.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading billing addresses: {ex.Message}");
+        }
+    }
+
+    private async Task RemoveBillingAddress(int addressId)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/billingaddress/{addressId}/user/{UserState.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Billing address removed successfully.");
+                await LoadBillingAddresses();
+            }
+            else
+            {
+                Console.WriteLine("Failed to remove billing address.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error removing billing address: {ex.Message}");
+        }
+    }
+
+    // Models
+    public class PaymentMethod
+    {
+        public int CardId { get; set; }
+        public int UserId { get; set; }
+        public string NameOnCard { get; set; }
+        public string CardNumber { get; set; } // Sensitive data
+        public string ExpiryMonth { get; set; }
+        public string ExpiryYear { get; set; }
+        public string PaymentOption { get; set; }
+    }
+
+    public class BillingAddress
+    {
+        public int AddressId { get; set; }
+        public int UserId { get; set; } // Foreign key to Users table
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string StreetAddress { get; set; }
+        public string ComplexBuilding { get; set; } // Optional
+        public string Suburb { get; set; } // Optional
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string PostalCode { get; set; }
+        public string AddressType { get; set; } // e.g., "Residential", "Business"
+    }
+}

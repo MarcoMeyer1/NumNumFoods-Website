@@ -1,40 +1,42 @@
 ﻿@page "/new-card"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using NumNumFoods.Services
+@inject UserState UserState
+@using NumNumFoods.Models
 
 <div class="new-card-container">
     <h1 class="title">Add New Card</h1>
 
-    <form class="card-form">
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="error-message">@ErrorMessage</div>
+    }
+
+    <form class="card-form" @onsubmit="HandleValidSubmit">
         <div class="form-group">
             <label for="nameOnCard">Name on Card</label>
-            <input type="text" id="nameOnCard" placeholder="Enter name on card">
+            <input type="text" id="nameOnCard" placeholder="Enter name on card" @bind="card.NameOnCard" required>
         </div>
 
         <div class="form-group">
             <label for="cardNumber">Card Number</label>
-            <input type="text" id="cardNumber" placeholder="Enter card number">
+            <input type="text" id="cardNumber" placeholder="Enter card number" @bind="card.CardNumber" required>
         </div>
 
         <div class="form-group">
             <label for="expiryDate">Expiry Date</label>
             <div class="expiry-date-group">
-                <select id="expiryMonth">
+                <select id="expiryMonth" @bind="card.ExpiryMonth" required>
                     <option value="">Month</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
+                    @for (int month = 1; month <= 12; month++)
+                    {
+                        <option value="@month.ToString("D2")">@month.ToString("D2")</option>
+                    }
                 </select>
-                <select id="expiryYear">
+                <select id="expiryYear" @bind="card.ExpiryYear" required>
                     <option value="">Year</option>
-                    @for (int year = 2024; year <= 2040; year++)
+                    @for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 20; year++)
                     {
                         <option value="@year">@year</option>
                     }
@@ -42,16 +44,14 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="cvv">CVV</label>
-            <input type="text" id="cvv" placeholder="Enter CVV">
-        </div>
+        <!-- Removed CVV field due to security considerations -->
+        <!-- CVV should not be stored or sent to the server -->
 
         <div class="form-group">
             <label for="straightBudget">Straight/Budget</label>
-            <select id="straightBudget">
-                <option value="straight">Straight</option>
-                <option value="budget">Budget</option>
+            <select id="straightBudget" @bind="card.PaymentOption">
+                <option value="Straight">Straight</option>
+                <option value="Budget">Budget</option>
             </select>
             <small>South African issued cards only</small>
         </div>
@@ -59,7 +59,84 @@
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button type="submit" class="save-button">Save Card</button>
-            <a href="/profile/billing-information" class="cancel-button">Cancel</a>
+            <button type="button" class="cancel-button" @onclick="Cancel">Cancel</button>
         </div>
     </form>
 </div>
+
+@code {
+    private CardInfo card = new CardInfo();
+    private string ErrorMessage;
+
+    protected override void OnInitialized()
+    {
+        if (!UserState.IsLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+
+        // Ensure UserId is set
+        card.UserId = UserState.UserId;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        ErrorMessage = string.Empty;
+
+        // Basic validation
+        if (string.IsNullOrWhiteSpace(card.NameOnCard) ||
+            string.IsNullOrWhiteSpace(card.CardNumber) ||
+            string.IsNullOrWhiteSpace(card.ExpiryMonth) ||
+            string.IsNullOrWhiteSpace(card.ExpiryYear))
+        {
+            ErrorMessage = "Please fill in all required fields.";
+            return;
+        }
+
+        // SECURITY WARNING:
+        // Handling and storing card data directly is not recommended.
+        // Use a payment gateway to handle sensitive card information.
+
+        try
+        {
+            // Ensure the card data matches the API's expected model
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/paymentmethod", card);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Card added successfully.");
+                Navigation.NavigateTo("/profile/billing-information");
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to add card: {errorContent}");
+                ErrorMessage = $"Failed to add card: {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding card: {ex.Message}");
+            ErrorMessage = $"An error occurred while adding the card: {ex.Message}";
+        }
+    }
+
+    // Logic to cancel and navigate back
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/profile/billing-information");
+    }
+
+    public class CardInfo
+    {
+        public int CardId { get; set; }
+        public int UserId { get; set; }
+        public string NameOnCard { get; set; }
+        public string CardNumber { get; set; } // In production, handle securely
+        public string ExpiryMonth { get; set; }
+        public string ExpiryYear { get; set; }
+        // Removed CVV property for security reasons
+        public string PaymentOption { get; set; } = "Straight";
+    }
+}

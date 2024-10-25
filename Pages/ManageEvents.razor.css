@@ -1,77 +1,112 @@
 ﻿.manage-events-container {
-    background-color: #efbfcd;
+    background-color: #f5f5f5;
     padding: 20px;
     border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the container */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    position: relative; /* Enable absolute positioning for the button */
 }
 
 h1 {
-    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center; /* Align heading to the center */
 }
 
 .new-event-button {
     padding: 10px 15px;
-    background-color: #0097ff;
+    background-color: #d5598c;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    position: absolute; /* Position button at the bottom-left */
+    bottom: 20px;
+    left: 20px;
 }
 
     .new-event-button:hover {
-        background-color: #007acc;
+        background-color: lightpink;
     }
 
 .events-list {
-    margin-top: 20px;
     background-color: #fff;
     border-radius: 8px;
     padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd; /* Border around the events list */
+    margin-bottom: 60px; /* Space for the New Event button */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Ensures table is responsive */
+    text-align: left;
+    border: 1px solid #ddd; /* Border around the entire table */
 }
 
 th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    border-right: 1px solid #ddd; /* Vertical lines between columns */
+    font-size: 1rem;
 }
 
 th {
-    background-color: #D5598C;
-    color: #fff;
+    background-color: #f7d9e2;
+    font-weight: 600;
+    color: #333;
+}
+
+td {
+    border-bottom: 1px solid #ddd; /* Horizontal lines between rows */
+}
+
+tr:hover {
+    background-color: #f9f9f9; /* Add a hover effect for rows */
 }
 
 .delete-button {
-    padding: 6px 12px;
-    background-color: #ff4444;
+    padding: 10px 15px;
+    background-color: #ff6b6b;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 0.9rem;
+    text-transform: uppercase;
 }
 
     .delete-button:hover {
-        background-color: #ff0000;
+        background-color: #ff3d3d;
     }
 
-/* Mobile adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
     .manage-events-container {
-        padding: 10px; /* Reduce padding */
+        padding: 15px;
     }
 
-    .events-list table {
-        display: block;
-        overflow-x: auto; /* Allow horizontal scrolling on small screens */
+    .events-list {
+        padding: 10px;
     }
 
     th, td {
-        font-size: 0.9rem; /* Slightly smaller text for mobile */
-        padding: 8px; /* Reduce padding */
+        font-size: 0.9rem;
+    }
+
+    .new-event-button {
+        width: 100%;
+        text-align: center;
+        position: static; /* Reset the absolute positioning */
+        margin-top: 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto; /* Enable horizontal scrolling for small screens */
     }
 }

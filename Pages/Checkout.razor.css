@@ -10,7 +10,7 @@
 }
 
 .order-summary-table {
-    width: 100%;
+    width: 100%; /* Restore the original width */
     border-collapse: collapse;
     margin-bottom: 1.5rem;
 }
@@ -19,7 +19,7 @@
     .order-summary-table td {
         padding: 1rem;
         border: 1px solid #ddd;
-        text-align: center;
+        text-align: center; /* Keep text center-aligned */
     }
 
 .product-image {
@@ -34,6 +34,44 @@
     font-weight: bold;
     padding: 1rem;
     text-align: right;
+    border-top: 2px solid #ddd; /* Separate total row */
+    margin-bottom: 1.5rem; /* Add spacing for the confirm button */
+}
+
+/* Shift Confirm Order button below the total amount */
+.confirm-order-container {
+    text-align: right; /* Align the confirm button with the total */
+    margin-bottom: 2rem; /* Add spacing below */
+}
+
+.btn-pink {
+    background-color: #d5598c;
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    width: 200px; /* Smaller button */
+}
+
+    .btn-pink:hover {
+        background-color: lightpink;
+    }
+
+/* Move Select Branch dropdown below the table */
+.select-branch-container {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+select.form-control {
+    padding: 0.75rem;
+    width: 50%; /* Reduce the width */
+    border: 1px solid #ccc;
+    border-radius: 6px;
 }
 
 .checkout-actions {
@@ -45,33 +83,27 @@
     border-radius: 6px;
 }
 
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-control {
-    padding: 0.75rem;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-.btn-pink {
-    background-color: #e91e63;
-    color: #fff;
-    border: none;
-    padding: 0.75rem;
-    cursor: pointer;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-}
-
-    .btn-pink:hover {
-        background-color: #d81b60;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .checkout-container {
+        width: 100%;
     }
 
+    .order-summary-table th,
+    .order-summary-table td {
+        padding: 0.5rem;
+    }
+
+    .btn-pink {
+        width: 100%; /* Full width button on mobile */
+    }
+
+    select.form-control {
+        width: 100%; /* Full width dropdown on mobile */
+    }
+}
+
+/* Navbar for smaller screens */
 @media (max-width: 768px) {
     .navbar-nav .nav-link {
         font-size: 1.2rem;
@@ -82,17 +114,5 @@
     .navbar-nav img.nav-icon {
         width: 30px;
         height: 30px;
-    }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .checkout-container {
-        width: 100%;
-    }
-
-    .order-summary-table th,
-    .order-summary-table td {
-        padding: 0.5rem;
     }
 }

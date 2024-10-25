@@ -1,5 +1,7 @@
 ﻿@page "/"
 
+@inject NavigationManager Navigation
+
 <PageTitle>Home</PageTitle>
 
 @* Hero Section *@
@@ -10,7 +12,7 @@
         <p>
             Num Num Foods is a home-grown baby food company dedicated to providing fresh, nutritious meals for little ones. Using locally sourced ingredients, grown in our own backyard, we create wholesome, homemade baby foods packed with essential vitamins and nutrients. Each batch is carefully prepared at home, ensuring the highest quality and taste, perfect for supporting your baby’s healthy growth and development. With Num Num Foods, you can trust that every spoonful is made with love, from our home to yours.
         </p>
-        <button class="cta-btn">Find out more!</button>
+        <button class="cta-btn" @onclick="NavigateToAboutPage">Find out more!</button>
     </div>
 </section>
 
@@ -52,3 +54,10 @@
         </div>
     </div>
 </section>
+
+@code {
+    private void NavigateToAboutPage()
+    {
+        Navigation.NavigateTo("/about");
+    }
+}

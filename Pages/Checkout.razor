@@ -44,16 +44,16 @@ else
             </tbody>
         </table>
 
-        <div class="order-summary">
+        <div class="order-total-container">
             <div class="order-total">
                 <h3>Total Amount: @totalAmount.ToString("C")</h3>
             </div>
         </div>
 
-        <div class="checkout-actions">
-            <div class="form-group">
-                <label>Select Branch:</label>
-                <select @bind="selectedBranchId" class="form-control">
+        <div class="checkout-actions-container">
+            <div class="select-branch-container">
+                <label for="branch">Select Branch:</label>
+                <select @bind="selectedBranchId" class="form-control" id="branch">
                     @foreach (var branch in branches)
                     {
                         <option value="@branch.BranchId">@branch.Name</option>
@@ -62,7 +62,9 @@ else
                 </select>
             </div>
 
-            <button class="btn-pink confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
+            <div class="confirm-order-container">
+                <button class="btn-pink confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
+            </div>
         </div>
     </div>
 }
@@ -181,8 +183,8 @@ else
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Order created successfully.");
-                    // Navigate to an order confirmation page
-                    Navigation.NavigateTo("/order-confirmation");
+                    // Navigate to the order confirmation page
+                    Navigation.NavigateTo("/order-confirmed"); // Changed to /order-confirmed
                 }
                 else
                 {
@@ -196,6 +198,7 @@ else
             }
         }
     }
+
 
     public class CartItem
     {

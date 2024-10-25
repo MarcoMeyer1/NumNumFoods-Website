@@ -1,9 +1,11 @@
 ﻿@page "/profile"
 @inject NavigationManager Navigation
 @using NumNumFoods.Services
-@inject UserState UserState 
+@inject UserState UserState
 @using NumNumFoods.Models
 @using NumNumFoods.Services
+@inject IJSRuntime JSRuntime
+
 
 <div class="profile-container">
     <div class="profile-box">
@@ -18,9 +20,11 @@
             }
             else
             {
-                <div class="login-prompt">
-                    <h2>Please log in</h2>
-                    <button class="login-button" @onclick="NavigateToLogin">Log In</button> <!-- Log In button -->
+                <div class="login-container">
+                    <div class="login-prompt">
+                        <h2>Please log in</h2>
+                        <button class="login-button" @onclick="NavigateToLogin">Log In</button> <!-- Log In button -->
+                    </div>
                 </div>
             }
         </div>
@@ -40,10 +44,7 @@
                 <a href="/security" class="profile-item">
                     <i class="fas fa-lock"></i> Security
                 </a>
-                <a href="/switch-account" class="profile-item">
-                    <i class="fas fa-user"></i> Switch Account
-                </a>
-                <a href="/logout" class="profile-item logout">
+                <a href="#" @onclick="LogoutUser" class="profile-item logout">
                     <i class="fas fa-sign-out-alt"></i> Log Out
                 </a>
             </div>
@@ -52,8 +53,20 @@
 </div>
 
 @code {
-    private void NavigateToLogin()
+    private async Task LogoutUser()
     {
-        Navigation.NavigateTo("/login"); // Navigate to the login page
+        // Trigger the logout in UserState
+        UserState.Logout();
+
+        // Optionally, clear session data from JSRuntime directly (if not handled in UserState)
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "userState");
+        await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "userRole");
+
     }
+        private void NavigateToLogin()
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+
 }

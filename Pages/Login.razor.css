@@ -1,14 +1,14 @@
-﻿/* Base styles for larger screens */
-.login-page {
+﻿.login-page {
     display: flex;
-    height: 100vh;
+    min-height: 90vh; /* Reduced height of the entire page */
     background-color: #fff;
     color: #333;
 }
 
 .login-left {
-    width: 60%; /* Make the image section wider */
+    flex: 1.3; /* Keep the left section wider */
     position: relative;
+    height: 125vh; /* Reduced the height of the image section */
 }
 
 .logo-container {
@@ -36,48 +36,49 @@
 }
 
 .login-right {
-    width: 40%; /* Keep the form section width */
-    padding: 70px; /* Add more padding */
+    flex: 0.7; /* Keep the right section narrower */
+    padding: 4%; /* Relative padding */
     background-color: #D5598C;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center; /* Center form content horizontally */
+    justify-content: flex-start; /* Align content to top */
+    align-items: center;
     color: white;
+    min-height: 85vh; /* Reduced height of the right section */
 }
 
 .login-title {
-    font-size: 3.5rem; /* Increase the size of the title */
+    font-size: 2.5vw; /* Dynamic font size */
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: #fff;
-    text-align: center; /* Center the title */
+    text-align: center;
 }
 
 .login-form {
     width: 100%;
-    max-width: 500px; /* Increase the width */
-    margin-bottom: 40px;
+    padding: 0 5%; /* Padding for responsiveness */
+    margin-bottom: 30px;
 }
 
     .login-form label {
         display: block;
-        margin-bottom: 12px; /* Increase space between label and input */
+        margin-bottom: 12px;
         font-weight: bold;
         color: #fff;
-        font-size: 1.4rem; /* Increase label font size */
+        font-size: 1.4rem;
     }
 
     .login-form input[type="text"],
     .login-form input[type="password"] {
         width: 100%;
-        padding: 20px; /* Increase padding */
-        margin-bottom: 25px;
-        border-radius: 0px; /* Rectangular inputs */
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
         border: none;
         background-color: #fff;
         color: #333;
-        font-size: 1.5rem; /* Increase input font size */
+        font-size: 1.2rem;
     }
 
 .remember-me {
@@ -85,25 +86,24 @@
     align-items: center;
     margin-bottom: 30px;
     color: #fff;
-    font-size: 1.3rem; /* Increase remember me font size */
+    font-size: 1.2rem;
 }
 
     .remember-me input[type="checkbox"] {
-        width: 20px;
-        height: 20px; /* Increase checkbox size */
-        margin-right: 10px; /* Space between checkbox and label */
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
     }
 
 .login-button {
     width: 100%;
-    padding: 25px; /* Make the button bigger */
+    padding: 20px;
     background-color: #9C114A;
     border: none;
-    border-radius: 0px; /* Rectangular button */
+    border-radius: 4px;
     color: #fff;
-    font-size: 1.7rem; /* Increase button font size */
+    font-size: 1.6rem;
     cursor: pointer;
-    margin-bottom: 35px;
     transition: background-color 0.3s ease;
 }
 
@@ -115,16 +115,16 @@
     display: block;
     margin-bottom: 25px;
     color: #fff;
-    text-align: center; /* Center the Forgot Password text */
+    text-align: center;
     text-decoration: underline;
     cursor: pointer;
-    font-size: 1.4rem; /* Increase font size */
+    font-size: 1.3rem;
 }
 
 .register-link {
     margin-bottom: 25px;
-    font-size: 1.4rem; /* Increase register link font size */
-    text-align: center; /* Center the register link */
+    font-size: 1.3rem;
+    text-align: center;
 }
 
     .register-link a {
@@ -148,22 +148,22 @@
 .google-login,
 .apple-login {
     width: 100%;
-    padding: 20px; /* Make the social login buttons bigger */
+    padding: 15px;
     background-color: #fff;
     border: none;
-    border-radius: 0px; /* Rectangular buttons */
+    border-radius: 4px;
     color: #333;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    font-size: 1.4rem; /* Increase button font size */
+    font-size: 1.2rem;
 }
 
     .google-login img,
     .apple-login img {
-        width: 28px; /* Increase the icon size */
+        width: 25px;
         margin-right: 15px;
     }
 
@@ -172,61 +172,57 @@
         background-color: #f1f1f1;
     }
 
-/* Media queries for smaller screens (tablets, phones) */
+/* Responsive adjustments for tablets and smaller screens */
 @media (max-width: 1024px) {
-    .login-left {
-        width: 50%;
-    }
-
-    .login-right {
-        width: 50%;
-        padding: 40px;
-    }
-
-    .login-title {
-        font-size: 3rem;
-    }
-}
-
-@media (max-width: 768px) {
     .login-page {
-        flex-direction: column;
+        flex-direction: column; /* Stack sections vertically */
     }
 
     .login-left,
     .login-right {
-        width: 100%;
-    }
-
-    .login-right {
-        padding: 40px;
+        width: 100%; /* Full width for both sections */
+        height: auto; /* Auto height for smaller screens */
     }
 
     .login-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem; /* Adjust font size for smaller screens */
     }
 
     .login-form {
-        max-width: 400px;
+        padding: 0 10%; /* Increase padding for better layout on smaller screens */
+    }
+}
+
+/* Further adjustments for smaller devices */
+@media (max-width: 768px) {
+    .login-title {
+        font-size: 2rem;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        padding: 12px;
+        font-size: 1rem;
     }
 
     .login-button {
-        padding: 20px;
-        font-size: 1.5rem;
+        padding: 18px;
+        font-size: 1.4rem;
     }
 
     .forgot-password,
     .register-link {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .google-login,
     .apple-login {
-        padding: 15px;
-        font-size: 1.2rem;
+        padding: 12px;
+        font-size: 1.1rem;
     }
 }
 
+/* Further adjustments for small phones */
 @media (max-width: 480px) {
     .login-left {
         display: none; /* Hide the image section for very small screens */
@@ -238,21 +234,21 @@
     }
 
     .login-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .login-form {
-        max-width: 100%;
+        padding: 0 15%; /* Increase padding for better form layout */
     }
 
     .login-button {
         padding: 15px;
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .google-login,
     .apple-login {
-        padding: 12px;
-        font-size: 1.1rem;
+        padding: 10px;
+        font-size: 1rem;
     }
 }

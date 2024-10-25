@@ -1,0 +1,115 @@
+﻿.order-confirmed-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    background: linear-gradient(135deg, #f0f4f8, #fff); /* Subtle background gradient */
+    padding: 20px;
+}
+
+.confirmation-message {
+    text-align: center;
+    max-width: 600px;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Stronger shadow for depth */
+    transition: transform 0.3s ease-in-out;
+}
+
+    .confirmation-message:hover {
+        transform: translateY(-10px); /* Adds a slight hover effect */
+    }
+
+.icon img {
+    width: 60px; /* Slightly larger icon */
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-size: 3rem; /* Larger, more impactful heading */
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Montserrat', sans-serif; /* Modern, stylish font */
+}
+
+p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 15px;
+    font-family: 'Lato', sans-serif;
+}
+
+.email-signup {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.email-input {
+    padding: 12px;
+    width: 300px; /* Increased width for better readability */
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.signup-btn {
+    padding: 12px 25px;
+    background-color: #d5598c; /* Vibrant yellow button */
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+    .signup-btn:hover {
+        background-color: lightpink;
+        transform: translateY(-2px); /* Hover effect for the button */
+    }
+
+.social-links {
+    margin-top: 40px;
+}
+
+.icons a {
+    display: inline-block;
+    margin: 0 12px;
+}
+
+.icons img {
+    width: 35px; /* Larger, clearer icons */
+    transition: transform 0.3s ease-in-out;
+}
+
+.icons a:hover img {
+    transform: scale(1.2); /* Slightly enlarges icons on hover */
+}
+
+/* Additional styling for smaller screens */
+@media (max-width: 768px) {
+    .confirmation-message {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .email-input {
+        width: 80%;
+    }
+
+    .signup-btn {
+        padding: 10px 20px;
+    }
+}

@@ -140,6 +140,7 @@
             {
                 SuccessMessage = "A password reset link has been sent to your email.";
                 ErrorMessage = string.Empty; // Clear any previous error message
+                await JSRuntime.InvokeVoidAsync("alert", "A password reset request has been sent! Please check your email.");
             }
             else
             {

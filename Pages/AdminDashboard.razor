@@ -48,30 +48,47 @@
 <div class="admin-dashboard">
     <h1 align="center">Admin Dashboard</h1>
     <div class="dashboard-grid">
+        <!-- Vouchers -->
         <div class="dashboard-item" @onclick="NavigateToManageVouchers">
+            <img src="/Assets/Voucher.png" alt="Voucher Icon" class="dashboard-icon" />
             <h3>Vouchers</h3>
             <p>Manage Vouchers</p>
         </div>
+
+        <!-- Products -->
         <div class="dashboard-item" @onclick="NavigateToManageProducts">
+            <img src="/Assets/Product.png" alt="Product Icon" class="dashboard-icon" />
             <h3>Products</h3>
             <p>Manage Products</p>
             <p>Add new Product</p>
         </div>
+
+        <!-- Orders -->
         <div class="dashboard-item" @onclick="NavigateToManageOrders">
+            <img src="/Assets/Orders.png" alt="Orders Icon" class="dashboard-icon" />
             <h3>Orders</h3>
             <p>Manage Orders</p>
         </div>
+
+        <!-- Stock -->
         <div class="dashboard-item" @onclick="NavigateToManageStock">
+            <img src="/Assets/Stock.png" alt="Stock Icon" class="dashboard-icon" />
             <h3>Stock</h3>
             <p>View Current Stock</p>
             <p>Add new Stock entry</p>
             <p>Stock Usage</p>
         </div>
+
+        <!-- Other (Events) -->
         <div class="dashboard-item" @onclick="NavigateToManageEvents">
+            <img src="/Assets/Other.png" alt="Events Icon" class="dashboard-icon" />
             <h3>Other</h3>
             <p>Manage Events</p>
         </div>
+
+        <!-- Branches -->
         <div class="dashboard-item" @onclick="NavigateToManageBranches">
+            <img src="/Assets/Branch.png" alt="Branches Icon" class="dashboard-icon" />
             <h3>Branches</h3>
             <p>Manage Branch Locations</p>
         </div>

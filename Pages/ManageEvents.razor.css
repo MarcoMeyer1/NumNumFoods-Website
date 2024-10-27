@@ -18,8 +18,9 @@ h1 {
 
 .new-event-button {
     padding: 10px 15px;
-    background-color: #d5598c;
-    color: #fff;
+    background-color: #FADADD;
+    color: black;
+    font-weight: bold;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -56,9 +57,8 @@ th, td {
 }
 
 th {
-    background-color: #f7d9e2;
-    font-weight: 600;
-    color: #333;
+    background-color: #FADADD;
+    color: black;
 }
 
 td {
@@ -71,17 +71,17 @@ tr:hover {
 
 .delete-button {
     padding: 10px 15px;
-    background-color: #ff6b6b;
-    color: #fff;
+    background-color: #FADADD;
+    color: black;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
-    text-transform: uppercase;
 }
 
     .delete-button:hover {
-        background-color: #ff3d3d;
+        background-color: #CC0000;
+        color: white;
     }
 
 /* Responsive Design */

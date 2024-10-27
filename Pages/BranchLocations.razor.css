@@ -1,7 +1,7 @@
 ﻿/* Main container for branch management */
 .branch-management {
     padding: 30px;
-    background-color: #FADADD; /* Light pink background */
+    background-color: #FAF9F6; 
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -15,8 +15,9 @@
     }
 
 .add-new-branch-button {
-    background-color: #9C114A;
-    color: white;
+    background-color: #FADADD;
+    color: black;
+    font-weight: bold;
     padding: 15px 30px;
     border-radius: 5px;
     border: none;
@@ -26,7 +27,7 @@
 }
 
     .add-new-branch-button:hover {
-        background-color: #7B0E3A;
+        background-color: lightpink;
     }
 
 /* Table styling */
@@ -46,8 +47,8 @@
     }
 
     .branch-list-table th {
-        background-color: #d5598c;
-        color: white;
+        background-color: #FADADD;
+        color: black;
         font-size: 1.2rem;
     }
 
@@ -57,8 +58,8 @@
     }
 
 .delete-button {
-    background-color: #FF4444;
-    color: white;
+    background-color: #FADADD;
+    color: black;
     padding: 10px 15px;
     border-radius: 5px;
     border: none;
@@ -68,6 +69,7 @@
 
     .delete-button:hover {
         background-color: #CC0000;
+        color: white;
     }
 
 /* Media query for responsiveness */

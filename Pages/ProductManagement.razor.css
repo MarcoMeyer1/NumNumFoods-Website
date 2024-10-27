@@ -88,6 +88,24 @@ table button {
         background-color: lightpink; /* Darker pink on hover */
     }
 
+.delete-button {
+    padding: 8px 15px;
+    background-color: #FADADD; /* Soft pink background for buttons */
+    color: black; /* Dark text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+    .delete-button:hover {
+        background-color: #CC0000;
+        color: white;
+    }
+
+
 /* Category table section */
 h2 {
     margin-top: 40px;

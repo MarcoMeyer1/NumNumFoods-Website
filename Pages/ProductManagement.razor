@@ -47,7 +47,7 @@
                     <td>@product.StockStatus</td>
                     <td>
                         <button @onclick="() => EditProduct(product.ProductId)">Edit</button>
-                        <button @onclick="() => DeleteProduct(product.ProductId)">Delete</button>
+                        <button class="delete-button" @onclick="() => DeleteProduct(product.ProductId)">Delete</button>
                     </td>
                 </tr>
             }
@@ -72,7 +72,7 @@
                     <td>@category.AgeRange</td>
                     <td>@category.ContainerSize</td>
                     <td>
-                        <button @onclick="() => DeleteCategory(category.CategoryId)">Delete</button>
+                        <button class="delete-button" @onclick="() => DeleteCategory(category.CategoryId)">Delete</button>
                     </td>
                 </tr>
             }

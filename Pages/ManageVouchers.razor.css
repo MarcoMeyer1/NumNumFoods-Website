@@ -29,7 +29,7 @@
 /* New Voucher and Active Vouchers sections with pink backgrounds */
 .new-voucher, .active-vouchers {
     padding: 20px;
-    background-color: #FADADD; /* Soft pink background */
+    background-color: #FAF9F6; /* Soft pink background */
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
 }
@@ -83,7 +83,7 @@
 
     .voucher-inputs button {
         padding: 10px 20px; /* Larger button size */
-        background-color: #D5598C; /* Pink button */
+        background-color: #FADADD; 
         color: black;
         border: none;
         border-radius: 6px;
@@ -152,7 +152,7 @@ td {
 /* Delete button styling */
 .delete-button {
     padding: 8px 16px;
-    background-color: #e90505;
+    background-color: #FADADD;
     color: black;
     border: none;
     border-radius: 6px;
@@ -162,7 +162,8 @@ td {
 }
 
     .delete-button:hover {
-        background-color: #ff0000;
+        background-color: #CC0000;
+        color: white;
     }
 
 /* Mobile adjustments */

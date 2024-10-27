@@ -1,12 +1,12 @@
 ﻿.about-section {
     position: relative;
-    background-image: url('/Assets/NumNumBackground.jpg'); /* Background image */
+    background-image: url('/Assets/NumNumBackground.jpg');
     background-size: cover;
     background-position: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    overflow: hidden;
 }
 
-    /* Darker overlay on the background */
     .about-section::before {
         content: "";
         position: absolute;
@@ -14,13 +14,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.3); /* Darker overlay with 30% opacity */
+        background-color: rgba(0, 0, 0, 0.5); /* Darker overlay */
         z-index: 1;
     }
 
 .about-container {
     position: relative;
-    z-index: 2; /* Ensure content is above the background overlay */
+    z-index: 2;
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
@@ -28,43 +28,48 @@
 }
 
 .about-title {
-    font-size: 5rem;
-    color: #333;
+    font-size: 4rem;
+    color: #FAF9F6;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .about-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     position: relative;
+    gap: 20px;
 }
 
     .about-row.reverse {
-        flex-direction: row-reverse; /* Reverse layout for alternating effect */
+        flex-direction: row-reverse;
     }
 
 .text-box {
-    background-color: rgba(241, 236, 235, 0.7); /* 70% opacity for the background only */
-    padding: 30px; /* Added more padding for spacing */
-    border-radius: 8px;
+    background-color: rgba(250, 249, 246, 0.8);
+    padding: 30px;
+    border-radius: 12px;
     width: 45%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    text-align: justify;
 }
 
     .text-box h2 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-        color: #333; /* Solid black for text */
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        color: #333;
     }
 
     .text-box p {
-        color: #555; /* Dark grey text */
+        color: #444;
         line-height: 1.6;
+        font-weight: 300;
     }
 
 .about-image {
@@ -73,19 +78,28 @@
 
     .about-image img {
         width: 100%;
-        max-height: 500px; /* Set a maximum height */
-        object-fit: cover; /* Ensures image scales properly without distortion */
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
     }
 
-/* Ensure consistent spacing and alignment of text and images */
-.about-row:nth-child(odd) .text-box {
-    order: 1;
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-in forwards;
 }
 
-.about-row:nth-child(odd) .about-image {
-    order: 2;
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Responsive Design */
@@ -93,6 +107,7 @@
     .about-row {
         flex-direction: column;
         text-align: center;
+        gap: 0;
     }
 
         .about-row.reverse {
@@ -106,6 +121,14 @@
     }
 
         .about-image img {
-            max-height: 200px; /* Adjust the height for smaller screens */
+            max-height: 250px;
         }
+
+    .about-title {
+        font-size: 3rem;
+    }
+
+    .text-box h2 {
+        font-size: 1.8rem;
+    }
 }

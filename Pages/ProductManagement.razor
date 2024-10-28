@@ -11,6 +11,7 @@
     <div class="product-inputs">
         <button @onclick="CreateNewProduct">Add New Product</button>
         <button @onclick="CreateNewCategory">Add New Category</button>
+        <button @onclick="NavigateToFeaturedProducts">Set Featured Products</button>
     </div>
 
     <h2>Product List</h2>
@@ -122,6 +123,11 @@
             var errorMessage = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Failed to fetch categories: {errorMessage}");
         }
+    }
+
+    private void NavigateToFeaturedProducts()
+    {
+        Navigation.NavigateTo("/manage-featured-products"); // Navigate to the new page
     }
 
     private void CreateNewProduct()

@@ -1,5 +1,6 @@
 ﻿@page "/"
-
+@using NumNumFoods.Models
+@inject HttpClient Http
 @inject NavigationManager Navigation
 
 <PageTitle>Home</PageTitle>
@@ -16,21 +17,28 @@
     </div>
 </section>
 
-@* Featured Products *@
+@* Featured Products Section *@
 <section class="featured-products">
     <h2>Featured Products</h2>
     <div class="product-grid">
-        @for (var i = 0; i < 3; i++)
+        @if (featuredProducts != null && featuredProducts.Any())
         {
-            <div class="product-card">
-                <img src="/Assets/Mashed_Peas.png" alt="Product Image" />
-                <h3>Mashed Peas</h3>
-                <p>Creamy mashed peas rich in vitamins and nutrients for your baby's growth.</p>
-                <div class="product-rating">
-                    <p>⭐⭐⭐⭐⭐</p>
+            @foreach (var product in featuredProducts)
+            {
+                <div class="product-card">
+                    <img src="@product.ImageUrl" alt="Product Image" />
+                    <h3>@product.Name</h3>
+                    <p>@product.Description</p>
+                    <div class="product-rating">
+                        <p>⭐⭐⭐⭐⭐</p>
+                    </div>
+                   
                 </div>
-                <button class="view-product-btn">View Product</button>
-            </div>
+            }
+        }
+        else
+        {
+            <p>No featured products available at the moment.</p>
         }
     </div>
 </section>
@@ -55,7 +63,42 @@
     </div>
 </section>
 
+
 @code {
+    private List<Product> featuredProducts;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFeaturedProducts();
+    }
+
+    private async Task LoadFeaturedProducts()
+    {
+        try
+        {
+            var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/featured");
+            if (response.IsSuccessStatusCode)
+            {
+                featuredProducts = await response.Content.ReadFromJsonAsync<List<Product>>();
+            }
+            else
+            {
+                Console.WriteLine($"Failed to load featured products: {response.StatusCode}");
+                featuredProducts = new List<Product>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadFeaturedProducts: {ex.Message}");
+            featuredProducts = new List<Product>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
     private void NavigateToAboutPage()
     {
         Navigation.NavigateTo("/about");

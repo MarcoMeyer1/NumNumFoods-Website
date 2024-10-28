@@ -1,81 +1,104 @@
-﻿@page "/admin/orders/summary/{OrderID}"
+﻿@page "/admin/orders/summary/{orderId:int}"
 @inject NavigationManager Navigation
+@inject HttpClient Http
 
 @code {
-    [Parameter] public string OrderID { get; set; }
+    [Parameter] public int orderId { get; set; }
 
-    private Order orderDetails;
+    private OrderWithCustomer order;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // Simulate data retrieval based on OrderID (use sample data for now)
-        orderDetails = orders.FirstOrDefault(o => o.OrderID == OrderID);
+        await LoadOrderDetails(orderId);
     }
 
-    // Reuse the same Order class from the main page
-    private List<Order> orders = new List<Order>
+    private async Task LoadOrderDetails(int orderId)
     {
-        new Order { OrderID = "858521", Customer = "Hannah White", Items = 3, Total = "R165",
-            OrderItems = new List<OrderItem>
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/order/admin/summary/{orderId}");
+            if (response.IsSuccessStatusCode)
             {
-                new OrderItem { Name = "Mashed Peas", Description = "A delicious side of mashed peas", Price = "R55", Quantity = 1, ImageUrl = "/assets/Mashed_Peas.png" },
-                new OrderItem { Name = "Cream Donuts", Description = "Cream-filled donuts", Price = "R55", Quantity = 2, ImageUrl = "/assets/Mashed_Peas.png" } // Assuming placeholder for now
+                order = await response.Content.ReadFromJsonAsync<OrderWithCustomer>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                Console.WriteLine($"Order with ID {orderId} not found.");
+                // Optionally, navigate to a not found page or display a message
+                Navigation.NavigateTo("/admin/orders");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to load order: {error}");
             }
         }
-    };
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in LoadOrderDetails: {ex.Message}");
+        }
+    }
 
-    public class Order
+    public class OrderWithCustomer
     {
-        public string OrderID { get; set; }
-        public string Customer { get; set; }
-        public int Items { get; set; }
-        public string Total { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; } // Customer's FullName
+        public string PhoneNumber { get; set; }  // Customer's phone number
+        public int BranchId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; } // e.g., "Pending", "Processing", "Completed", "Cancelled"
+        public DateTime OrderDate { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        // Removed PaymentMethod as it doesn't exist in your database
     }
 
     public class OrderItem
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Price { get; set; }
+        public int OrderItemId { get; set; }
+        public int OrderId { get; set; } // Foreign key to Orders table
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public string ImageUrl { get; set; } // New field for image URL
+        public decimal Price { get; set; } // Price at the time of ordering
+        public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
 
-@if (orderDetails != null)
+@if (order == null)
+{
+    <p>Loading order details...</p>
+}
+else
 {
     <div class="order-summary">
-        <h1>Order Summary for @orderDetails.OrderID</h1>
-        <h2>Customer: @orderDetails.Customer</h2>
-        <p>Total Items: @orderDetails.Items</p>
-        <p>Total Amount: @orderDetails.Total</p>
+        <h1>Order Summary for Order #@order.OrderId</h1>
+        <h2>Customer: @order.CustomerName</h2>
+        <p>Phone Number: @order.PhoneNumber</p>
+        <p>Order Date: @(order.OrderDate.ToString("dd/MM/yyyy HH:mm"))</p>
+        <p>Status: @order.Status</p>
+        <p>Total Items: @order.OrderItems.Count</p>
+        <p>Total Amount: R@(order.TotalPrice.ToString("N2"))</p>
 
         <div class="order-items">
-            @foreach (var item in orderDetails.OrderItems)
+            @foreach (var item in order.OrderItems)
             {
                 <div class="order-item">
                     <div class="item-details">
-                        <h3>@item.Name</h3>
-                        <p>@item.Description</p>
+                        <h3>@item.ProductName</h3>
                         <p><strong>Quantity:</strong> @item.Quantity</p>
-                        <p><strong>Price:</strong> R@item.Price</p>
-                        <p><strong>Total:</strong> R@((decimal.Parse(item.Price.TrimStart('R')) * item.Quantity).ToString("F2"))</p>
+                        <p><strong>Price:</strong> R@(item.Price.ToString("N2"))</p>
+                        <p><strong>Total:</strong> R@((item.Price * item.Quantity).ToString("N2"))</p>
                     </div>
 
-                    <!-- Image for each order item -->
                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                     {
                         <div class="item-image">
-                            <img src="@item.ImageUrl" alt="@item.Name" />
+                            <img src="@item.ImageUrl" alt="@item.ProductName" />
                         </div>
                     }
                 </div>
             }
         </div>
     </div>
-}
-else
-{
-    <p>Order not found.</p>
 }

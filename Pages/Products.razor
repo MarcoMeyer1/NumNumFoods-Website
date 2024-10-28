@@ -1,6 +1,7 @@
 ﻿@page "/products"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 @using NumNumFoods.Models
 @using NumNumFoods.Services
 @inject UserState UserState
@@ -152,6 +153,9 @@
         };
 
         _ = AddToCartAsync(cartItem);
+        NavigationManager.NavigateTo("/cart");
+        JSRuntime.InvokeVoidAsync("alert", "Product added to cart.");
+
     }
 
     private async Task AddToCartAsync(CartItem cartItem)

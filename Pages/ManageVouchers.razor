@@ -8,12 +8,15 @@
     <h1>Voucher Management</h1>
 
     <div class="new-voucher">
-        <h2>New voucher</h2>
+        <h2>New Voucher</h2>
         <div class="voucher-inputs">
-            <input type="text" placeholder="Voucher Code" @bind="VoucherCode" />
+            <input type="text" placeholder="Voucher Code" @bind="VoucherCode" class="uppercase-input" @oninput="(e) => VoucherCode = VoucherCode.ToUpper()" />
             <input type="date" @bind="ExpiryDate" />
-            <input type="number" placeholder="Max uses" @bind="MaxUses" />
-            <input type="number" placeholder="% Discount" @bind="DiscountPercent" />
+            <input type="number" placeholder="Max Uses" @bind="MaxUses" />
+            <div class="input-wrapper">
+                <input type="number" placeholder="Discount" @bind="DiscountPercent" />
+                <span class="percent-symbol">%</span>
+            </div>
             <button @onclick="CreateVoucher">Create Voucher</button>
         </div>
     </div>
@@ -25,7 +28,7 @@
                 <tr>
                     <th>Code</th>
                     <th>Expiry Date</th>
-                    <th>Uses left</th>
+                    <th>Uses Left</th>
                     <th>Discount</th>
                     <th>Status</th>
                     <th>Actions</th>

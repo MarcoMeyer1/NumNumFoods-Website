@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @using NumNumFoods.Services
 @inject UserState UserState
+@inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 @using System.Net.Http.Json
 
@@ -121,6 +122,7 @@
             var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/paymentmethod/delete/{cardId}/user/{UserState.UserId}");
             if (response.IsSuccessStatusCode)
             {
+                await JSRuntime.InvokeVoidAsync("alert", "Payment method removed successfully.");
                 Console.WriteLine("Payment method removed successfully.");
                 await LoadPaymentMethods();
             }
@@ -185,6 +187,7 @@
             var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/billingaddress/delete/{addressId}/user/{UserState.UserId}");
             if (response.IsSuccessStatusCode)
             {
+                await JSRuntime.InvokeVoidAsync("alert", "Billing address removed successfully.");
                 Console.WriteLine("Billing address removed successfully.");
                 await LoadBillingAddresses();
             }

@@ -6,68 +6,70 @@
 @using NumNumFoods.Services
 @inject UserState UserState
 
-<h1>Checkout</h1>
+<div class="checkout-page">
+    <div class="checkout-header">
+        <h1>Checkout</h1>
+    </div>
 
-@if (cartItems == null)
-{
-    <p>Loading cart items...</p>
-}
-else if (!cartItems.Any())
-{
-    <p>Your cart is empty.</p>
-}
-else
-{
-    <div class="checkout-container">
-        <h2>Order Summary</h2>
-        <table class="order-summary-table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Image</th>
-                    <th>Quantity</th>
-                    <th>Price Each</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in cartItems)
-                {
-                    <tr>
-                        <td>@item.Product.Name</td>
-                        <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" /></td>
-                        <td>@item.Quantity</td>
-                        <td>@($"R{item.Price:0.00}")</td>
-                        <td>@($"R{item.Price * item.Quantity:0.00}")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    @if (cartItems == null)
+    {
+        <p class="loading-message">Loading cart items...</p>
+    }
+    else if (!cartItems.Any())
+    {
+        <p class="empty-cart-message">Your cart is empty.</p>
+    }
+    else
+    {
+        <div class="checkout-container">
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+                <table class="order-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th>Price Each</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in cartItems)
+                        {
+                            <tr>
+                                <td>@item.Product.Name</td>
+                                <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" /></td>
+                                <td>@item.Quantity</td>
+                                <td>@($"R{item.Price:0.00}")</td>
+                                <td>@($"R{item.Price * item.Quantity:0.00}")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="order-total-container">
             <div class="order-total">
                 <h3>Total Amount: @($"R{totalAmount:0.00}")</h3>
             </div>
-        </div>
 
-        <div class="checkout-actions-container">
-            <div class="select-branch-container">
-                <label for="branch">Select Branch:</label>
-                <select @bind="selectedBranchId" class="form-control" id="branch">
-                    @foreach (var branch in branches)
-                    {
-                        <option value="@branch.BranchId">@branch.Name</option>
-                    }
-                    }
-                </select>
-            </div>
+            <div class="checkout-actions">
+                <div class="select-branch">
+                    <label for="branch">Select Branch:</label>
+                    <select @bind="selectedBranchId" class="form-control" id="branch">
+                        @foreach (var branch in branches)
+                        {
+                            <option value="@branch.BranchId">@branch.Name</option>
+                        }
+                    </select>
+                </div>
 
-            <div class="confirm-order-container">
-                <button class="btn-pink confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
+                <button class="confirm-order-btn" @onclick="ConfirmOrder">Confirm Order</button>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
+
 
 @code {
     private List<CartItem> cartItems;

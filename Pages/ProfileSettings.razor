@@ -1,6 +1,7 @@
 ﻿@page "/profile-settings"
 @inject NavigationManager Navigation
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 @using NumNumFoods.Services
 @inject UserState UserState
 
@@ -76,9 +77,11 @@
             var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/profile/update/{UserState.UserId}", user);
             if (response.IsSuccessStatusCode)
             {
+                await JSRuntime.InvokeVoidAsync("alert", "Profile updated successfully.");
                 Console.WriteLine("[ConfirmChanges] Profile updated successfully.");
                 // Update UserState if necessary
                 UserState._userFullName = user.FullName;
+                Navigation.NavigateTo("/profile");
             }
             else
             {
@@ -93,6 +96,8 @@
             ErrorMessage = $"Error updating profile: {ex.Message}";
         }
     }
+
+
 
     public class User
     {

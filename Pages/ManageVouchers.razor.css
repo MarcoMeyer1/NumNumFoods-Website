@@ -166,6 +166,36 @@ td {
         color: white;
     }
 
+.uppercase-input {
+    text-transform: uppercase;
+}
+
+.voucher-inputs .input-wrapper {
+    position: relative;
+    width: 150px; /* Set max-width for consistent alignment */
+    max-width: 100%; /* Responsive to screen size */
+}
+
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+    .input-wrapper input {
+        width: 100%; /* Ensures input takes full width */
+        padding-right: 30px; /* Space for percentage symbol */
+    }
+
+.percent-symbol {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #555;
+    pointer-events: none;
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .voucher-management {
@@ -175,6 +205,10 @@ td {
     .voucher-inputs {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .input-wrapper {
+        width: 100%; /* Full-width for smaller screens */
     }
 
     table {

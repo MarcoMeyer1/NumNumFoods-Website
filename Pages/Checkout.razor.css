@@ -1,118 +1,141 @@
-﻿.checkout-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    max-width: 100%;
-    margin: 0 auto;
+﻿.checkout-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 2rem;
 }
 
-.order-summary-table {
-    width: 100%; /* Restore the original width */
-    border-collapse: collapse;
+.checkout-header {
+    display: flex;
+    justify-content: flex-start;
     margin-bottom: 1.5rem;
 }
 
-    .order-summary-table th,
-    .order-summary-table td {
+    .checkout-header h1 {
+        font-size: 2rem;
+        color: black;
+        margin: 0;
+    }
+
+/* Container for the order summary and checkout details */
+.checkout-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header and messages */
+h2 {
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 1rem 0;
+}
+
+.loading-message, .empty-cart-message {
+    color: #888;
+    font-size: 1.2rem;
+    margin: 2rem 0;
+}
+
+/* Table styling */
+.order-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .order-summary-table th, .order-summary-table td {
         padding: 1rem;
         border: 1px solid #ddd;
-        text-align: center; /* Keep text center-aligned */
+        text-align: center;
+    }
+
+    .order-summary-table th {
+        background-color: #f1f1f1;
+        color: #666;
+        font-weight: bold;
     }
 
 .product-image {
     width: 80px;
     height: 80px;
+    border-radius: 8px;
     object-fit: cover;
-    border-radius: 6px;
 }
 
+/* Order total and actions styling */
 .order-total {
-    font-size: 1.5rem;
+    text-align: right;
+    font-size: 1.25rem;
     font-weight: bold;
     padding: 1rem;
-    text-align: right;
-    border-top: 2px solid #ddd; /* Separate total row */
-    margin-bottom: 1.5rem; /* Add spacing for the confirm button */
-}
-
-/* Shift Confirm Order button below the total amount */
-.confirm-order-container {
-    text-align: right; /* Align the confirm button with the total */
-    margin-bottom: 2rem; /* Add spacing below */
-}
-
-.btn-pink {
-    background-color: #d5598c;
-    color: #fff;
-    border: none;
-    padding: 0.75rem;
-    cursor: pointer;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-    width: 200px; /* Smaller button */
-}
-
-    .btn-pink:hover {
-        background-color: lightpink;
-    }
-
-/* Move Select Branch dropdown below the table */
-.select-branch-container {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-}
-
-select.form-control {
-    padding: 0.75rem;
-    width: 50%; /* Reduce the width */
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    margin: 1rem 0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 
 .checkout-actions {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border-radius: 6px;
+    gap: 1.5rem;
 }
+
+.select-branch {
+    text-align: left;
+}
+
+    .select-branch label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+select.form-control {
+    padding: 0.75rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Button styling */
+.confirm-order-btn {
+    background-color: #d5598c;
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+    .confirm-order-btn:hover {
+        background-color: #c0487e;
+    }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .checkout-container {
-        width: 100%;
+        padding: 1rem;
     }
 
-    .order-summary-table th,
-    .order-summary-table td {
+    .order-summary-table th, .order-summary-table td {
         padding: 0.5rem;
     }
 
-    .btn-pink {
-        width: 100%; /* Full width button on mobile */
-    }
-
-    select.form-control {
-        width: 100%; /* Full width dropdown on mobile */
-    }
-}
-
-/* Navbar for smaller screens */
-@media (max-width: 768px) {
-    .navbar-nav .nav-link {
-        font-size: 1.2rem;
-        padding: 0.75rem 1rem;
-        text-align: center;
-    }
-
-    .navbar-nav img.nav-icon {
-        width: 30px;
-        height: 30px;
+    .confirm-order-btn {
+        width: 100%;
     }
 }

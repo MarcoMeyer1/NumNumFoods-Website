@@ -11,8 +11,15 @@
 <h1 align="center">Our Products</h1>
 
 <section class="product-page">
+
+   
+
     <div class="filters-and-search">
-        <input type="text" placeholder="Search for products..." class="search-bar" @bind="searchTerm" @bind:event="oninput" />
+        <input type="text"
+               placeholder="Search for products..."
+               class="search-bar"
+               @bind="searchTerm"
+               @bind:event="oninput" />
         <select class="sort-dropdown" @onchange="SortProducts">
             <option value="default">Sort</option>
             <option value="price-asc">Price - Low to High</option>
@@ -20,56 +27,71 @@
         </select>
     </div>
 
-    <div class="filter-tags">
-        @foreach (var tag in filterTags)
+    <div class="category-buttons">
+        <button class="filter-btn" @onclick="() => SelectCategory(null)">All</button> <!-- Show all products -->
+        @foreach (var category in uniqueCategories)
         {
-            <button class="filter-btn" @onclick="() => ApplyFilter(tag)">@tag</button>
+            <button class="filter-btn" @onclick="() => SelectCategory(category)">@category</button>
         }
     </div>
+
+
+
+
+ 
+
 
     @if (groupedProducts != null && groupedProducts.Any())
     {
         @foreach (var categoryGroup in groupedProducts)
         {
-            <h2>@(categoryGroup.Key ?? "Uncategorized")</h2>
-            <div class="product-grid">
-                @foreach (var product in categoryGroup)
-                {
-                    <div class="product-card">
-                        <img src="@product.ImageUrl" alt="@product.Name" />
-                        <h3>@product.Name</h3>
-                        <p>@product.Description</p>
-                        <div class="product-rating">
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
-                            }
+            if (selectedCategory == null || selectedCategory == categoryGroup.Key)
+            {
+                <h2 id="category-@SanitizeCategoryName(categoryGroup.Key)">@(categoryGroup.Key ?? "Uncategorized")</h2>
+                <div class="product-grid">
+                    @foreach (var product in categoryGroup)
+                    {
+                        <div class="product-card">
+                            <img src="@product.ImageUrl" alt="@product.Name" />
+                            <h3>@product.Name</h3>
+                            <p>@product.Description</p>
+                            <div class="product-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
+                                }
+                            </div>
+                            <p>Price: @product.Price.ToString("C")</p>
+                            <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
+                            <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
                         </div>
-                        <p>Price: @product.Price.ToString("C")</p>
-                        <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
-                        <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         }
     }
     else
     {
         <p>Loading products...</p>
     }
+
 </section>
 
 @code {
+    private string selectedCategory { get; set; } = null;
+
     private string searchTerm { get; set; } = "";
     private string selectedSort { get; set; } = "default";
     private List<string> filterTags = new() { "For Babies", "6+ Months", "7+ Months", "Nutritious", "Smooth Texture" };
     private List<Product> allProducts = new();
     private IEnumerable<IGrouping<string, Product>> groupedProducts = Enumerable.Empty<IGrouping<string, Product>>();
     private List<Product> filteredProducts = new();
+    private List<string> uniqueCategories = new();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadProducts();
+        ExtractUniqueCategories();
         FilterAndGroupProducts();
     }
 
@@ -99,10 +121,38 @@
         }
     }
 
+    private void SelectCategory(string category)
+    {
+        selectedCategory = category;
+    }
+
+
+    private void ExtractUniqueCategories()
+    {
+        uniqueCategories = allProducts
+            .Select(p => p.CategoryName ?? "Uncategorized")
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+
+        Console.WriteLine("Unique Categories:");
+        foreach (var category in uniqueCategories)
+        {
+            Console.WriteLine($"- {category}");
+        }
+    }
+
+
     private void FilterAndGroupProducts()
     {
         // Apply search filter
-        filteredProducts = allProducts.Where(p => string.IsNullOrEmpty(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        filteredProducts = allProducts
+            .Where(p => string.IsNullOrEmpty(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        // Apply additional filters if needed (e.g., tags)
+        // Example: Filter by selected tags
+        // This part can be expanded based on how you want to handle multiple filters
 
         // Apply sorting
         if (selectedSort == "price-asc")
@@ -114,8 +164,6 @@
             filteredProducts = filteredProducts.OrderByDescending(p => p.Price).ToList();
         }
 
-        // Apply additional filters if needed (e.g., tags)
-
         // Group products by category name, handling null values
         groupedProducts = filteredProducts.GroupBy(p => p.CategoryName ?? "Uncategorized");
     }
@@ -123,17 +171,19 @@
     private void ApplyFilter(string filterTag)
     {
         // Implement filtering logic based on filterTag
-        filteredProducts = allProducts.Where(p => p.Description != null && p.Description.Contains(filterTag, StringComparison.OrdinalIgnoreCase)).ToList();
+        filteredProducts = allProducts
+            .Where(p => p.Description != null && p.Description.Contains(filterTag, StringComparison.OrdinalIgnoreCase))
+            .ToList();
         FilterAndGroupProducts();
     }
 
     private void SortProducts(ChangeEventArgs e)
     {
-        selectedSort = e.Value.ToString();
+        selectedSort = e.Value?.ToString() ?? "default";
         FilterAndGroupProducts();
     }
 
-    private void AddToCart(Product product)
+    private async Task AddToCart(Product product)
     {
         int userId = UserState.UserId;
 
@@ -145,17 +195,16 @@
         }
 
         var cartItem = new CartItem
-        {
-            UserId = userId,
-            ProductId = product.ProductId,
-            Quantity = 1,
-            Price = product.Price
-        };
+            {
+                UserId = userId,
+                ProductId = product.ProductId,
+                Quantity = 1,
+                Price = product.Price
+            };
 
-        _ = AddToCartAsync(cartItem);
+        await AddToCartAsync(cartItem);
         NavigationManager.NavigateTo("/cart");
-        JSRuntime.InvokeVoidAsync("alert", "Product added to cart.");
-
+        await JSRuntime.InvokeVoidAsync("alert", "Product added to cart.");
     }
 
     private async Task AddToCartAsync(CartItem cartItem)
@@ -184,6 +233,17 @@
         NavigationManager.NavigateTo($"/product-details/{productId}");
     }
 
+    private string SanitizeCategoryName(string categoryName)
+    {
+        var sanitizedCategory = categoryName.Replace(" ", "-").Replace("&", "and").Replace("'", "").ToLower();
+        Console.WriteLine($"Sanitized '{categoryName}' to '{sanitizedCategory}'");
+        return sanitizedCategory;
+    }
+
+
+
+   
+
     public class Product
     {
         public int ProductId { get; set; }
@@ -192,7 +252,7 @@
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int Rating { get; set; } // Rating from 1 to 5
-        public string CategoryName { get; set; } // Add this property to hold the category name
+        public string CategoryName { get; set; } // Holds the category name
     }
 
     public class CartItem

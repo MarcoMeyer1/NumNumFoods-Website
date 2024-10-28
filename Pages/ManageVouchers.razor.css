@@ -166,6 +166,21 @@ td {
         color: white;
     }
 
+.uppercase-input {
+    text-transform: uppercase;
+}
+
+.discount-input::after {
+    content: "%";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #555;
+    pointer-events: none;
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .voucher-management {

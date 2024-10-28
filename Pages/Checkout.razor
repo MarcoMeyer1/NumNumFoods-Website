@@ -37,8 +37,8 @@ else
                         <td>@item.Product.Name</td>
                         <td><img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="product-image" /></td>
                         <td>@item.Quantity</td>
-                        <td>@item.Price.ToString("C")</td>
-                        <td>@(item.Price * item.Quantity).ToString("C")</td>
+                        <td>@($"R{item.Price:0.00}")</td>
+                        <td>@($"R{item.Price * item.Quantity:0.00}")</td>
                     </tr>
                 }
             </tbody>
@@ -46,7 +46,7 @@ else
 
         <div class="order-total-container">
             <div class="order-total">
-                <h3>Total Amount: @totalAmount.ToString("C")</h3>
+                <h3>Total Amount: @($"R{totalAmount:0.00}")</h3>
             </div>
         </div>
 

@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using NumNumFoods.Models
+@inject IJSRuntime JSRuntime
 
 <div class="voucher-management">
     <h1>Voucher Management</h1>
@@ -49,7 +50,7 @@
                             }
                         </td>
                         <td>
-                            <button class="delete-button">Delete</button>
+                            <button class="delete-button" @onclick="() => ConfirmDelete(voucher.VoucherId)">Delete</button>
                         </td>
                     </tr>
                 }
@@ -98,7 +99,22 @@
 
     private async Task ConfirmDelete(int voucherId)
     {
-        
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this voucher?");
+
+        if (confirmed)
+        {
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/voucher/delete/{voucherId}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Voucher deleted successfully.");
+                await FetchActiveVouchers(); // Refresh the list
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error deleting voucher: {errorMessage}");
+            }
+        }
     }
 
     private async Task FetchActiveVouchers()

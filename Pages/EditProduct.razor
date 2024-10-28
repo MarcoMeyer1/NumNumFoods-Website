@@ -154,8 +154,19 @@ else
                 product.ImageUrl = newImageUrl;
             }
 
+            // Retrieve the CategoryName if CategoryId is selected
+            string categoryName = null;
+            if (product.CategoryId.HasValue)
+            {
+                categoryName = await FetchCategoryNameById(product.CategoryId.Value);
+            }
+
+            // Optionally, use the category name in a request or log
+            Console.WriteLine($"Updating product in category: {categoryName}");
+
             // Update the product
-            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{ProductId}", product);
+            var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/product/update/{ProductId}", product);
+
             if (response.IsSuccessStatusCode)
             {
                 Navigation.NavigateTo("/manage-products");
@@ -171,6 +182,18 @@ else
             Console.WriteLine($"Exception in SubmitUpdatedProduct: {ex.Message}");
         }
     }
+
+    private async Task<string> FetchCategoryNameById(int categoryId)
+    {
+        var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/{categoryId}");
+        if (response.IsSuccessStatusCode)
+        {
+            var category = await response.Content.ReadFromJsonAsync<ProductCategory>();
+            return category?.Name;
+        }
+        return null;
+    }
+
 
     private async Task<string> UploadFile(IBrowserFile file)
     {

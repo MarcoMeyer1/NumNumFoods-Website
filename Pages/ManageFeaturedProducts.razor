@@ -1,0 +1,96 @@
+﻿@page "/manage-featured-products"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@using Models
+@inject NavigationManager Navigation
+
+<div class="featured-products-management">
+    <h1>Manage Featured Products</h1>
+
+    <p>Select up to 3 products to feature:</p>
+
+    <div>
+        @if (Products == null)
+        {
+            <p>Loading products...</p>
+        }
+        else if (!Products.Any())
+        {
+            <p>No products available.</p>
+        }
+        else
+        {
+            @foreach (var product in Products)
+            {
+                <div>
+                    <input type="checkbox" @onchange="(e) => ToggleFeaturedProduct(e, product.ProductId)"
+                           checked="@FeaturedProductIds.Contains(product.ProductId)" /> @product.Name
+                </div>
+            }
+            <button @onclick="SaveFeaturedProducts">Save Featured Products</button>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Product> Products { get; set; } = new List<Product>();
+    private List<int> FeaturedProductIds { get; set; } = new List<int>();
+    private int maxFeaturedProducts = 3;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchProducts();
+        await FetchFeaturedProducts();
+    }
+
+    private async Task FetchProducts()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/getAll");
+        if (response.IsSuccessStatusCode)
+        {
+            Products = await response.Content.ReadFromJsonAsync<List<Product>>();
+        }
+    }
+
+    private async Task FetchFeaturedProducts()
+    {
+        var response = await Http.GetAsync("https://numnumfoods-api.azurewebsites.net/api/product/featured");
+        if (response.IsSuccessStatusCode)
+        {
+            var featuredProducts = await response.Content.ReadFromJsonAsync<List<Product>>();
+            FeaturedProductIds = featuredProducts.Select(p => p.ProductId).ToList();
+        }
+    }
+
+    private void ToggleFeaturedProduct(ChangeEventArgs e, int productId)
+    {
+        if ((bool)e.Value)
+        {
+            if (FeaturedProductIds.Count >= maxFeaturedProducts)
+            {
+                JSRuntime.InvokeVoidAsync("alert", $"Only {maxFeaturedProducts} products can be featured at a time.");
+                return;
+            }
+            FeaturedProductIds.Add(productId);
+        }
+        else
+        {
+            FeaturedProductIds.Remove(productId);
+        }
+    }
+
+    private async Task SaveFeaturedProducts()
+    {
+        if (FeaturedProductIds.Count > maxFeaturedProducts)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"You can only select up to {maxFeaturedProducts} featured products.");
+            return;
+        }
+
+        var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/product/setFeatured", FeaturedProductIds);
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/manage-products");
+        }
+    }
+}

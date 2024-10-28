@@ -1,6 +1,7 @@
 ﻿@page "/new-address"
 @inject NavigationManager Navigation
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 @using Services
 @inject UserState UserState
 
@@ -86,6 +87,7 @@
             var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/billingaddress/add", billingAddress);
             if (response.IsSuccessStatusCode)
             {
+                await JSRuntime.InvokeVoidAsync("alert", "Billing address added successfully.");
                 Console.WriteLine("Billing address added successfully.");
                 Navigation.NavigateTo("/profile/billing-information");
             }

@@ -60,6 +60,9 @@
             if (response.IsSuccessStatusCode)
             {
                 orders = await response.Content.ReadFromJsonAsync<List<Order>>();
+
+                // Sort orders by most recent date
+                orders = orders.OrderByDescending(o => o.OrderDate).ToList();
             }
             else
             {

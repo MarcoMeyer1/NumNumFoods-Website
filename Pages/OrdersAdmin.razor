@@ -116,7 +116,6 @@
         }
     }
 
-    // Apply status and search filters
     private void ApplyFilters()
     {
         if (orders == null)
@@ -125,11 +124,13 @@
             return;
         }
 
+        // Sort by OrderDate in descending order (most recent first)
         filteredOrders = orders
             .Where(o => (selectedStatus == "All" || o.Status == selectedStatus) &&
                         (string.IsNullOrEmpty(searchTerm) ||
                          o.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                          o.OrderId.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .OrderByDescending(o => o.OrderDate) // Sort by date descending
             .ToList();
     }
 

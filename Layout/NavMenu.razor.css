@@ -1,6 +1,6 @@
 .navbar {
     background-color: #D5598C;
-    height: 4.5rem;
+    height: 5rem;
     display: flex;
     align-items: center;
 }
@@ -20,6 +20,13 @@
 .navbar-brand {
     font-size: 1.6rem;
     color: white;
+    height: 55px;
+}
+
+.Logos {
+    height: 60px;
+    margin-top: -8px;
+
 }
 
 .navbar-nav {
@@ -57,7 +64,8 @@
     width: 30px;
     height: 30px;
     filter: invert(1) !important;
-    margin-left: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
     vertical-align: middle;
 }
 

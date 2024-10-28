@@ -44,6 +44,7 @@ h1 {
 .add-stock-button {
     padding: 12px 20px; /* Larger button */
     background-color: #FADADD;
+    margin-right: 40px;
     color: black;
     font-weight: bold;
     border: none;

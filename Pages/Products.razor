@@ -12,8 +12,6 @@
 
 <section class="product-page">
 
-   
-
     <div class="filters-and-search">
         <input type="text"
                placeholder="Search for products..."
@@ -35,12 +33,6 @@
         }
     </div>
 
-
-
-
- 
-
-
     @if (groupedProducts != null && groupedProducts.Any())
     {
         @foreach (var categoryGroup in groupedProducts)
@@ -61,7 +53,7 @@
                                     <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
                                 }
                             </div>
-                            <p>Price: @product.Price.ToString("C")</p>
+                            <p>Price: R @product.Price.ToString("N2")</p> <!-- Updated currency display -->
                             <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
                             <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
                         </div>
@@ -103,7 +95,6 @@
             if (response.IsSuccessStatusCode)
             {
                 allProducts = await response.Content.ReadFromJsonAsync<List<Product>>();
-                // Initialize ratings (if you have ratings in the database, you can remove this)
                 foreach (var product in allProducts)
                 {
                     product.Rating = 0; // Default rating
@@ -126,7 +117,6 @@
         selectedCategory = category;
     }
 
-
     private void ExtractUniqueCategories()
     {
         uniqueCategories = allProducts
@@ -134,32 +124,21 @@
             .Distinct()
             .OrderBy(c => c)
             .ToList();
-
-        Console.WriteLine("Unique Categories:");
-        foreach (var category in uniqueCategories)
-        {
-            Console.WriteLine($"- {category}");
-        }
     }
 
     private void OnSearchChanged(string value)
     {
         searchTerm = value;
-        FilterAndGroupProducts(); // Update the filtered list every time search term changes
+        FilterAndGroupProducts();
     }
 
     private void FilterAndGroupProducts()
     {
-        // Apply search filter
         filteredProducts = allProducts
             .Where(p => string.IsNullOrEmpty(searchTerm) ||
                         p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        // Apply additional filters if needed (e.g., tags)
-        // This part can be expanded based on how you want to handle multiple filters
-
-        // Apply sorting
         if (selectedSort == "price-asc")
         {
             filteredProducts = filteredProducts.OrderBy(p => p.Price).ToList();
@@ -169,17 +148,7 @@
             filteredProducts = filteredProducts.OrderByDescending(p => p.Price).ToList();
         }
 
-        // Group products by category name, handling null values
         groupedProducts = filteredProducts.GroupBy(p => p.CategoryName ?? "Uncategorized");
-    }
-
-    private void ApplyFilter(string filterTag)
-    {
-        // Implement filtering logic based on filterTag
-        filteredProducts = allProducts
-            .Where(p => p.Description != null && p.Description.Contains(filterTag, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        FilterAndGroupProducts();
     }
 
     private void SortProducts(ChangeEventArgs e)
@@ -194,7 +163,6 @@
 
         if (userId == 0)
         {
-            // User is not logged in; redirect to login page or show a message
             NavigationManager.NavigateTo("/login");
             return;
         }
@@ -241,13 +209,8 @@
     private string SanitizeCategoryName(string categoryName)
     {
         var sanitizedCategory = categoryName.Replace(" ", "-").Replace("&", "and").Replace("'", "").ToLower();
-        Console.WriteLine($"Sanitized '{categoryName}' to '{sanitizedCategory}'");
         return sanitizedCategory;
     }
-
-
-
-   
 
     public class Product
     {
@@ -256,14 +219,14 @@
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
-        public int Rating { get; set; } // Rating from 1 to 5
-        public string CategoryName { get; set; } // Holds the category name
+        public int Rating { get; set; }
+        public string CategoryName { get; set; }
     }
 
     public class CartItem
     {
-        public int UserId { get; set; } // User ID
-        public int ProductId { get; set; } // Product ID
+        public int UserId { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
     }

@@ -110,9 +110,18 @@
             }
             else
             {
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                ErrorMessage = $"Login failed: {errorResponse}";
-                Console.WriteLine($"Login failed: {errorResponse}"); // Debugging
+                // Custom error message for invalid login attempt
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    ErrorMessage = "Incorrect Email or Password. Please try again and ensure Caps Lock is not enabled.";
+                }
+                else
+                {
+                    // General error message if it's another kind of failure
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Login failed: {errorResponse}"); // Debugging
+                    ErrorMessage = "An unexpected error occurred. Please try again.";
+                }
             }
         }
         catch (Exception ex)
@@ -121,6 +130,7 @@
             Console.WriteLine($"Exception in LoginUser: {ex.Message}"); // Debugging
         }
     }
+
 
     // New method for sending forgot password email
     private async Task SendForgotPasswordEmail()

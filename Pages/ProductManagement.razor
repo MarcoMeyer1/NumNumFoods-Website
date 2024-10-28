@@ -143,9 +143,11 @@
     private async Task DeleteProduct(int id)
     {
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the product with ID {id}?");
+
         if (confirmed)
         {
-            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/product/{id}");
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/product/delete/{id}");
+
             if (response.IsSuccessStatusCode)
             {
                 await FetchProducts();
@@ -154,16 +156,23 @@
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Failed to delete product: {errorMessage}");
+
+                // Display the error message to the user
+                errorMessage = errorMessage.Replace("\"", ""); // Remove extra quotes if needed
+                await JSRuntime.InvokeVoidAsync("alert", errorMessage);
             }
         }
     }
 
+
     private async Task DeleteCategory(int id)
     {
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category with ID {id}?");
+
         if (confirmed)
         {
-            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/{id}");
+            var response = await Http.DeleteAsync($"https://numnumfoods-api.azurewebsites.net/api/productcategory/delete/{id}");
+
             if (response.IsSuccessStatusCode)
             {
                 await FetchCategories();
@@ -172,9 +181,14 @@
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Failed to delete category: {errorMessage}");
+
+                // Display the error message to the user
+                errorMessage = errorMessage.Replace("\"", ""); // Remove extra quotes if needed
+                await JSRuntime.InvokeVoidAsync("alert", errorMessage);
             }
         }
     }
+
 
   
 }

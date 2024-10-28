@@ -18,8 +18,8 @@
         <input type="text"
                placeholder="Search for products..."
                class="search-bar"
-               @bind="searchTerm"
-               @bind:event="oninput" />
+               @oninput="e => OnSearchChanged(e.Value.ToString())" />
+
         <select class="sort-dropdown" @onchange="SortProducts">
             <option value="default">Sort</option>
             <option value="price-asc">Price - Low to High</option>
@@ -142,16 +142,21 @@
         }
     }
 
+    private void OnSearchChanged(string value)
+    {
+        searchTerm = value;
+        FilterAndGroupProducts(); // Update the filtered list every time search term changes
+    }
 
     private void FilterAndGroupProducts()
     {
         // Apply search filter
         filteredProducts = allProducts
-            .Where(p => string.IsNullOrEmpty(searchTerm) || p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .Where(p => string.IsNullOrEmpty(searchTerm) ||
+                        p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         // Apply additional filters if needed (e.g., tags)
-        // Example: Filter by selected tags
         // This part can be expanded based on how you want to handle multiple filters
 
         // Apply sorting

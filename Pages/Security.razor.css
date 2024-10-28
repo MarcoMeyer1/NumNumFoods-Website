@@ -2,64 +2,64 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px; /* Increased padding */
+    padding: 40px;
     text-align: center;
 }
 
 .security-title {
-    font-size: 4rem; /* Larger title */
-    font-weight: bold; /* Bold text */
-    margin-bottom: 50px; /* Extra space below the title */
+    font-size: 5rem; /* Adjusted title size for large screens */
+    font-weight: bold;
+    margin-bottom: 50px;
 }
 
 .security-settings {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Align items to the top */
-    margin-bottom: 60px; /* Increased space below the form section */
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 60px;
 }
 
 .left-section, .right-section {
-    width: 45%; /* Keep even widths */
+    width: 45%;
 }
 
 .checkbox-section {
     display: flex;
     align-items: center;
-    margin-bottom: 30px; /* Extra space below the checkbox */
+    margin-bottom: 30px;
 }
 
 .checkbox-input {
-    width: 35px; /* Larger checkbox */
+    width: 35px;
     height: 35px;
-    margin-right: 15px; /* Increased space between checkbox and label */
+    margin-right: 15px;
 }
 
 .checkbox-section label {
-    font-size: 1.8rem; /* Bigger and bolder */
+    font-size: 1.6rem;
     font-weight: bold;
 }
 
 .email-section label, .right-section label {
     display: block;
-    margin-bottom: 15px; /* Increased space below labels */
-    font-size: 1.6rem; /* Larger labels */
-    font-weight: bold; /* Bold labels */
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    font-weight: bold;
     text-align: left;
 }
 
 .input-field {
     width: 100%;
-    padding: 20px; /* Larger input padding */
-    font-size: 1.6rem; /* Larger font size for inputs */
-    margin-bottom: 25px; /* More space between fields */
-    border: 2px solid #ccc; /* Thicker border */
-    border-radius: 8px; /* Slightly larger radius */
+    padding: 16px;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
 }
 
 .change-password-link {
     display: block;
-    font-size: 1.4rem; /* Bigger font size for link */
+    font-size: 1.2rem;
     color: #d5598c;
     text-decoration: underline;
     margin-top: -10px;
@@ -71,23 +71,69 @@
         color: #9c114a;
     }
 
-/* Privacy Policy Section */
 .privacy-policy h2 {
-    font-size: 2.5rem; /* Larger privacy policy heading */
-    font-weight: bold; /* Bold heading */
-    margin-bottom: 30px; /* Increased space below the heading */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
 
 .policy-box {
     background-color: #f5f5f5;
-    padding: 30px; /* Increased padding */
-    border: 2px solid #ccc; /* Thicker border */
-    border-radius: 8px; /* Larger border radius */
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
     text-align: left;
 }
 
     .policy-box p {
         margin: 0;
-        font-size: 1.4rem; /* Larger text for privacy policy */
+        font-size: 1.2rem;
         line-height: 1.8;
     }
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .security-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .security-settings {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .left-section, .right-section {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .checkbox-section label {
+        font-size: 1.4rem;
+    }
+
+    .email-section label, .right-section label {
+        font-size: 1.2rem;
+    }
+
+    .input-field {
+        padding: 14px;
+        font-size: 1.2rem;
+    }
+
+    .change-password-link {
+        font-size: 1rem;
+    }
+
+    .privacy-policy h2 {
+        font-size: 1.8rem;
+    }
+
+    .policy-box {
+        padding: 16px;
+    }
+
+        .policy-box p {
+            font-size: 1rem;
+        }
+}

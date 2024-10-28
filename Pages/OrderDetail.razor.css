@@ -90,3 +90,59 @@
     .log-return-button:hover {
         background-color: #9c114a;
     }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .order-detail-page {
+        padding: 20px; /* Reduce padding for mobile */
+    }
+
+    .order-detail-title {
+        font-size: 2rem; /* Smaller title on mobile */
+    }
+
+    .order-detail-meta {
+        font-size: 0.9rem; /* Smaller meta text on mobile */
+    }
+
+    .order-summary-section {
+        flex-direction: column; /* Stack items vertically */
+    }
+
+    .summary-item,
+    .payment-method-section {
+        margin-bottom: 20px; /* Add space between Order Summary and Payment Method */
+    }
+
+    .summary-item {
+        font-size: 1rem; /* Smaller font size for summary */
+    }
+
+    .payment-method-section h3 {
+        font-size: 1.2rem; /* Smaller payment method heading */
+    }
+
+    .order-items-section h3 {
+        font-size: 1.2rem; /* Smaller heading for order items */
+    }
+
+    .order-item {
+        flex-direction: column; /* Stack image and details for mobile */
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    .order-item-image {
+        width: 100%; /* Make image responsive */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 10px; /* Add space below image */
+    }
+
+    .order-item-details {
+        font-size: 1rem; /* Smaller font size for order item details */
+    }
+
+    .log-return-button {
+        width: 100%; /* Full width button on mobile */
+        font-size: 1rem; /* Smaller button font */
+    }
+}

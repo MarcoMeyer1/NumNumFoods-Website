@@ -13,7 +13,10 @@
             <input type="text" placeholder="Voucher Code" @bind="VoucherCode" class="uppercase-input" @oninput="(e) => VoucherCode = VoucherCode.ToUpper()" />
             <input type="date" @bind="ExpiryDate" />
             <input type="number" placeholder="Max Uses" @bind="MaxUses" />
-            <input type="number" placeholder="Discount" @bind="DiscountPercent" class="discount-input" />
+            <div class="input-wrapper">
+                <input type="number" placeholder="Discount" @bind="DiscountPercent" />
+                <span class="percent-symbol">%</span>
+            </div>
             <button @onclick="CreateVoucher">Create Voucher</button>
         </div>
     </div>

@@ -26,7 +26,6 @@
 .Logos {
     height: 60px;
     margin-top: -8px;
-
 }
 
 .navbar-nav {
@@ -38,6 +37,7 @@
 .nav-item {
     padding: 0 1rem;
     font-size: 1.1rem;
+    color: white;
 }
 
     .nav-item ::deep a {
@@ -51,30 +51,146 @@
     }
 
         .nav-item ::deep a.active {
-            background-color: rgba(255, 255, 255, 0.37);
-            color: white;
+            background-color: transparent !important; /* Removes the background color */
+            box-shadow: none !important; /* Removes any box shadow if present */
+            color: white; /* Keeps the text color consistent */
         }
 
         .nav-item ::deep a:hover {
-            background-color: #ffd1dc;
+            background-color: white;
             color: white;
         }
-
-.navbar-nav .nav-icon {
-    width: 30px;
-    height: 30px;
-    filter: invert(1) !important;
-    margin-left: 5px;
-    margin-right: 5px;
-    vertical-align: middle;
-}
 
 .navbar-nav.ms-auto {
     margin-left: auto;
 }
 
+/* Icon and text styling */
+.nav-icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.nav-text {
+    font-weight: bold;
+    color: white;
+}
+
+/* Mobile Dropdown Styles */
+.navbar-collapse.show {
+    background-color: #D5598C;
+    opacity: 1;
+    border-radius: 0 0 15px 15px;
+    padding-bottom: 1rem;
+}
+
+.navbar-nav .nav-link {
+    color: white;
+    padding: 0.5rem 1.5rem;
+    display: block;
+}
+
+    .navbar-nav .nav-link:hover {
+        background-color: white;
+        color: white;
+    }
+
+/* Responsive styling */
 @media (max-width: 768px) {
     .navbar-nav.ms-auto {
         margin-top: 10px;
+    }
+
+    /* Hide icons in mobile view */
+    .nav-icon {
+        display: none;
+    }
+
+    /* Show text for Cart and Profile links in mobile */
+    .mobile-only {
+        display: inline;
+    }
+}
+
+@media (min-width: 769px) {
+    /* Show icons on larger screens */
+    .nav-icon {
+        display: inline;
+    }
+
+    /* Hide text on larger screens */
+    .mobile-only {
+        display: none;
+    }
+}
+
+/* Main Layout General Page Styles */
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+main {
+    flex: 1;
+    margin-top: 2rem;
+}
+
+article {
+    padding: 1rem;
+}
+
+/* Top navigation bar */
+.top-row {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+    .top-row ::deep a,
+    .top-row ::deep .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        color: #333;
+    }
+
+        .top-row ::deep a:hover,
+        .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+        }
+
+/* Responsive behavior for top-row navbar */
+@media (max-width: 640.98px) {
+    .top-row {
+        justify-content: space-between;
+    }
+
+        .top-row ::deep a,
+        .top-row ::deep .btn-link {
+            margin-left: 0;
+        }
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: column;
+    }
+
+    .top-row,
+    article {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
     }
 }

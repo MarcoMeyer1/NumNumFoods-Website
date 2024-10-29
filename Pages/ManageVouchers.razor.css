@@ -9,14 +9,14 @@
 }
 
 .voucher-management {
-    background-color: #fff; /* White background for overall container */
+    background-color: lightpink; /* White background for overall container */
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
   .voucher-management {
-    background-color: #fff; /* White background for overall container */
+    background-color: white; /* White background for overall container */
     padding: 30px; /* Adjusted padding for spacing */
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -29,7 +29,7 @@
 /* New Voucher and Active Vouchers sections with pink backgrounds */
 .new-voucher, .active-vouchers {
     padding: 20px;
-    background-color: #FAF9F6; /* Soft pink background */
+    background-color: white; /* Soft pink background */
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
 }
@@ -112,7 +112,7 @@ th, td {
 
 /* Add black line directly under the table headers */
 th {
-    background-color: transparent; /* Remove the pink background */
+    background-color: #e8a9c3; /* Remove the pink background */
     color: #000; /* Make the inner headings black */
     font-size: 1.2rem;
     font-weight: bold; /* Bold the table headers */

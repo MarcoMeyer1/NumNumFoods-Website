@@ -22,7 +22,7 @@
 /* Payment method section styling */
 .payment-method-section,
 .billing-address-section {
-    background-color: #f0f0f0;
+    background-color: #e8a9c3;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
@@ -109,9 +109,8 @@
 
     .add-payment-button::before {
         content: "+";
-        color:pink;
+        color:white;
         font-size: 2.5rem;
-        color: pink;
         margin-right: 5px;
     }
 
@@ -147,7 +146,7 @@
     .add-new-address-button::before {
         content: "+";
         font-size: 2.5rem;
-        color: lightpink; /* Pink color for + sign */
+        color: white; /* Pink color for + sign */
         margin-right: 5px;
     }
 

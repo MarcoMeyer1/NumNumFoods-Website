@@ -60,7 +60,7 @@ h1 {
 .update-stock-button {
     padding: 15px 30px; /* Larger padding for buttons */
     background-color: #D5598C;
-    color: black;
+    color: white;
     font-weight: bold;
     border: none;
     border-radius: 10px;
@@ -76,7 +76,7 @@ h1 {
 .cancel-button {
     padding: 15px 30px; /* Larger padding for buttons */
     background-color: #D5598C;
-    color: #333;
+    color: white;
     border: none;
     font-weight:bold;
     border-radius: 10px;

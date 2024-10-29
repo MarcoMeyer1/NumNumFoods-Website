@@ -17,7 +17,7 @@
         margin: 0;
     }
 
-/* Container for the order summary and checkout details */
+/* Main container styling */
 .checkout-container {
     max-width: 800px;
     margin: 0 auto;
@@ -27,7 +27,6 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Header and messages */
 h2 {
     color: #555;
     margin-bottom: 1rem;
@@ -73,7 +72,7 @@ h3 {
     object-fit: cover;
 }
 
-/* Order total and actions styling */
+/* Total amount and actions */
 .order-total {
     text-align: right;
     font-size: 1.25rem;
@@ -125,14 +124,42 @@ select.form-control {
         background-color: #c0487e;
     }
 
-/* Responsive adjustments */
+/* Mobile adjustments */
 @media (max-width: 768px) {
     .checkout-container {
         padding: 1rem;
     }
 
-    .order-summary-table th, .order-summary-table td {
+    /* Responsive table adjustments */
+    .order-summary-table th {
+        display: none;
+    }
+
+    .order-summary-table td {
+        display: block;
         padding: 0.5rem;
+        text-align: right;
+        position: relative;
+    }
+
+        .order-summary-table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            text-align: left;
+            position: absolute;
+            left: 0;
+            padding-left: 10px;
+            color: #555;
+        }
+
+    .order-summary-table tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .confirm-order-btn {

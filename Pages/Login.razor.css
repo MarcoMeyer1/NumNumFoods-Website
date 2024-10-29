@@ -172,28 +172,25 @@
         background-color: #f1f1f1;
     }
 
-/* Responsive adjustments for tablets and smaller screens */
 @media (max-width: 1024px) {
     .login-page {
-        flex-direction: column; /* Stack sections vertically */
+        flex-direction: column;
     }
 
-    .login-left,
-    .login-right {
-        width: 100%; /* Full width for both sections */
-        height: auto; /* Auto height for smaller screens */
+    .login-left, .login-right {
+        width: 100%;
+        height: auto;
     }
 
     .login-title {
-        font-size: 2.2rem; /* Adjust font size for smaller screens */
+        font-size: 2.2rem;
     }
 
     .login-form {
-        padding: 0 10%; /* Increase padding for better layout on smaller screens */
+        padding: 0 10%;
     }
 }
 
-/* Further adjustments for smaller devices */
 @media (max-width: 768px) {
     .login-title {
         font-size: 2rem;
@@ -210,22 +207,19 @@
         font-size: 1.4rem;
     }
 
-    .forgot-password,
-    .register-link {
+    .forgot-password, .register-link {
         font-size: 1.2rem;
     }
 
-    .google-login,
-    .apple-login {
+    .google-login, .apple-login {
         padding: 12px;
         font-size: 1.1rem;
     }
 }
 
-/* Further adjustments for small phones */
 @media (max-width: 480px) {
     .login-left {
-        display: none; /* Hide the image section for very small screens */
+        display: none;
     }
 
     .login-right {
@@ -238,7 +232,7 @@
     }
 
     .login-form {
-        padding: 0 15%; /* Increase padding for better form layout */
+        padding: 0 15%;
     }
 
     .login-button {
@@ -246,8 +240,7 @@
         font-size: 1.3rem;
     }
 
-    .google-login,
-    .apple-login {
+    .google-login, .apple-login {
         padding: 10px;
         font-size: 1rem;
     }

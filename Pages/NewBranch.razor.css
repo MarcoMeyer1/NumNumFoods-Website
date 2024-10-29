@@ -1,8 +1,8 @@
-﻿.new-branch-form-container {
+.new-branch-form-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 30px;
-    background-color: #f8f8f8;
+    background-color: #FAF9F6;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -52,6 +52,8 @@
     background-color: #FADADD;
     color: black;
     font-weight: bold;
+
+
 }
 
     .save-button:hover {

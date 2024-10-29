@@ -53,8 +53,9 @@ textarea {
 
 .create-post-button {
     padding: 10px 15px;
-    background-color: #d5598c; /* Button color */
-    color: #fff;
+    background-color: #FADADD; /* Button color */
+    color: black;
+    font-weight: bold;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -68,8 +69,9 @@ textarea {
 
 .clear-posts-button {
     padding: 10px 15px;
-    background-color: #D5598C; /* Button color */
-    color: #fff;
+    background-color: #FADADD; /* Button color */
+    color: black;
+    font-weight: bold;
     border: none;
     border-radius: 4px;
     cursor: pointer;

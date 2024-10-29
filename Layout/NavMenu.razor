@@ -6,7 +6,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-pink">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img src="/Assets/NumNumNavIcon.png" alt="NumNumFoods Logo" style="height: 40px;" />
+            <img class ="Logos" src ="/Assets/NumNumNavIcon.png" alt="NumNumFoods Logo"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -46,12 +46,12 @@
 @code {
     protected override void OnInitialized()
     {
-        UserState.OnChange += StateHasChanged; // Subscribe to changes
+        UserState.OnChange += StateHasChanged;
     }
 
 
     public void Dispose()
     {
-        UserState.OnChange -= StateHasChanged; // Unsubscribe to avoid memory leaks
+        UserState.OnChange -= StateHasChanged; 
     }
 }

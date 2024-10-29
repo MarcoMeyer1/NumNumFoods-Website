@@ -68,16 +68,17 @@
 }
 
 .save-button {
-    background-color: #0097ff;
-    color: white;
+    background-color: #FADADD;
+    color: black;
+    font-weight: bold;
 }
 
     .save-button:hover {
-        background-color: #007acc;
+        background-color: lightpink;
     }
 
 .cancel-button {
-    background-color: #f0f0f0;
+    background-color: lightgray;
     color: #333;
     text-decoration: none;
 }

@@ -96,7 +96,7 @@
     }
 
     .quantity-control button {
-        background-color: #e91e63;
+        background-color: #d5598c;
         color: #fff;
         border: none;
         padding: 5px 10px;
@@ -122,12 +122,12 @@
         padding: 10px;
         border-radius: 4px;
         border: 1px solid #ddd;
-        margin-bottom: 0.5rem; /* Added spacing between input and submit button */
+        margin-bottom: 1.5rem; /* Added spacing between input and submit button */
     }
 
     .voucher-group button {
         padding: 12px;
-        background-color: #007bff;
+        background-color: #d5598c;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -136,7 +136,7 @@
     }
 
         .voucher-group button:hover {
-            background-color: #0056b3;
+            background-color: lightpink;
         }
 
 .cart-total {
@@ -146,7 +146,7 @@
 }
 
 .btn-pink {
-    background-color: #e91e63;
+    background-color: #d5598c;
     color: #fff;
     border: none;
     padding: 15px;

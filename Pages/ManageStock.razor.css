@@ -43,6 +43,7 @@ h1 {
 /* Add stock button */
 .add-stock-button {
     background-color: #FADADD;
+    margin-right: 40px;
     color: black;
     font-weight: bold;
     border: none;

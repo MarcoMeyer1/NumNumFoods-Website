@@ -60,7 +60,7 @@ h1 {
 .add-stock-button {
     padding: 15px 25px; /* Larger padding */
     background-color: #D5598C;
-    color: black;
+    color: white;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -76,7 +76,7 @@ h1 {
 .cancel-button {
     padding: 15px 25px;
     background-color: #D5598C;
-    color: #333;
+    color: white;
     font-weight: bold;
     border: none;
     border-radius: 8px;

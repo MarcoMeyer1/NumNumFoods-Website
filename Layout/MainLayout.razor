@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
 
 <header>
     <NavMenu />
@@ -11,3 +12,26 @@
         </article>
     </div>
 </main>
+
+<script>
+    window.addClickOutsideListener = function () {
+        document.addEventListener('click', function (event) {
+            const navbar = document.querySelector('.navbar-collapse');
+            const isClickInside = navbar.contains(event.target) || event.target.classList.contains('navbar-toggler');
+
+            if (!isClickInside && navbar.classList.contains('show')) {
+                new bootstrap.Collapse(navbar).hide();
+            }
+        });
+    };
+</script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("addClickOutsideListener");
+        }
+    }
+}

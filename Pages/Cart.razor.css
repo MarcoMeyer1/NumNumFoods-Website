@@ -9,6 +9,12 @@
     margin: 0 auto;
 }
 
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
 .cart-content {
     display: flex;
     justify-content: space-between;

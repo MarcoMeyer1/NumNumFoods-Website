@@ -75,6 +75,10 @@
                         <input type="radio" id="in-person" name="payment" value="In person" @onchange="OnPaymentMethodChanged" />
                     </div>
                 </div>
+                @if (!string.IsNullOrEmpty(paymentError))
+                {
+                    <p class="error-message">@paymentError</p>
+                }
 
                 <div class="cart-total">
                     <div>Discount: @("R" + discount)</div>
@@ -92,7 +96,8 @@
     private string selectedBranch = "Port Elizabeth";
     private string voucherCode = string.Empty;
     private decimal discount = 0M;
-    private string paymentMethod = "In person";
+    private string paymentMethod = string.Empty;
+    private string paymentError = string.Empty;
     private string voucherError = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -112,6 +117,7 @@
     private void OnPaymentMethodChanged(ChangeEventArgs e)
     {
         paymentMethod = e.Value.ToString();
+        paymentError = string.Empty;
     }
 
     private async Task LoadCartItems(int userId)
@@ -228,6 +234,12 @@
 
     private void ProceedToCheckout()
     {
+        if (string.IsNullOrEmpty(paymentMethod))
+        {
+            paymentError = "Please select a payment method before proceeding to checkout.";
+            return;
+        }
+
         Navigation.NavigateTo("/checkout");
     }
 

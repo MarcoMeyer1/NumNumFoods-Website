@@ -82,6 +82,7 @@ table button {
     font-size: 0.9rem;
     margin-right: 10px;
     transition: background-color 0.3s ease;
+    margin-bottom:7px;
 }
 
     table button:hover {

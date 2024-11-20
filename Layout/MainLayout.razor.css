@@ -62,7 +62,6 @@ article {
             text-decoration: underline;
         }
 
-/* Responsive behavior */
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;

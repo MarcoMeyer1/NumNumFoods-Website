@@ -1,5 +1,10 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
 }
 
 h1:focus {
@@ -21,7 +26,7 @@ a, .btn-link {
 }
 
 .content {
-    padding-top: 1.1rem;
+    padding: 0;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -102,16 +107,17 @@ code {
     color: #c02d76;
 }
 
-/* Additional styles specific to your app */
 .navbar {
-    background-color: #e91e63; /* Pink background for navbar */
+    background-color: #e91e63;
     height: 3.5rem;
     display: flex;
     align-items: center;
+    margin: 0;
+    padding: 0;
     width: 100%;
     position: fixed;
     top: 0;
-    z-index: 1000; /* Ensures it stays above other content */
+    z-index: 1000;
 }
 
 .navbar-brand {

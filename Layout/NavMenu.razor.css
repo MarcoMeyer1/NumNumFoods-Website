@@ -117,6 +117,15 @@
     .mobile-only {
         display: inline;
     }
+
+    .nav-link {
+        padding: 8px 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem !important;
+    }
 }
 
 @media (min-width: 769px) {

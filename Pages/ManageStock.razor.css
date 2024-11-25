@@ -1,7 +1,13 @@
-﻿.stock-management-container {
+﻿.stock-management {
     padding: 30px;
-    background-color: #FAF9F6; /* Light background */
+    background-color: #FAF9F6 !important;
     border-radius: 12px;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 100vh; 
+    width: 100%;
+    display: flex; 
+    flex-direction: column;
 }
 
 /* Header */
@@ -74,8 +80,11 @@ h1 {
 
     .stock-table th,
     .stock-table td {
-        padding: 15px; /* Larger padding for spacing */
-        border: 1px solid #ddd;
+        padding: 15px; 
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        border-left: none;
+        border-right: none;
         text-align: left;
         font-size: 1.1rem;
     }
@@ -120,8 +129,8 @@ h1 {
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    float: right;
     margin-right: 35px;
+    text-align: center !important;
 }
 
     /* Hover effect for buttons */

@@ -25,7 +25,7 @@
         {
             @foreach (var product in featuredProducts)
             {
-                <div class="product-card">
+                <div @onclick="() => GoToProductDetails(product.ProductId)" class="product-card">
                     <img src="@product.ImageUrl" alt="Product Image" />
                     <h3>@product.Name</h3>
                     <p>@product.Description</p>
@@ -102,5 +102,10 @@
     private void NavigateToAboutPage()
     {
         Navigation.NavigateTo("/about");
+    }
+
+    private void GoToProductDetails(int productId)
+    {
+        Navigation.NavigateTo($"/product-details/{productId}");
     }
 }

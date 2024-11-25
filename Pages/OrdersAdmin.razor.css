@@ -1,8 +1,9 @@
-﻿.order-management-container {
+﻿.order-management {
     padding: 30px;
-    background-color: #FAF9F6; /* Lighter background */
+    background-color: #FAF9F6 !important;
     border-radius: 12px;
     margin-top: 20px;
+    height: 100%;
 }
 
 /* Header */

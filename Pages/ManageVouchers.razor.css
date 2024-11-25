@@ -9,7 +9,7 @@
 }
 
 .voucher-management {
-    background-color: lightpink; /* White background for overall container */
+    background-color: #FAF9F6 !important;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -110,18 +110,16 @@ th, td {
     font-size: 1.1rem;
 }
 
-/* Add black line directly under the table headers */
 th {
-    background-color: #e8a9c3; /* Remove the pink background */
-    color: #000; /* Make the inner headings black */
+    background-color: #e8a9c3; 
+    color: #000; 
     font-size: 1.2rem;
-    font-weight: bold; /* Bold the table headers */
-    border-bottom: 2px solid #000; /* Add black line under headers */
+    font-weight: bold; 
+    border-bottom: 2px solid #000; 
 }
 
-/* Add black lines between each Active Voucher row */
 td {
-    border-bottom: 2px solid #000; /* Black border between table rows */
+    border-bottom: 1px solid LightGray; 
 }
 
 /* Status colors for the Active Vouchers table */
@@ -172,8 +170,8 @@ td {
 
 .voucher-inputs .input-wrapper {
     position: relative;
-    width: 150px; /* Set max-width for consistent alignment */
-    max-width: 100%; /* Responsive to screen size */
+    width: 150px; 
+    max-width: 100%; 
 }
 
 .input-wrapper {
@@ -182,8 +180,8 @@ td {
 }
 
     .input-wrapper input {
-        width: 100%; /* Ensures input takes full width */
-        padding-right: 30px; /* Space for percentage symbol */
+        width: 100%; 
+        padding-right: 30px; 
     }
 
 .percent-symbol {
@@ -208,7 +206,7 @@ td {
     }
 
     .input-wrapper {
-        width: 100%; /* Full-width for smaller screens */
+        width: 100%; 
     }
 
     table {

@@ -9,6 +9,10 @@
     margin: 0 auto;
 }
 
+.btn-primary {
+    margin-top: 10px;
+}
+
 .error-message {
     color: red;
     font-size: 0.9rem;

@@ -21,8 +21,11 @@
         }
     </select>
 
-    <InputFile OnChange="OnFileChange" />
-    <button @onclick="SubmitNewProduct">Submit New Product</button>
+    <div class="file-upload-container">
+        <InputFile OnChange="OnFileChange" class="choose-file-button" />
+    </div>
+
+    <button class="submit-button" @onclick="SubmitNewProduct">Submit New Product</button>
 </div>
 
 @code {

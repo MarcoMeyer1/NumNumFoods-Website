@@ -99,12 +99,13 @@
 .product-card {
     border: 1px solid #ddd;
     padding: 1rem;
-    width: 100%; 
-    max-width: 250px; 
+    width: 100%;
+    max-width: 250px;
     text-align: center;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
     .product-card img {
@@ -113,9 +114,9 @@
         border-radius: 50%;
     }
 
-.product-rating {
-    margin-top: 0.5rem;
-}
+    .product-card:hover {
+        transform: scale(1.05);
+    }
 
 .view-product-btn {
     background-color: #e8a9c3;

@@ -80,8 +80,11 @@ h1 {
 
     .stock-table th,
     .stock-table td {
-        padding: 15px; /* Larger padding for spacing */
-        border: 1px solid #ddd;
+        padding: 15px; 
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        border-left: none;
+        border-right: none;
         text-align: left;
         font-size: 1.1rem;
     }

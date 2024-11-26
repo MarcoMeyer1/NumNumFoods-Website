@@ -24,7 +24,7 @@
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 Console.WriteLine($"Order with ID {orderId} not found.");
-                // Optionally, navigate to a not found page or display a message
+            
                 Navigation.NavigateTo("/admin/orders");
             }
             else
@@ -43,23 +43,22 @@
     {
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; } // Customer's FullName
-        public string PhoneNumber { get; set; }  // Customer's phone number
+        public string CustomerName { get; set; } 
+        public string PhoneNumber { get; set; }  
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; } // e.g., "Pending", "Processing", "Completed", "Cancelled"
+        public string Status { get; set; } 
         public DateTime OrderDate { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        // Removed PaymentMethod as it doesn't exist in your database
     }
 
     public class OrderItem
     {
         public int OrderItemId { get; set; }
-        public int OrderId { get; set; } // Foreign key to Orders table
+        public int OrderId { get; set; } 
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; } // Price at the time of ordering
+        public decimal Price { get; set; }
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }

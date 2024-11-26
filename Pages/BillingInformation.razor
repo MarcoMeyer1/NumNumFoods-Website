@@ -209,24 +209,24 @@
         public int CardId { get; set; }
         public int UserId { get; set; }
         public string NameOnCard { get; set; }
-        public string CardNumber { get; set; } // Sensitive data
+        public string CardNumber { get; set; } 
         public string ExpiryMonth { get; set; }
         public string ExpiryYear { get; set; }
         public string PaymentOption { get; set; }
-        public DateTime CreatedAt { get; set; } // Match your database schema
+        public DateTime CreatedAt { get; set; } 
     }
 
     public class BillingAddress
     {
         public int AddressId { get; set; }
-        public int UserId { get; set; } // Foreign key to Users table
+        public int UserId { get; set; } 
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string StreetAddress { get; set; }
-        // Removed ComplexBuilding, Suburb, Province as they are not in your schema
+     
         public string City { get; set; }
         public string PostalCode { get; set; }
-        public string AddressType { get; set; } // e.g., "Residential", "Business"
-        public DateTime CreatedAt { get; set; } // Match your database schema
+        public string AddressType { get; set; } 
+        public DateTime CreatedAt { get; set; } 
     }
 }

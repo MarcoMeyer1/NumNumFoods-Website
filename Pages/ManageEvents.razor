@@ -68,8 +68,7 @@
 
     private async Task ConfirmDelete(int eventId)
     {
-        // Display confirmation dialog and await user response
- 
+      
 
      
             // Make a DELETE request to the API to delete the event
@@ -77,12 +76,12 @@
 
             if (response.IsSuccessStatusCode)
             {
-                // Optionally, refresh the events list after deletion
-                await FetchActiveEvents(); // Ensure you have this method implemented to refresh the event list
+                
+                await FetchActiveEvents(); 
             }
             else
             {
-                // Handle error (e.g., show an error message)
+                
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Error deleting event: {errorMessage}");
             }
@@ -100,8 +99,6 @@
 
             if (events != null)
             {
-                // Update the UI with the retrieved events
-                // Assuming you have a property to hold events, like this:
                 Events = events;
             }
         }

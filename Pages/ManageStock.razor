@@ -3,10 +3,10 @@
 @inject NavigationManager Navigation
 
 <div class="stock-management">
-    <!-- Move the Current Stock Heading above the toolbar -->
+  
     <h1>Current Stock</h1>
 
-    <!-- Stock Toolbar (search, location dropdown, add stock button) -->
+   
     <div class="stock-toolbar">
         <input type="text" placeholder="Search..." class="search-input" @bind="searchTerm" @oninput="FilterStockList" />
         <select @onchange="OnLocationChanged" class="location-dropdown">
@@ -117,7 +117,7 @@
         Navigation.NavigateTo("/update-stock");
     }
 
-    // StockItem class
+    
     public class StockItem
     {
         public int Id { get; set; }

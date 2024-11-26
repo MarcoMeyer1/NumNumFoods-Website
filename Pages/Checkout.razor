@@ -186,7 +186,7 @@
                 {
                     Console.WriteLine("Order created successfully.");
                     // Navigate to the order confirmation page
-                    Navigation.NavigateTo("/order-confirmed"); // Changed to /order-confirmed
+                    Navigation.NavigateTo("/order-confirmed");
                 }
                 else
                 {
@@ -205,11 +205,11 @@
     public class CartItem
     {
         public int CartId { get; set; }
-        public int UserId { get; set; } // User ID
-        public int ProductId { get; set; } // Product ID
+        public int UserId { get; set; } 
+        public int ProductId { get; set; } 
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public Product Product { get; set; } // Associated product
+        public Product Product { get; set; } 
     }
 
     public class Product
@@ -226,7 +226,7 @@
         public int CustomerId { get; set; }
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; } // e.g., "Pending", "Completed"
+        public string Status { get; set; } 
         public DateTime OrderDate { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
@@ -235,7 +235,7 @@
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; } // Price at the time of ordering
+        public decimal Price { get; set; } 
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }

@@ -6,42 +6,49 @@
 @using NumNumFoods.Services
 @inject UserState UserState
 
-
 <PageTitle>@product?.Name ?? "Product Details"</PageTitle>
 
-@if (product == null)
-{
-    <p>Loading product details...</p>
-}
-else
-{
-    <h1 class="product-title">@product.Name</h1>
-
-    <div class="product-details-page">
-        <!-- Product Card -->
-        <div class="product-card">
-            <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
-            <div class="product-description">
-                <h2>@product.Name</h2>
-                <p>@product.Description</p>
-                <p>Price: R @product.Price.ToString("N2")</p>
-
+<div class="product-details-container">
+    @if (product == null || productDetails == null)
+    {
+        <p>Loading product details...</p>
+    }
+    else
+    {
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <div class="product-image-container">
+                <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+            </div>
+            <div class="product-info">
+                <h1 class="product-title">@product.Name</h1>
+                <p class="product-description">@product.Description</p>
+                <p class="product-price">Price: <strong>R @product.Price.ToString("N2")</strong></p>
                 <div class="product-rating">
+                    <span>Rating:</span>
                     @for (int i = 1; i <= 5; i++)
                     {
                         <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
                     }
                 </div>
-
                 <button class="add-to-cart-btn" @onclick="AddToCart">Add to cart</button>
             </div>
         </div>
 
-        <!-- Review Section -->
-        <div class="review-section">
-            <h3>Leave a Review</h3>
-            <textarea placeholder="Write your review here..." @bind="reviewText"></textarea>
+        <!-- Product Additional Info -->
+        <div class="product-additional-info">
+            <h2>Additional Information</h2>
+            <p>@productDetails.AdditionalInfo</p>
+            <h3>Specifications</h3>
+            <p>@productDetails.Specifications</p>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <h2>Leave a Review</h2>
+            <textarea placeholder="Write your review here..." @bind="reviewText" class="review-textarea"></textarea>
             <div class="rating-input">
+                <span>Your Rating:</span>
                 @for (int i = 1; i <= 5; i++)
                 {
                     <span class="rating-star @(userRating >= i ? "selected" : "")"
@@ -49,27 +56,200 @@ else
                 }
             </div>
             <button class="submit-review-btn" @onclick="SubmitReview">Submit Review</button>
+
+            <h2>Reviews</h2>
+            @if (reviews == null || !reviews.Any())
+            {
+                <p class="no-reviews">No reviews yet. Be the first to review!</p>
+            }
+            else
+            {
+                <ul class="reviews-list">
+                    @foreach (var review in reviews)
+                    {
+                        <li class="review-item">
+                            <div>
+                                <strong>User @review.UserId</strong>
+                                <br />
+                                <span class="review-rating">@string.Concat(Enumerable.Repeat("⭐", review.Rating))</span>
+                                <br />
+                                <span class="review-date">Reviewed on @review.Date.ToString("yyyy-MM-dd")</span>
+                            </div>
+                            <p class="review-text">@review.Text</p>
+                        </li>
+                    }
+                </ul>
+            }
         </div>
-    </div>
-}
+    }
+</div>
+
+<style>
+    .product-details-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .product-details {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .product-image-container {
+        flex: 1;
+        text-align: center;
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .product-info {
+        flex: 2;
+    }
+
+    .product-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .product-rating {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .rating-star.filled {
+        color: gold;
+    }
+
+    .add-to-cart-btn {
+        background-color: #ff007b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .add-to-cart-btn:hover {
+            background-color: #e60070;
+        }
+
+    .product-additional-info {
+        margin-top: 20px;
+    }
+
+    .reviews-section {
+        margin-top: 20px;
+    }
+
+    .review-textarea {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .rating-input {
+        margin-bottom: 10px;
+    }
+
+    .rating-star.selected {
+        color: gold;
+        cursor: pointer;
+    }
+
+    .submit-review-btn {
+        background-color: #ff007b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+        .submit-review-btn:hover {
+            background-color: #e60070;
+        }
+
+    .reviews-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .review-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .review-rating {
+        color: gold;
+    }
+
+    .review-date {
+        font-size: 12px;
+        color: #777;
+    }
+
+    .review-text {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .no-reviews {
+        font-size: 14px;
+        color: #777;
+    }
+</style>
 
 @code {
     [Parameter] public int ProductId { get; set; }
 
     private Product product;
+    private ProductDetail productDetails;
+    private List<ProductReview> reviews = new();
     private string reviewText = "";
     private int userRating = 0;
 
     protected override async Task OnInitializedAsync()
     {
         await FetchProductDetails();
+        await FetchProductAdditionalDetails();
+        await FetchReviews();
     }
 
     private async Task FetchProductDetails()
     {
         try
         {
-            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/product/getById/{ProductId}");
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/Product/{ProductId}");
             if (response.IsSuccessStatusCode)
             {
                 product = await response.Content.ReadFromJsonAsync<Product>();
@@ -82,6 +262,46 @@ else
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching product details: {ex.Message}");
+        }
+    }
+
+    private async Task FetchProductAdditionalDetails()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/ProductDetail/{ProductId}");
+            if (response.IsSuccessStatusCode)
+            {
+                productDetails = await response.Content.ReadFromJsonAsync<ProductDetail>();
+            }
+            else
+            {
+                Console.WriteLine($"Failed to fetch product additional details: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching product additional details: {ex.Message}");
+        }
+    }
+
+    private async Task FetchReviews()
+    {
+        try
+        {
+            var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/ProductReview/{ProductId}");
+            if (response.IsSuccessStatusCode)
+            {
+                reviews = await response.Content.ReadFromJsonAsync<List<ProductReview>>();
+            }
+            else
+            {
+                Console.WriteLine($"Failed to fetch product reviews: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching reviews: {ex.Message}");
         }
     }
 
@@ -138,12 +358,13 @@ else
 
         try
         {
-            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/review/add", review);
+            var response = await Http.PostAsJsonAsync("https://numnumfoods-api.azurewebsites.net/api/ProductReview", review);
             if (response.IsSuccessStatusCode)
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Thank you for your review!");
                 reviewText = "";
                 userRating = 0;
+                await FetchReviews(); // Refresh the reviews
             }
             else
             {
@@ -169,6 +390,14 @@ else
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int Rating { get; set; }
+    }
+
+    public class ProductDetail
+    {
+        public int ProductDetailId { get; set; }
+        public int ProductId { get; set; }
+        public string AdditionalInfo { get; set; }
+        public string Specifications { get; set; }
     }
 
     public class ProductReview

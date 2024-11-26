@@ -73,7 +73,7 @@
                                 <br />
                                 <span class="review-rating">@string.Concat(Enumerable.Repeat("⭐", review.Rating))</span>
                                 <br />
-                                <span class="review-date">Reviewed on @review.Date.ToString("yyyy-MM-dd")</span>
+                                <span class="review-date">Reviewed on @review.Date.ToString("yyyy-MM-dd HH:mm")</span>
                             </div>
                             <p class="review-text">@review.Text</p>
                         </li>
@@ -292,7 +292,29 @@
             var response = await Http.GetAsync($"https://numnumfoods-api.azurewebsites.net/api/ProductReview/{ProductId}");
             if (response.IsSuccessStatusCode)
             {
-                reviews = await response.Content.ReadFromJsonAsync<List<ProductReview>>();
+                var fetchedReviews = await response.Content.ReadFromJsonAsync<List<ProductReview>>();
+
+               
+                foreach (var review in fetchedReviews)
+                {
+                    Console.WriteLine($"Fetched Review - UserId: {review.UserId}, Date: {review.Date}");
+                }
+
+                // Convert the CreatedAt field to local time and log adjustments
+                reviews = fetchedReviews.Select(r =>
+                {
+                    var adjustedDate = DateTime.SpecifyKind(r.Date, DateTimeKind.Utc).ToLocalTime();
+                    Console.WriteLine($"Adjusted Review Date - Original: {r.Date}, Adjusted: {adjustedDate}");
+
+                    return new ProductReview
+                        {
+                            ProductId = r.ProductId,
+                            UserId = r.UserId,
+                            Rating = r.Rating,
+                            Text = r.Text,
+                            Date = adjustedDate
+                        };
+                }).ToList();
             }
             else
             {
@@ -304,6 +326,9 @@
             Console.WriteLine($"Error fetching reviews: {ex.Message}");
         }
     }
+
+
+
 
     private async Task AddToCart()
     {

@@ -1,19 +1,37 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; 
+    box-sizing: border-box;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
     height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 /* Main content should fill the available space */
 main {
     flex: 1;
    
-    margin-top: 2rem; /* Adds spacing under the navbar */
 }
 
 article {
-    padding: 1rem;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Top navigation bar */
@@ -23,6 +41,8 @@ article {
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
+    padding-left: 0;
+    padding-right: 0;
     align-items: center;
     position: fixed; /* Fixed at the top */
     width: 100%;
@@ -42,7 +62,7 @@ article {
             text-decoration: underline;
         }
 
-/* Responsive behavior */
+
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
@@ -53,14 +73,16 @@ article {
         }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 768px) {
     .page {
         flex-direction: column;
     }
 
     .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+        padding-left: 0;
+        padding-right: 0;
     }
+
+    
 }
 

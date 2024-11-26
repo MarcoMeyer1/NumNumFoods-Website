@@ -26,23 +26,36 @@
         box-sizing: border-box; /* Ensure padding doesn't affect width */
     }
 
-    .create-product button {
-        width: 100%; /* Full width button */
-        padding: 15px; /* Increase padding */
-        background-color: #FADADD; /* Soft pink background */
-        color: #000; /* Dark text for contrast */
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.3rem; /* Larger font size */
-        font-weight: bold;
-        transition: background-color 0.3s ease;
+    .submit-button {
+       width: 100%;
+       padding: 18px;
+       background-color: #FADADD;
+       color: #000;
+       border: none;
+       border-radius: 8px;
+       cursor: pointer;
+       font-size: 1.3rem;
+       font-weight: bold;
+       transition: background-color 0.3s ease;
     }
 
-        .create-product button:hover {
+        .submit-button:hover {
             background-color: lightpink; /* Slightly darker pink on hover */
         }
 
+   .file-upload-container {
+    margin-bottom: 20px; 
+   }
+
+   .choose-file-button {
+      background-color: #FADADD;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-block; 
+   }
 
 /* Mobile Adjustments for Create Product */
 @media (max-width: 768px) {

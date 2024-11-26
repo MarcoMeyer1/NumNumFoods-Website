@@ -80,13 +80,16 @@
     color: white;
 }
 
-/* Mobile Dropdown Styles */
 .navbar-collapse.show {
-    background-color: #D5598C;
-    opacity: 1;
+    background-color: #eb639a;
+    border: 3px solid;
+    border-color: #fff;
+    border-top: 1px solid transparent;
+    margin-top: 1rem;
     border-radius: 0 0 15px 15px;
     padding-bottom: 1rem;
 }
+
 
 .navbar-nav .nav-link {
     color: white;
@@ -113,6 +116,15 @@
     /* Show text for Cart and Profile links in mobile */
     .mobile-only {
         display: inline;
+    }
+
+    .nav-link {
+        padding: 8px 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem !important;
     }
 }
 

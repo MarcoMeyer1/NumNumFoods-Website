@@ -3,83 +3,91 @@
 @inject HttpClient Http
 
 <div class="order-management">
+    <!-- Dashboard Header -->
     <div class="dashboard-header">
         <h1>Order Management</h1>
     </div>
 
-    <!-- Dropdown for filtering order status -->
-    <div class="filter-dropdown">
-        <select @bind="selectedStatus" class="status-dropdown">
-            <option value="ALL">All Orders</option>
-            @foreach (var status in availableStatuses)
-            {
-                <option value="@status">@status</option>
-            }
-        </select>
+    <!-- Toolbar (Dropdown and Search) -->
+    <div class="order-toolbar">
+        <!-- Dropdown for filtering order status -->
+        <div class="filter-dropdown">
+            <select @bind="selectedStatus" class="status-dropdown">
+                <option value="ALL">All Orders</option>
+                @foreach (var status in availableStatuses)
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" placeholder="Quick Search" @bind="searchTerm" @oninput="ApplyFilters" />
+        </div>
     </div>
 
-    <div class="search-bar">
-        <input type="text" placeholder="Quick Search" @bind="searchTerm" @oninput="ApplyFilters" />
-    </div>
-
-    <table class="orders-table">
-        <thead>
-            <tr>
-                <th><input type="checkbox" /></th>
-                <th>Order ID</th>
-                <th>Date/Time</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Payment Method</th>
-                <th>Actions</th> <!-- New column for actions -->
-            </tr>
-        </thead>
-        <tbody>
-            @if (filteredOrders == null)
-            {
+    <!-- Orders Table -->
+    <div class="orders-table-container">
+        <table class="orders-table">
+            <thead>
                 <tr>
-                    <td colspan="9">Loading orders...</td>
+                    <th><input type="checkbox" /></th>
+                    <th>Order ID</th>
+                    <th>Date/Time</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Payment Method</th>
+                    <th>Actions</th> <!-- New column for actions -->
                 </tr>
-            }
-            else if (!filteredOrders.Any())
-            {
-                <tr>
-                    <td colspan="9">No orders found.</td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var order in filteredOrders)
+            </thead>
+            <tbody>
+                @if (filteredOrders == null)
                 {
                     <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>@order.OrderId</td>
-                        <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@order.CustomerName</td>
-                        <td>
-                            <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
-                                @foreach (var status in availableStatuses)
-                                {
-                                    <option value="@status" selected="@(status == order.Status)">@status</option>
-                                }
-                            </select>
-                        </td>
-                        <td>@order.OrderItems.Count</td>
-                        <td>R @order.TotalPrice.ToString("N2")</td>
-                        <td>@order.PaymentMethod</td>
-                        <td>
-                            <!-- Order Summary Button -->
-                            <button @onclick="() => NavigateToOrderSummary(order.OrderId)" class="btn-order-summary">
-                                Order Summary
-                            </button>
-                        </td>
+                        <td colspan="9">Loading orders...</td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
+                else if (!filteredOrders.Any())
+                {
+                    <tr>
+                        <td colspan="9">No orders found.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var order in filteredOrders)
+                    {
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>@order.OrderId</td>
+                            <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@order.CustomerName</td>
+                            <td>
+                                <select class="status-dropdown" @onchange="(e) => UpdateOrderStatus(order, e.Value.ToString())">
+                                    @foreach (var status in availableStatuses)
+                                    {
+                                        <option value="@status" selected="@(status == order.Status)">@status</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>@order.OrderItems.Count</td>
+                            <td>R @order.TotalPrice.ToString("N2")</td>
+                            <td>@order.PaymentMethod</td>
+                            <td>
+                                <!-- Order Summary Button -->
+                                <button @onclick="() => NavigateToOrderSummary(order.OrderId)" class="btn-order-summary">
+                                    Order Summary
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @code {

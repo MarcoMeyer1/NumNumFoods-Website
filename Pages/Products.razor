@@ -40,24 +40,20 @@
             if (selectedCategory == null || selectedCategory == categoryGroup.Key)
             {
                 <h2 id="category-@SanitizeCategoryName(categoryGroup.Key)">@(categoryGroup.Key ?? "Uncategorized")</h2>
-                <div class="product-grid">
-                    @foreach (var product in categoryGroup)
-                    {
-                        <div class="product-card">
-                            <img src="@product.ImageUrl" alt="@product.Name" />
-                            <h3>@product.Name</h3>
-                            <p>@product.Description</p>
-                            <div class="product-rating">
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    <span class="rating-star @(product.Rating >= i ? "filled" : "")">⭐</span>
-                                }
+                <div class="horizontal-scroll">
+                    <div class="product-grid">
+                        @foreach (var product in categoryGroup)
+                        {
+                            <div class="product-card">
+                                <img src="@product.ImageUrl" alt="@product.Name" />
+                                <h3>@product.Name</h3>
+                                <p>@product.Description</p>
+                                <p>Price: R @product.Price.ToString("N2")</p>
+                                <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
+                                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
                             </div>
-                            <p>Price: R @product.Price.ToString("N2")</p> <!-- Updated currency display -->
-                            <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
-                            <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             }
         }

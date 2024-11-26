@@ -1,8 +1,9 @@
-﻿.order-management-container {
+﻿.order-management {
     padding: 30px;
-    background-color: #FAF9F6; /* Lighter background */
+    background-color: #FAF9F6 !important;
     border-radius: 12px;
     margin-top: 20px;
+    height: 100%;
 }
 
 /* Header */
@@ -78,7 +79,10 @@
 
     .orders-table th, .orders-table td {
         padding: 15px;
-        border: 1px solid #ddd;
+        border-top: 1px solid #ddd; 
+        border-bottom: 1px solid #ddd; 
+        border-left: none; 
+        border-right: none; 
         text-align: left;
         font-size: 1.1rem;
     }
@@ -112,4 +116,5 @@
         padding: 10px;
         font-size: 1rem;
     }
+
 }

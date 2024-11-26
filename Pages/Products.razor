@@ -49,8 +49,10 @@
                                 <h3>@product.Name</h3>
                                 <p>@product.Description</p>
                                 <p>Price: R @product.Price.ToString("N2")</p>
-                                <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
-                                <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
+                                <div class="button-container">
+                                    <button class="add-to-cart-btn" @onclick="() => AddToCart(product)">Add to cart</button>
+                                    <button class="more-info-btn" @onclick="() => GoToProductDetails(product.ProductId)">More info</button>
+                                </div>
                             </div>
                         }
                     </div>

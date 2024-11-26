@@ -19,6 +19,8 @@ namespace NumNumFoods.Models
         public string StockStatus { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public string? CategoryName { get; set; } 
     }
 
     public class ProductCategory

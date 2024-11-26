@@ -154,15 +154,17 @@ else
                 product.ImageUrl = newImageUrl;
             }
 
-            // Retrieve the CategoryName if CategoryId is selected
-            string categoryName = null;
+            // Retrieve the CategoryName from the dropdown using the CategoryId
             if (product.CategoryId.HasValue)
             {
-                categoryName = await FetchCategoryNameById(product.CategoryId.Value);
+                var selectedCategory = Categories.FirstOrDefault(c => c.CategoryId == product.CategoryId);
+                if (selectedCategory != null)
+                {
+                    product.CategoryName = selectedCategory.Name;
+                }
             }
 
-            // Optionally, use the category name in a request or log
-            Console.WriteLine($"Updating product in category: {categoryName}");
+            Console.WriteLine($"Updating product: Name = {product.Name}, Category = {product.CategoryName}, ImageUrl = {product.ImageUrl}");
 
             // Update the product
             var response = await Http.PutAsJsonAsync($"https://numnumfoods-api.azurewebsites.net/api/product/update/{ProductId}", product);
@@ -182,6 +184,7 @@ else
             Console.WriteLine($"Exception in SubmitUpdatedProduct: {ex.Message}");
         }
     }
+
 
     private async Task<string> FetchCategoryNameById(int categoryId)
     {

@@ -88,13 +88,13 @@
 
         if (response.IsSuccessStatusCode)
         {
-            // Successfully created the voucher, fetch the updated list
+           
             await FetchActiveVouchers();
             ClearInputs();
         }
         else
         {
-            // Handle error (e.g., show a message)
+           
             var errorMessage = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Error creating voucher: {errorMessage}");
         }
@@ -130,7 +130,7 @@
         }
         else
         {
-            // Handle error (e.g., show a message)
+            
             Console.WriteLine("Error fetching vouchers.");
         }
     }

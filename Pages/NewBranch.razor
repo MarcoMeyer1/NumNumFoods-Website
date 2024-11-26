@@ -47,7 +47,7 @@
 </div>
 
 @code {
-    // Branch model that matches the SQL table structure
+
     private Branch newBranch = new Branch();
     private string createBranchErrorMessage = string.Empty;
 
@@ -83,7 +83,7 @@
         Navigation.NavigateTo("/branchlocations");
     }
 
-    // Branch class matching the structure of the backend model
+   
     private class Branch
     {
         public string Name { get; set; }

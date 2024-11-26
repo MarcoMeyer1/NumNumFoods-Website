@@ -213,7 +213,7 @@ else
             if (response.IsSuccessStatusCode)
             {
                 var imageUrl = await response.Content.ReadAsStringAsync();
-                // Trim quotes if necessary
+              
                 imageUrl = imageUrl.Trim('"');
                 Console.WriteLine($"File uploaded successfully. Image URL: {imageUrl}");
                 return imageUrl; // Return the image URL

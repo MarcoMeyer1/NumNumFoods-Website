@@ -43,10 +43,6 @@
             <label for="password">Password</label>
             <input type="password" id="password" @bind="Password" placeholder="Password" />
 
-            <div class="remember-me">
-                <input type="checkbox" id="remember-me" @bind="RememberMe" />
-                <label for="remember-me">Remember me</label>
-            </div>
 
             <button @onclick="LoginUser" class="login-button">Login</button>
 
@@ -65,10 +61,7 @@
                 Continue with Google
             </button>
 
-            <button class="apple-login">
-                <img src="Assets/Apple Icon.png" alt="Apple Icon" />
-                Continue with Apple
-            </button>
+           
         </div>
     </div>
 </div>
@@ -101,7 +94,7 @@
 
                 UserState.SetUser(loginResponse.User.UserId, loginResponse.User.FullName, loginResponse.User.Email, loginResponse.User.Role);
 
-                // Optionally, store user info in local storage for persistence
+             
                 await JSRuntime.InvokeVoidAsync("localStorage.setItem", "userState", JsonSerializer.Serialize(UserState));
                 await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "userRole", loginResponse.User.Role);
 
@@ -174,10 +167,10 @@
 
     public class User
     {
-        public int UserId { get; set; } // Ensure UserId is included
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        // Other properties as needed
+        
     }
 }

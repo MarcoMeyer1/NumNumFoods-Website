@@ -90,7 +90,7 @@
         public int CustomerId { get; set; }
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; } // e.g., "Pending", "Completed"
+        public string Status { get; set; } 
         public DateTime OrderDate { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
@@ -98,10 +98,10 @@
     public class OrderItem
     {
         public int OrderItemId { get; set; }
-        public int OrderId { get; set; } // Foreign key to Orders table
+        public int OrderId { get; set; } 
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; } // Price at the time of ordering
+        public decimal Price { get; set; } 
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }

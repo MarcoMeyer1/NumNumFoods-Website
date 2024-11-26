@@ -14,10 +14,10 @@ namespace NumNumFoods.Models
 
         public int StockQuantity { get; set; }
 
-        public int? CategoryId { get; set; } // Optional: Category ID for the product
+        public int? CategoryId { get; set; } 
 
-        public string? StockStatus { get; set; } // Stock status of the product
+        public string? StockStatus { get; set; } 
 
-        public string? ImageUrl { get; set; } // Make ImageUrl nullable
+        public string? ImageUrl { get; set; } 
     }
 }

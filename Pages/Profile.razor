@@ -53,7 +53,7 @@
         // Trigger the logout in UserState
         UserState.Logout();
 
-        // Optionally, clear session data from JSRuntime directly (if not handled in UserState)
+      
         await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "userState");
         await JSRuntime.InvokeVoidAsync("sessionStorage.removeItem", "userRole");
 

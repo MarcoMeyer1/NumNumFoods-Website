@@ -40,7 +40,7 @@
                     <th>Items</th>
                     <th>Total</th>
                     <th>Payment Method</th>
-                    <th>Actions</th> <!-- New column for actions -->
+                    <th>Actions</th> 
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@
                             </td>
                             <td>@order.OrderItems.Count</td>
                             <td>R @order.TotalPrice.ToString("N2")</td>
-                            <td>@order.PaymentMethod</td>
+                            <td>In Person</td> <!-- Hardcoded due to client not wanting payment gateways at the moment -->
                             <td>
                                 <!-- Order Summary Button -->
                                 <button @onclick="() => NavigateToOrderSummary(order.OrderId)" class="btn-order-summary">

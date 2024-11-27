@@ -162,6 +162,13 @@
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to confirm the order?");
         if (confirmed)
         {
+            var selectedBranch = branches.FirstOrDefault(b => b.BranchId == selectedBranchId);
+            if (selectedBranch == null)
+            {
+                Console.WriteLine("Branch not found.");
+                return;
+            }
+
             var newOrder = new Order
                 {
                     CustomerId = userId,
@@ -185,8 +192,7 @@
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Order created successfully.");
-                    // Navigate to the order confirmation page
-                    Navigation.NavigateTo("/order-confirmed"); // Changed to /order-confirmed
+                    Navigation.NavigateTo($"/order-confirmed?branchName={Uri.EscapeDataString(selectedBranch.Name)}&branchAddress={Uri.EscapeDataString(selectedBranch.Address)}");
                 }
                 else
                 {
@@ -205,11 +211,11 @@
     public class CartItem
     {
         public int CartId { get; set; }
-        public int UserId { get; set; } // User ID
-        public int ProductId { get; set; } // Product ID
+        public int UserId { get; set; } 
+        public int ProductId { get; set; } 
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public Product Product { get; set; } // Associated product
+        public Product Product { get; set; } 
     }
 
     public class Product
@@ -226,7 +232,7 @@
         public int CustomerId { get; set; }
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; } // e.g., "Pending", "Completed"
+        public string Status { get; set; } 
         public DateTime OrderDate { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
@@ -235,7 +241,7 @@
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; } // Price at the time of ordering
+        public decimal Price { get; set; } 
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }
@@ -244,5 +250,10 @@
     {
         public int BranchId { get; set; }
         public string Name { get; set; }
+        public string Address { get; set; } // Add this property
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

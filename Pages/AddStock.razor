@@ -84,7 +84,7 @@
             if (response.IsSuccessStatusCode)
             {
                 successMessage = "Stock item added successfully.";
-                // Optionally, reset the form
+              
                 newStock = new StockItem
                     {
                         Location = branches.FirstOrDefault()?.Name
@@ -125,7 +125,7 @@
     {
         public int BranchId { get; set; }
         public string Name { get; set; }
-        // Additional properties if needed
+    
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }

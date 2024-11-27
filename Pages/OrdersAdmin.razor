@@ -12,11 +12,11 @@
     <div class="order-toolbar">
         <!-- Dropdown for filtering order status -->
         <div class="filter-dropdown">
-            <select @bind="selectedStatus" class="status-dropdown">
+            <select @onchange="HandleStatusChange" class="status-dropdown">
                 <option value="ALL">All Orders</option>
                 @foreach (var status in availableStatuses)
                 {
-                    <option value="@status">@status</option>
+                    <option value="@status" selected="@(status == selectedStatus)">@status</option>
                 }
             </select>
         </div>
@@ -40,7 +40,7 @@
                     <th>Items</th>
                     <th>Total</th>
                     <th>Payment Method</th>
-                    <th>Actions</th> <!-- New column for actions -->
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@
                             </td>
                             <td>@order.OrderItems.Count</td>
                             <td>R @order.TotalPrice.ToString("N2")</td>
-                            <td>@order.PaymentMethod</td>
+                            <td>In Person</td>
                             <td>
                                 <!-- Order Summary Button -->
                                 <button @onclick="() => NavigateToOrderSummary(order.OrderId)" class="btn-order-summary">
@@ -94,7 +94,7 @@
     private List<Order> orders;
     private List<Order> filteredOrders;
     private List<string> availableStatuses = new List<string> { "Pending", "Processing", "Completed", "Cancelled" };
-    private string selectedStatus = "All";
+    private string selectedStatus = "ALL";
     private string searchTerm = "";
 
     protected override async Task OnInitializedAsync()
@@ -114,8 +114,7 @@
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Failed to load orders: {error}");
+                Console.WriteLine($"Failed to load orders: {response.StatusCode}");
             }
         }
         catch (Exception ex)
@@ -126,23 +125,28 @@
 
     private void ApplyFilters()
     {
-        if (orders == null)
+        if (orders == null || !orders.Any())
         {
             filteredOrders = new List<Order>();
             return;
         }
 
-        // Sort by OrderDate in descending order (most recent first)
         filteredOrders = orders
-            .Where(o => (selectedStatus == "All" || o.Status == selectedStatus) &&
-                        (string.IsNullOrEmpty(searchTerm) ||
-                         o.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                         o.OrderId.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
-            .OrderByDescending(o => o.OrderDate) // Sort by date descending
+            .Where(order =>
+                (selectedStatus == "ALL" || order.Status.Equals(selectedStatus, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(searchTerm) ||
+                 order.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                 order.OrderId.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .OrderByDescending(order => order.OrderDate)
             .ToList();
     }
 
-    // Method to update the order status
+    private void HandleStatusChange(ChangeEventArgs e)
+    {
+        selectedStatus = e.Value.ToString();
+        ApplyFilters();
+    }
+
     private async Task UpdateOrderStatus(Order order, string newStatus)
     {
         var oldStatus = order.Status;
@@ -157,30 +161,22 @@
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Failed to update order status: {error}");
-                order.Status = oldStatus; // Revert status on failure
+                Console.WriteLine($"Failed to update order status.");
+                order.Status = oldStatus;
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Exception in UpdateOrderStatus: {ex.Message}");
-            order.Status = oldStatus; // Revert status on exception
+            order.Status = oldStatus;
         }
 
-        ApplyFilters(); // Reapply filters in case the status change affects visibility
+        ApplyFilters();
     }
 
     private void NavigateToOrderSummary(int orderId)
     {
         Navigation.NavigateTo($"/admin/orders/summary/{orderId}");
-    }
-
-    // Method to handle search input change
-    private void OnSearchTermChanged(ChangeEventArgs e)
-    {
-        searchTerm = e.Value.ToString();
-        ApplyFilters();
     }
 
     public class Order
@@ -189,20 +185,20 @@
         public int CustomerId { get; set; }
         public int BranchId { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Status { get; set; } // e.g., "Pending", "Processing", "Completed", "Cancelled"
+        public string Status { get; set; }
         public DateTime OrderDate { get; set; }
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItem> OrderItems { get; set; } = new();
         public string CustomerName { get; set; }
-        public string PaymentMethod { get; set; } // Add this property if available
+        public string PaymentMethod { get; set; }
     }
 
     public class OrderItem
     {
         public int OrderItemId { get; set; }
-        public int OrderId { get; set; } // Foreign key to Orders table
+        public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; } // Price at the time of ordering
+        public decimal Price { get; set; }
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
     }

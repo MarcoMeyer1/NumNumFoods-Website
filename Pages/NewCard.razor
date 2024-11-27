@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <!-- Removed CVV field due to security considerations -->
+     
 
         <div class="form-group">
             <label for="straightBudget">Straight/Budget</label>
@@ -55,7 +55,7 @@
             <small>South African issued cards only</small>
         </div>
 
-        <!-- Action Buttons -->
+   
         <div class="action-buttons">
             <button type="submit" class="save-button">Save Card</button>
             <button type="button" class="cancel-button" @onclick="Cancel">Cancel</button>
@@ -93,9 +93,6 @@
             return;
         }
 
-        // SECURITY WARNING:
-        // Handling and storing card data directly is not recommended.
-        // Use a payment gateway to handle sensitive card information.
 
         try
         {
@@ -133,7 +130,7 @@
         public int CardId { get; set; }
         public int UserId { get; set; }
         public string NameOnCard { get; set; }
-        public string CardNumber { get; set; } // In production, handle securely
+        public string CardNumber { get; set; } 
         public string ExpiryMonth { get; set; }
         public string ExpiryYear { get; set; }
         public string PaymentOption { get; set; } = "Straight";

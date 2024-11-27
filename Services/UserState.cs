@@ -4,7 +4,7 @@
     {
         public event Action OnChange;
 
-        public int UserId { get; private set; } // Added UserId property
+        public int UserId { get; private set; } 
         private string _role;
         public string _userFullName;
         private string _userEmail;

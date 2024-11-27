@@ -1,9 +1,14 @@
 ﻿@page "/order-confirmed"
+@inject NavigationManager Navigation
 
 <div class="order-confirmed-container">
     <div class="confirmation-message">
         <h1>Thank you!</h1>
         <p>Your order has been confirmed and is being processed</p>
+        <p>Your order will be ready for pickup soon at: </p>
+        <p><strong>@branchName Branch</strong></p>
+        <p>@branchAddress</p>
+
 
         <div class="social-links">
             <p>Receive More Updates Here!</p>
@@ -13,3 +18,18 @@
         </div>
     </div>
 </div>
+
+@code {
+    private string branchName;
+    private string branchAddress;
+
+    protected override void OnInitialized()
+    {
+
+        var uri = new Uri(Navigation.Uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        branchName = query["branchName"] ?? "Unknown Branch";
+        branchAddress = query["branchAddress"] ?? "Unknown Address";
+    }
+}
